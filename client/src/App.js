@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import axios from "axios";
+//import axios from "axios";
 
 //pages imported
 import Login from "./pages/auth/Login";
@@ -15,6 +15,8 @@ import Master1 from "./miniPages/admin/Master1";
 import Master2 from "./miniPages/admin/Master2";
 import UserProfile from "./miniPages/admin/UserProfile";
 import LicenceOneFInal from "./miniPages/admin/LicenceOneFInal";
+import Forgot from "./pages/auth/Forgot";
+import ResetPassword from './pages/auth/ResetPassword'
 
 function App() {
   const [user, setUser] = useState({});
@@ -45,7 +47,15 @@ function App() {
       <>
         <Routes>
           {!user.success && (
-            <Route exact path="/login" element={<Login setUser={setUser} />} />
+            <>
+              <Route
+                exact
+                path="/login"
+                element={<Login setUser={setUser} />}
+              />
+              <Route exact path="/forgot" element={<Forgot />} />
+              <Route exact path="/reset-password/:email/:token" element={<ResetPassword />} />
+            </>
           )}
           {user.type === "admin" && (
             <Route path="/admin" element={<Admin />}>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { BiLockAlt } from "react-icons/bi";
-//import { HiOutlineMail } from "react-icons/hi";
+import { Link } from "react-router-dom";
 import logo from "../../asserts/images/logo.png";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -76,7 +76,10 @@ const Login = () => {
                 setPassword(e.target.value);
               }}
             />
-            <Fogort> Forgot your password?</Fogort>
+            <Fogort to={"/forgot"}>
+              {" "}
+              <p>forgot your password? Reset it</p>
+            </Fogort>
             <Submit type="submit" onClick={(e) => login(e)}>
               {" "}
               Login{" "}
@@ -175,9 +178,11 @@ const Input = styled.input`
   }
 `;
 
-const Fogort = styled.p`
+const Fogort = styled(Link)`
   cursor: pointer;
   margin-bottom: 15px;
+  text-decoration: none;
+  color: #c4c4c4;
 
   &:hover {
     color: #a649ea;

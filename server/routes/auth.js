@@ -13,24 +13,22 @@ router.post("/login", (req, res) => {
         return user;
       }
     });
- 
+
     if (user.length > 0) {
-      res
-        .status(200)
-        .send({
-          email: user[0].email,
-          type: user[0].type,
-          success: true, 
-        });
+      res.status(200).send({
+        email: user[0].email,
+        type: user[0].type,
+        success: true,
+      });
     } else {
-      res
-        .status(200)
-        .send({
-          message: "no user with this email and password",
-          success: false,
-        });
+      res.status(200).send({
+        message: "no user with this email and password",
+        success: false,
+      });
     }
   }
 });
+
+
 
 module.exports = router;
