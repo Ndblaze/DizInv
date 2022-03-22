@@ -1,91 +1,157 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { MdOutlineClose } from "react-icons/md"; 
+import { MdOutlineClose } from "react-icons/md";
+import image from "../asserts/images/addForm.svg";
+import AddFormOptions from "./AddFormOptions";
 
-const AddNewForm = ({ onClick, handler, setNewStudent, newStudent}) => {
-    
-    const newValue = (name,value) => {
-        setNewStudent({
-            ...newStudent,
-            [name]: value,
-        })
-        console.log(newStudent)
-    }
+const AddNewForm = ({ onClick, handler, storeIn }) => {
+  //data from the add new modal
+  const [newStudent, setNewStudent] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    address: "",
+    city: "",
+    password: "",
+    level: "",
+    inscription: "",
+    section: "",
+    department: "",
+    speciality: "",
+    group: "",
+    status: "",
+    module: "",
+    storeIn: storeIn,
+  });
+
+  const newValue = (name, value) => {
+    setNewStudent({
+      ...newStudent,
+      [name]: value,
+    });
+  };
+  const addNewUser = (e) => {
+    e.preventDefault()
+
+    console.log(newStudent)
+  };
   return (
     <Wrapper>
+      <Hero>
+        <Img src={image} alt="add form image" />
+      </Hero>
       <Content>
         <form>
           <Header>
-            Licence 1 form
+            {storeIn} Form
             <CloseIcon onClick={onClick} />
           </Header>
           <Shared>
             <InputShared>
               <Label>First name *</Label>
-              <input type="text" onChange={(e) => newValue(e.target.name, e.target.value)} name="firstName"/>
+              <input
+                type="text"
+                onChange={(e) => newValue(e.target.name, e.target.value)}
+                name="firstName"
+              />
             </InputShared>
             <InputShared>
               <Label>Last name *</Label>
-              <input type="text" onChange={(e) => newValue(e.target.name, e.target.value)} name="LastName"/>
+              <input
+                type="text"
+                onChange={(e) => newValue(e.target.name, e.target.value)}
+                name="lastName"
+              />
             </InputShared>
           </Shared>
           <NonShared>
             <Input>
               <Label>Email *</Label>
-              <input type="text" onChange={(e) => newValue(e.target.name, e.target.value)} name="email"/>
+              <input
+                type="text"
+                onChange={(e) => newValue(e.target.name, e.target.value)}
+                name="email"
+              />
             </Input>
           </NonShared>
           <NonShared>
             <Input>
               <Label>Address *</Label>
-              <input type="text" onChange={(e) => newValue(e.target.name, e.target.value)} name="address"/>
+              <input
+                type="text"
+                onChange={(e) => newValue(e.target.name, e.target.value)}
+                name="address"
+              />
             </Input>
           </NonShared>
           <Shared>
             <InputShared>
               <Label>City *</Label>
-              <input type="text" onChange={(e) => newValue(e.target.name, e.target.value)} name="city"/>
+              <input
+                type="text"
+                onChange={(e) => newValue(e.target.name, e.target.value)}
+                name="city"
+              />
             </InputShared>
             <InputShared>
               <Label>Phone no *</Label>
-              <input type="text" onChange={(e) => newValue(e.target.name, e.target.value)} name="phone"/>
+              <input
+                type="text"
+                onChange={(e) => newValue(e.target.name, e.target.value)}
+                name="phone"
+              />
             </InputShared>
           </Shared>
           <Shared>
             <InputShared>
               <Label>password *</Label>
-              <input type="text" onChange={(e) => newValue(e.target.name, e.target.value)} name="password"/>
+              <input
+                type="text"
+                onChange={(e) => newValue(e.target.name, e.target.value)}
+                name="password"
+              />
             </InputShared>
             <InputShared>
-              <Label>Level *</Label>
-              <input type="text" onChange={(e) => newValue(e.target.name, e.target.value)} name="level"/>
+              <Label>Department *</Label>
+              <AddFormOptions options={"department"} newValue={newValue} />
             </InputShared>
           </Shared>
           <NonShared>
             <Input>
               <Label>Inscription no *</Label>
-              <input type="text" onChange={(e) => newValue(e.target.name, e.target.value)} name="inscription"/>
+              <input
+                type="text"
+                onChange={(e) => newValue(e.target.name, e.target.value)}
+                name="inscription"
+              />
             </Input>
           </NonShared>
           <Shared>
+            <InputShared3>
+              <Label>Level *</Label>
+              <AddFormOptions options={"level"} newValue={newValue} />
+            </InputShared3>
             {handler === "section" ? (
-              <InputShared>
+              <InputShared3>
                 <Label>Section *</Label>
-                <input type="text" onChange={(e) => newValue(e.target.name, e.target.value)} name="section"/>
-              </InputShared>
+                <AddFormOptions options={"section"} newValue={newValue} />
+              </InputShared3>
             ) : (
-              <InputShared>
+              <InputShared3>
                 <Label>Speciality *</Label>
-                <input type="text" onChange={(e) => newValue(e.target.name, e.target.value)} name="speciality"/>
-              </InputShared>
+                <div>
+                  <AddFormOptions options={"speciality"} newValue={newValue} />
+                </div>
+              </InputShared3>
             )}
-            <InputShared>
+            <InputShared3>
               <Label>Group *</Label>
-              <input type="text" onChange={(e) => newValue(e.target.name, e.target.value)} name="group"/>
-            </InputShared>
+              <AddFormOptions options={"group"} newValue={newValue} />
+            </InputShared3>
           </Shared>
           <ButtonContainer>
-            <Save >Add</Save>
+            <Save type="submit" onClick={(e) => addNewUser(e)} >Add</Save>
             <Cancel type="reset" value="Reset" />
           </ButtonContainer>
         </form>
@@ -97,15 +163,21 @@ const AddNewForm = ({ onClick, handler, setNewStudent, newStudent}) => {
 export default AddNewForm;
 
 const Wrapper = styled.div`
-  height: fit-content;
+  height: 100%;
   background-color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   //box-shadow: 0 4px 7px rgba(0, 0, 0, 0.05), 0 10px 10px rgba(0, 0, 0, 0.22);
 `;
 
 const Content = styled.div`
-  padding: 0px 20px;
-
+  width: 60%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   & > form {
+    width: 95%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -113,10 +185,23 @@ const Content = styled.div`
   }
 `;
 
+const Hero = styled.div`
+  width: 40%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #bb60fd;
+`;
+
+const Img = styled.img`
+  width: 150px;
+`;
+
 const Header = styled.div`
   font-size: 22px;
   font-weight: 700;
-  padding: 10px 10px;
   color: #c278f8;
   border-bottom: 1px solid #f1f3f7;
   width: 100%;
@@ -124,7 +209,6 @@ const Header = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-bottom: 10px;
-  margin-left: 10px;
 `;
 
 const CloseIcon = styled(MdOutlineClose)`
@@ -138,27 +222,27 @@ const Shared = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 91%;
+  width: 95%;
   margin-bottom: 10px;
 `;
 const NonShared = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 90%;
+  width: 95%;
   margin-bottom: 10px;
 `;
 
 const Input = styled.div`
   display: flex;
   flex-direction: column;
-  width: 97%;
+  width: 100%;
 
   & > input {
     width: 100%;
-    border-radius: 10px;
+    border-radius: 3px;
     height: 30px;
-    padding-left: 10px;
+    padding-left: 5px;
     outline: none;
     font-size: 14px;
     border: 1px solid #adb1c0;
@@ -171,8 +255,24 @@ const InputShared = styled.div`
   width: 45%;
 
   & > input {
-    width: 93%;
-    border-radius: 10px;
+    width: 100%;
+    border-radius: 3px;
+    padding-left: 5px;
+    outline: none;
+    height: 30px;
+    border: 1px solid #adb1c0;
+    font-size: 14px;
+  }
+`;
+
+const InputShared3 = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 32%;
+
+  & > input {
+    width: 96%;
+    border-radius: 3px;
     padding-left: 10px;
     outline: none;
     height: 30px;
@@ -192,8 +292,8 @@ const Label = styled.span`
 const ButtonContainer = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 10px;
-  height: 70px;
+  margin-top: 40px;
+  height: 50px;
   width: 100%;
   border-top: 1px solid #f1f3f7;
 `;

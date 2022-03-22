@@ -11,7 +11,7 @@ const Search = ({ onChange }) => {
       <Input placeholder="Search here...." onChange={onChange} />
     </>
   );
-};
+}; 
 
 export default Search;
 

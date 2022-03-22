@@ -59,7 +59,7 @@ const students = [
         group: "G4",
         section: "Section 1",
         profile: 'student',
-      },
+      },  
       {
         firstName: "ALLAG EDDINE AYOUB",
         lastName: "SALAH",

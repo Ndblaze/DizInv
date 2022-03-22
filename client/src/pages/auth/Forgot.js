@@ -2,14 +2,21 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { FaArrowLeft } from "react-icons/fa";
 import toast, { Toaster } from "react-hot-toast";
+import HashLoader from "react-spinners/HashLoader";
+import { css } from "@emotion/react";
 
 import logo from "../../asserts/images/logo.png";
+
+const override = css`
+  position: absolute;
+  opacity: 1;
+`;
 
 const Forgot = () => {
   const [email, setEmail] = useState("");
   const [resend, setResend] = useState("Send Link");
+  const [loading, setLoading] = useState(false);
 
   const errorMessage = (message) => {
     toast.error(message, {
@@ -31,25 +38,29 @@ const Forgot = () => {
 
   const sendEmail = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     await axios
       .post("http://localhost:5000/forgot", {
         email,
       })
       .then((res) => {
         if (res.data.status === "SUCCESS") {
+          setLoading(false);
           successMessage("Email was sent succefully !!");
           setEmail("");
           setResend("Resend Link");
         }
         if (res.data.status === "FAILED") {
+          setLoading(false);
           errorMessage("Email was not sent succefully, Try again !!");
         }
         if (res.data.status === "NON") {
+          setLoading(false);
           errorMessage("No user with this email, verify Email !!");
         }
       })
       .catch((err) => {
+        setLoading(false);
         console.log(err);
       });
   };
@@ -57,9 +68,22 @@ const Forgot = () => {
   return (
     <Wrapper>
       <Toaster position="top-center" reverseOrder={false} />
-      <Content>
+      {loading && (
+        <HashLoader
+          color={"#C278F8"}
+          css={override}
+          loading={loading}
+          size={50}
+        />
+      )}
+      <Content
+        style={{
+          opacity: loading && 0.4,
+          pointerEvents: loading && "none",
+        }}
+      >
         <Link to={"/login"}>
-        <BackIcon>Back to Login</BackIcon>
+          <BackIcon>Back to Login</BackIcon>
         </Link>
         <InnerContent>
           <Logo src={logo} alt="logo" />

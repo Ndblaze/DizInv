@@ -7,9 +7,9 @@ import axios from "axios";
 import HeaderNav from "../../components/HeaderNav";
 import ListNav from "../../components/ListNav";
 import Table from "../../components/Table";
-import AddNewForm from "../../components/AddNewForm";
 
 import toast, { Toaster } from "react-hot-toast";
+import NewUserModal from "../../components/NewUserModal";
 
 const Licence1 = () => {
   const [speciality, setSpeciality] = useState("Speciality");
@@ -22,37 +22,14 @@ const Licence1 = () => {
   const [allList, setAllList] = useState([]);
   const [filtered, setFiltered] = useState([]);
 
-  //data from the add new modal
-  const [newStudent, setNewStudent] = useState({
-    firstName: "",
-    LastName: "",
-    email: "",
-    phone: "",
-    address: "",
-    city: "",
-    password: "",
-    level: "",
-    inscription: "",
-    section: "",
-    group: "",
-  });
 
-  //item to delete
-  const [newDelete, setNewDelete] = useState();
-  //console.log(newDelete);
-
-  const DeleteUser = () => {
-    toast.success("User deleted succefully", {
+  const DeleteUser = (message) => {
+    toast.success(message, {
       style: {
         background: "#25ab42",
         color: "#fff",
       },
     });
-  };
-
-  const onDelete = (message) => {
-    setNewDelete(message);
-    DeleteUser();
   };
 
   useEffect(() => {
@@ -101,25 +78,6 @@ const Licence1 = () => {
     setGroup("Group");
   }, [section, speciality]);
 
-  const customStyles = {
-    content: {
-      top: "50%",
-      left: "50%",
-      right: "auto",
-      bottom: "auto",
-      transform: "translate(-50%, -50%)",
-      backgroundColor: "#0a0b0d",
-      padding: 0,
-      border: "none",
-      borderRadius: "20px",
-      //   overflow: 'hidden',
-      width: "550px",
-    },
-    overlay: {
-      backgroundColor: "rgba(10, 11, 13, 0.75)",
-    },
-  };
-
   return (
     <Wrapper>
       <Content>
@@ -143,21 +101,15 @@ const Licence1 = () => {
             }}
             total={filtered.length}
           />
-          <Table data={filtered} onDelete={onDelete} />
+          <Table data={filtered} DeleteUser={DeleteUser} updateUI={getStudents}/>
         </List>
-        <Modal
+        <NewUserModal
           isOpen={modalIsOpen}
-          style={customStyles}
           onRequestClose={() => setModalIsOpen(false)}
-          ariaHideApp={false}
-        >
-          <AddNewForm
-            onClick={() => setModalIsOpen(false)}
-            handler="section"
-            setNewStudent={setNewStudent}
-            newStudent={newStudent}
-          />
-        </Modal>
+          onClick={() => setModalIsOpen(false)}
+          handler="section"
+          storeIn="Student"
+        />
       </Content>
     </Wrapper>
   );

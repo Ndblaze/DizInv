@@ -50,7 +50,7 @@ const GeneralStatistics = ({ Teachers, Students, Modules }) => {
   );
 };
 
-export default GeneralStatistics;
+export default GeneralStatistics;  
 
 const Wrapper = styled.div`
   margin-top: 15px;

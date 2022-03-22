@@ -3,12 +3,20 @@ import styled from "styled-components";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
+import HashLoader from "react-spinners/HashLoader";
+import { css } from "@emotion/react";
+
+const override = css`
+  position: absolute;
+  opacity: 1;
+`;
 
 const ResetPassword = () => {
   const params = useParams();
   const [confirmPassword, setConfirmPassword] = useState("");
   const [password, setPassword] = useState("");
-  const [linkValidity, setLinkValidity] = useState();
+  const [linkValidity, setLinkValidity] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   console.log(params);
   const errorMessage = (message) => {
@@ -34,6 +42,7 @@ const ResetPassword = () => {
   }, []);
 
   const VerifyLink = async () => {
+    setLoading(true);
     await axios
       .get(
         `http://localhost:5000/reset-password/${params.email}/${params.token}`
@@ -41,20 +50,24 @@ const ResetPassword = () => {
       .then((res) => {
         if (res.data.status === "SUCCESS") {
           setLinkValidity(true);
+          setLoading(false);
         }
         if (res.data.status === "NON") {
-          errorMessage("404: invalid Link or Link Expired");
+          errorMessage("404: invalid Link or Link Expired, retry !!");
           setLinkValidity(false);
+          setLoading(false);
         }
       })
       .catch((err) => {
         errorMessage(err);
         console.log(err);
+        setLoading(false);
       });
   };
 
   const ResetEmail = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     await axios
       .post(
@@ -67,16 +80,19 @@ const ResetPassword = () => {
       .then((res) => {
         if (res.data.status === "SUCCESS") {
           successMessage("Successfully changed");
+          setLoading(false);
 
-          //redirect to login after 5 seconds 
+          //redirect to login after 5 seconds
 
-           console.log(res.data);
+          console.log(res.data);
         }
         if (res.data.status === "NON") {
           errorMessage("Credentials invalid, Try agian or start again");
+          setLoading(false);
         }
       })
       .catch((err) => {
+        setLoading(false);
         console.log(err);
       });
   };
@@ -84,39 +100,49 @@ const ResetPassword = () => {
   return (
     <Wrapper>
       <Toaster position="top-center" reverseOrder={false} />
-      {!linkValidity && <h1>404: invalid Link or Link Expired</h1>}
-      {linkValidity && (
-        <Content>
-          <Link to={"/login"}>
-            <BackIcon>Back to Login</BackIcon>
-          </Link>
-          <InnerContent>
-            <Header>Reset Password</Header>
-            <Discription>
-              To reset your password please fill the field below and click reset
-            </Discription>
-            <InputContainer>
-              <Input
-                value={password}
-                type="password"
-                placeholder="password..."
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </InputContainer>
-            <InputContainer>
-              <Input
-                value={confirmPassword}
-                type="password"
-                placeholder="confirm password..."
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-            </InputContainer>
-            <Button type="submit" onClick={(e) => ResetEmail(e)}>
-              Reset Password
-            </Button>
-          </InnerContent>
-        </Content>
+      {loading && (
+        <HashLoader
+          color={"#C278F8"}
+          css={override}
+          loading={loading}
+          size={50}
+        />
       )}
+      <Content
+        style={{
+          opacity: loading || (!linkValidity && 0.4),
+          pointerEvents: !linkValidity && "none",
+        }}
+      >
+        <Link to={"/login"}>
+          <BackIcon>Back to Login</BackIcon>
+        </Link>
+        <InnerContent>
+          <Header>Reset Password</Header>
+          <Discription>
+            To reset your password please fill the field below and click reset
+          </Discription>
+          <InputContainer>
+            <Input
+              value={password}
+              type="password"
+              placeholder="password..."
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </InputContainer>
+          <InputContainer>
+            <Input
+              value={confirmPassword}
+              type="password"
+              placeholder="confirm password..."
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+          </InputContainer>
+          <Button type="submit" onClick={(e) => ResetEmail(e)}>
+            Reset Password
+          </Button>
+        </InnerContent>
+      </Content>
     </Wrapper>
   );
 };
