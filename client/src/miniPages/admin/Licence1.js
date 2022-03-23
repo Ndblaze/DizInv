@@ -107,7 +107,7 @@ const Licence1 = () => {
           isOpen={modalIsOpen}
           onRequestClose={() => setModalIsOpen(false)}
           onClick={() => setModalIsOpen(false)}
-          handler="section"
+          handler="speciality"
           storeIn="Student"
         />
       </Content>

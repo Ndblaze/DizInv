@@ -1,7 +1,8 @@
 import React from "react";
 import Modal from "react-modal";
 
-import AddNewForm from "./AddNewForm";
+import AddNewFormStudentSection from "./AddNewFormStudentSection";
+import AddNewFormStudentSpeciality from "./AddNewFormStudentSpeciality";
 
 const NewUserModal = ({
   isOpen,
@@ -21,7 +22,7 @@ const NewUserModal = ({
       padding: 0,
       border: "none",
       borderRadius: "20px",
-      overflow: 'hidden',
+      overflow: "hidden",
       width: "900px",
       height: "650px",
     },
@@ -37,11 +38,18 @@ const NewUserModal = ({
       onRequestClose={onRequestClose}
       ariaHideApp={false}
     >
-      <AddNewForm
-        onClick={onClick}
-        handler={handler}
-        storeIn={storeIn}
-      />
+      {handler === "section" && (
+        <AddNewFormStudentSection
+          onClick={onClick}
+          storeIn={storeIn}
+        />
+      )}
+      {handler === "speciality" && (
+        <AddNewFormStudentSpeciality
+          onClick={onClick}
+          storeIn={storeIn}
+        />
+      )}
     </Modal>
   );
 };

@@ -1,39 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
-const AddFormOptions = ({ options, newValue }) => {
-  const dropDownOptions = () => {
-    if (options === "department") {
-      return ["Commun core", "TLSI", "IFA"];
-    }
-    if (options === "section") {
-      return ["Section 1", "Section 2", "Section 3", "Section 4"];
-    }
-    if (options === "group") {
-      return ["G1", "G2", "G3", "G4"];
-    }
-    if (options === "level") {
-      return ["Licence 1", "Licence 2", "Licence 3", "Master 1", "Master 2"];
-    }
-    if (options === "speciality") {
-      return ["GL", "SCI", "TI", "SI", "MTW"];
-    }
+const AddFormOptions = ({ options, newValue, name }) => {
+  const changes = (e) => {
+    newValue(e.target.name, e.target.value);
   };
 
   return (
-    <>
-      <Select
-        name={options}
-        onChange={(e) => newValue(e.target.name, e.target.value)}
-      >
-        <Option value=""></Option>
-        {dropDownOptions().map((value) => (
-          <Option key={value} value={value}>
-            {value}
-          </Option>
-        ))}
-      </Select>
-    </>
+    <Select name={name} onChange={(e) => changes(e)}>
+      <Option value="">choose {name}</Option>
+      {options.map((option) => (
+           <Option value={option}>{option}</Option>
+      ))}
+    </Select>
   );
 };
 

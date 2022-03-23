@@ -20,7 +20,7 @@ const users = [
     type: "admin",
   },
   {
-    email: "zakarah.lakar@univ-constantine2.dz",
+    email: "zakarah.lakar@univ-constantine2.dz", 
     password: "Lakar3000",
     type: "teacher",
   },

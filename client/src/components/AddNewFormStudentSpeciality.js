@@ -4,8 +4,9 @@ import { MdOutlineClose } from "react-icons/md";
 import image from "../asserts/images/addForm.svg";
 import AddFormOptions from "./AddFormOptions";
 
-const AddNewForm = ({ onClick, handler, storeIn }) => {
-  //data from the add new modal
+const AddNewFormStudentSpeciality = ({ onClick, storeIn }) => {
+
+     //data from the add new modal
   const [newStudent, setNewStudent] = useState({
     firstName: "",
     lastName: "",
@@ -16,12 +17,9 @@ const AddNewForm = ({ onClick, handler, storeIn }) => {
     password: "",
     level: "",
     inscription: "",
-    section: "",
-    department: "",
     speciality: "",
+    department: "",
     group: "",
-    status: "",
-    module: "",
     storeIn: storeIn,
   });
 
@@ -32,10 +30,11 @@ const AddNewForm = ({ onClick, handler, storeIn }) => {
     });
   };
   const addNewUser = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    console.log(newStudent)
+    console.log(newStudent);
   };
+
   return (
     <Wrapper>
       <Hero>
@@ -114,7 +113,7 @@ const AddNewForm = ({ onClick, handler, storeIn }) => {
             </InputShared>
             <InputShared>
               <Label>Department *</Label>
-              <AddFormOptions options={"department"} newValue={newValue} />
+              <AddFormOptions options={["TLSI", "IFA"]} newValue={newValue} name="department" />
             </InputShared>
           </Shared>
           <NonShared>
@@ -130,37 +129,38 @@ const AddNewForm = ({ onClick, handler, storeIn }) => {
           <Shared>
             <InputShared3>
               <Label>Level *</Label>
-              <AddFormOptions options={"level"} newValue={newValue} />
+              <AddFormOptions
+                options={["Licence 3", "Master 1", "Master 2"]}
+                newValue={newValue}
+                name="level"
+              />
             </InputShared3>
-            {handler === "section" ? (
-              <InputShared3>
-                <Label>Section *</Label>
-                <AddFormOptions options={"section"} newValue={newValue} />
-              </InputShared3>
-            ) : (
-              <InputShared3>
-                <Label>Speciality *</Label>
-                <div>
-                  <AddFormOptions options={"speciality"} newValue={newValue} />
-                </div>
-              </InputShared3>
-            )}
+            <InputShared3>
+              <Label>speciality *</Label>
+              <AddFormOptions
+                options={["GL", "TI", "SCI", "SI", "MWT"]}
+                newValue={newValue}
+                name="speciality"
+              />
+            </InputShared3>
             <InputShared3>
               <Label>Group *</Label>
-              <AddFormOptions options={"group"} newValue={newValue} />
+              <AddFormOptions options={["G1", "G2", "G3", "G4"]} newValue={newValue} name="group" />
             </InputShared3>
           </Shared>
           <ButtonContainer>
-            <Save type="submit" onClick={(e) => addNewUser(e)} >Add</Save>
+            <Save type="submit" onClick={(e) => addNewUser(e)}>
+              Add
+            </Save>
             <Cancel type="reset" value="Reset" />
           </ButtonContainer>
         </form>
       </Content>
     </Wrapper>
-  );
-};
+  )
+}
 
-export default AddNewForm;
+export default AddNewFormStudentSpeciality
 
 const Wrapper = styled.div`
   height: 100%;
@@ -227,7 +227,7 @@ const Shared = styled.div`
 `;
 const NonShared = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; 
   align-items: center;
   width: 95%;
   margin-bottom: 10px;
