@@ -14,9 +14,8 @@ import Licence3 from "./miniPages/admin/Licence3";
 import Master1 from "./miniPages/admin/Master1";
 import Master2 from "./miniPages/admin/Master2";
 import UserProfile from "./miniPages/admin/UserProfile";
-import LicenceOneFInal from "./miniPages/admin/LicenceOneFInal";
 import Forgot from "./pages/auth/Forgot";
-import ResetPassword from './pages/auth/ResetPassword'
+import ResetPassword from "./pages/auth/ResetPassword";
 
 function App() {
   const [user, setUser] = useState({});
@@ -54,7 +53,11 @@ function App() {
                 element={<Login setUser={setUser} />}
               />
               <Route exact path="/forgot" element={<Forgot />} />
-              <Route exact path="/reset-password/:email/:token" element={<ResetPassword />} />
+              <Route
+                exact
+                path="/reset-password/:email/:token"
+                element={<ResetPassword />}
+              />
             </>
           )}
           {user.type === "admin" && (
@@ -62,10 +65,8 @@ function App() {
               <Route exact path="dashboard" element={<Dashboard />} />
               <Route exact path="teacher" element={<Teachers />} />
               <Route exact path="profile" element={<Profile />} />
-              <Route exact path="licence1" element={<LicenceOneFInal />}>
-                <Route exact path="list" element={<Licence1 />} />
-                <Route exact path=":id" element={<UserProfile />} />
-              </Route>
+              <Route exact path="licence1" element={<Licence1 />} />
+              <Route exact path="user/:id" element={<UserProfile />} />
               <Route exact path="licence2" element={<Licence2 />} />
               <Route exact path="licence3" element={<Licence3 />} />
               <Route exact path="master1" element={<Master1 />} />

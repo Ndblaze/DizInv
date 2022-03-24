@@ -77,7 +77,7 @@ const AdminNav = () => {
           <Move>
             <MenuLinkIcon
               Name="Licence 1"
-              path="/admin/licence1/list"
+              path="/admin/licence1"
               Icon={HiOutlineAcademicCap}
               Active={active === "Licence 1" ? true : false}
               onClick={() => {

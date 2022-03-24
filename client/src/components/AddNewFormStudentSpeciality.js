@@ -5,8 +5,7 @@ import image from "../asserts/images/addForm.svg";
 import AddFormOptions from "./AddFormOptions";
 
 const AddNewFormStudentSpeciality = ({ onClick, storeIn }) => {
-
-     //data from the add new modal
+  //data from the add new modal
   const [newStudent, setNewStudent] = useState({
     firstName: "",
     lastName: "",
@@ -113,7 +112,11 @@ const AddNewFormStudentSpeciality = ({ onClick, storeIn }) => {
             </InputShared>
             <InputShared>
               <Label>Department *</Label>
-              <AddFormOptions options={["TLSI", "IFA"]} newValue={newValue} name="department" />
+              <AddFormOptions
+                options={["TLSI", "IFA"]}
+                newValue={newValue}
+                name="department"
+              />
             </InputShared>
           </Shared>
           <NonShared>
@@ -145,7 +148,11 @@ const AddNewFormStudentSpeciality = ({ onClick, storeIn }) => {
             </InputShared3>
             <InputShared3>
               <Label>Group *</Label>
-              <AddFormOptions options={["G1", "G2", "G3", "G4"]} newValue={newValue} name="group" />
+              <AddFormOptions
+                options={["G1", "G2", "G3", "G4"]}
+                newValue={newValue}
+                name="group"
+              />
             </InputShared3>
           </Shared>
           <ButtonContainer>
@@ -157,10 +164,10 @@ const AddNewFormStudentSpeciality = ({ onClick, storeIn }) => {
         </form>
       </Content>
     </Wrapper>
-  )
-}
+  );
+};
 
-export default AddNewFormStudentSpeciality
+export default AddNewFormStudentSpeciality;
 
 const Wrapper = styled.div`
   height: 100%;
@@ -227,7 +234,7 @@ const Shared = styled.div`
 `;
 const NonShared = styled.div`
   display: flex;
-  justify-content: space-between; 
+  justify-content: space-between;
   align-items: center;
   width: 95%;
   margin-bottom: 10px;

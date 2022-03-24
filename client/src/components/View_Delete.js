@@ -6,7 +6,7 @@ const View_Delete = ({ text, path, onClick}) => {
 
   return (
     <>
-      {text === "View" && <View to={`/admin/licence1/${path}`} > {text} </View>}
+      {text === "View" && <View to={`/admin/user/${path}`} > {text} </View>}
       {text === "Delete" && <Delete onClick={onClick}> {text} </Delete>}
     </>
   );

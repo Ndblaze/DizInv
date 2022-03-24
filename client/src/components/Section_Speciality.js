@@ -17,7 +17,7 @@ const Section_Speciality = ({
       <Selected
         onClick={() => {
           setBox(!box);
-        }}
+        }} 
       >
         {level === "section" ? section : speciality}
         <DownIcon />
@@ -43,7 +43,7 @@ const Section_Speciality = ({
                 Section 4
               </Options>{" "}
             </>
-          ) : (
+          ) : ( 
             <>
               <Options onClick={() => chooseSpeciality("GL")}>GL</Options>
               <Options onClick={() => chooseSpeciality("TI")}>SI</Options>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { HiOutlineAcademicCap } from "react-icons/hi";
-import Modal from "react-modal";
 import axios from "axios";
 
 import HeaderNav from "../../components/HeaderNav";
@@ -22,7 +21,6 @@ const Licence1 = () => {
   const [allList, setAllList] = useState([]);
   const [filtered, setFiltered] = useState([]);
 
-
   const DeleteUser = (message) => {
     toast.success(message, {
       style: {
@@ -37,8 +35,9 @@ const Licence1 = () => {
   }, []);
 
   const getStudents = async () => {
+    const level = "Licence 1"
     await axios
-      .get("http://localhost:5000/api/admin/licence1")
+      .get(`http://localhost:5000/api/admin/students/${level}`)
       .then((res) => {
         if (res.data.length > 0) {
           setAllList(res.data);
@@ -101,13 +100,18 @@ const Licence1 = () => {
             }}
             total={filtered.length}
           />
-          <Table data={filtered} DeleteUser={DeleteUser} updateUI={getStudents}/>
+          <Table
+            data={filtered}
+            DeleteUser={DeleteUser}
+            updateUI={getStudents}
+          />
         </List>
         <NewUserModal
           isOpen={modalIsOpen}
           onRequestClose={() => setModalIsOpen(false)}
           onClick={() => setModalIsOpen(false)}
-          handler="speciality"
+          // handler="speciality"
+          handler="section"
           storeIn="Student"
         />
       </Content>

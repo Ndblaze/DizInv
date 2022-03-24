@@ -27,7 +27,7 @@ const Group = ({
 
       {groupBox && (
         <SelectBox>
-          {speciality && (
+          {speciality  && ( 
             <>
               <Options onClick={() => choice("Group")}>All</Options>
               <Options onClick={() => choice("G1")}>G1</Options>

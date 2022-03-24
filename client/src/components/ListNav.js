@@ -44,7 +44,7 @@ const ListNav = ({
         level={level}
         chooseSection={chooseSection}
         chooseSpeciality={chooseSpeciality}
-        speciality={speciality}
+        speciality={speciality} 
         section={section}
         setBox={setBox}
         box={box}
@@ -53,6 +53,7 @@ const ListNav = ({
         onClick={() => setBox(false)}
         section={section}
         group={group}
+        speciality={speciality}
         setGroupBox={setGroupBox}
         groupBox={groupBox}
         choice={choice}

@@ -10,18 +10,17 @@ const GeneralProfile = ({
   newValues,
   UpdateValues,
   profileType,
-  firstLetter
+  firstLetter,
+  style,
 }) => {
   return (
-    <Wrapper>
+    <Wrapper style={style}>
       <Content>
         <Info>
           <Personal>
             <Edit />
             <Header>
-              <Photo>
-                {firstLetter}
-              </Photo>
+              <Photo>{firstLetter}</Photo>
               <Name>
                 {user.firstName} {user.lastName}
               </Name>
@@ -74,17 +73,28 @@ const GeneralProfile = ({
                   </DataContainer>
                   <DataContainer>
                     <Data>Deprt:</Data>
-                    <Value>{user.Department}</Value>
+                    <Value>{user.department}</Value>
                   </DataContainer>
                   <DataContainer>
                     <Data>Level:</Data>
-                    <Value>{user.Level}</Value>
+                    <Value>{user.level}</Value>
                   </DataContainer>
                   <DataContainer>
-                    <Data>Scetion/Group:</Data>
-                    <Value>
-                      {user.section} / {user.group}
-                    </Value>
+                    {user.department === "Commune Core" ? (
+                      <>
+                        <Data>Scetion/Group:</Data>
+                        <Value>
+                          {user.section} / {user.group}
+                        </Value>{" "}
+                      </>
+                    ) : (
+                      <>
+                        <Data>Speciality/Group:</Data>
+                        <Value>
+                          {user.speciality} / {user.group}
+                        </Value>{" "}
+                      </>
+                    )}
                   </DataContainer>
                 </AcademicDetail>
               </>
@@ -93,6 +103,7 @@ const GeneralProfile = ({
         </Info>
         <Form
           user={user}
+          profileType={profileType}
           setNewValues={setNewValues}
           newValues={newValues}
           UpdateValues={UpdateValues}

@@ -8,15 +8,18 @@ router.get("/dashboard", (req, res) => {
   res.send(users);
 });
 
-router.get("/licence1", (req, res) => {
+router.get("/students/:level", (req, res) => {
+  const parameter = req.params.level;
   res.status(200).send(
     students.filter((item) => {
-      return item.Level === "Licence 1";
-    })
+      return item.level === parameter;
+    }) 
   );
 });
 
-router.get("/students/:id", (req, res) => {
+
+//getting user profile 
+router.get("/student-profile/:id", (req, res) => {
   const parameter = req.params.id;
   res.status(200).send(
     students.filter((item) => {

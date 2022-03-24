@@ -3,40 +3,49 @@ import styled from "styled-components";
 import axios from "axios";
 import { FaArrowLeft } from "react-icons/fa";
 import GeneralProfile from "../../components/GeneralProfile";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
+
+import HashLoader from "react-spinners/HashLoader";
+import { css } from "@emotion/react";
+
+const override = css`
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  opacity: 1;
+`;
 
 const UserProfile = () => {
   const params = useParams();
-  const location = useLocation();
   const [user, setUser] = useState({});
   const [profileType, setProfileType] = useState("");
   const [firstLetter, setFirstLetter] = useState();
-
-  const setProfile = () => {
-    if (location.pathname.includes("licence1" || "licence2")) {
-      setProfileType("student");
-    }
-    if (location.pathname.includes("teacher")) {
-      setProfileType("teacher");
-    }
-  };
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setProfile();
     getStudents();
   }, []);
 
   const getStudents = async () => {
+    setLoading(true);
     await axios
-      .get(`http://localhost:5000/api/admin/students/${params.id}`)
+      .get(`http://localhost:5000/api/admin/student-profile/${params.id}`)
       .then((res) => {
         if (res.data.length > 0) {
           // console.log(res.data[0]);
           setUser(res.data[0]);
           setFirstLetter(res.data[0].firstName.slice(0, 1).toUpperCase());
         }
+        if (res.data[0].hasOwnProperty("inscription")) {
+          setProfileType("student");
+        }
+        setLoading(false);
       })
       .catch((err) => {
+        setLoading(false);
         console.log(err.message);
       });
   };
@@ -65,6 +74,14 @@ const UserProfile = () => {
   return (
     <Wrapper>
       <Content>
+        {loading && (
+          <HashLoader
+            color={"#C278F8"}
+            css={override}
+            loading={loading}
+            size={70}
+          />
+        )}
         <HeaderContainer>
           <BackIcon />
           <Hearder>
@@ -72,13 +89,17 @@ const UserProfile = () => {
           </Hearder>
         </HeaderContainer>
         <GeneralProfile
+          style={{
+            opacity: loading && 0.4,
+            pointerEvents: loading && "none",
+          }}
           user={user}
           setNewValues={setNewValues}
           newValues={newValues}
           UpdateValues={UpdateValues}
           firstLetter={firstLetter}
           profileType={profileType}
-        />
+        /> 
       </Content>
     </Wrapper>
   );

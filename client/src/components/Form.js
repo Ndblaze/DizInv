@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-const Form = ({ user, setNewValues, newValues, UpdateValues }) => {
+const Form = ({ user, setNewValues, newValues, UpdateValues, profileType }) => {
 
   const getValue = (name, value) => {
     setNewValues({
@@ -86,7 +86,7 @@ const Form = ({ user, setNewValues, newValues, UpdateValues }) => {
               />
             </InputShared>
           </Shared>
-          {user.profile === "admin" && (
+          {profileType === "admin" && (
             <Shared>
               <InputShared>
                 <Label>Position</Label>
@@ -98,7 +98,7 @@ const Form = ({ user, setNewValues, newValues, UpdateValues }) => {
               </InputShared>
             </Shared>
           )}
-          {user.profile === "student" && (
+          {profileType === "student" && (
             <>
               <Shared>
                 <InputShared>
@@ -114,7 +114,7 @@ const Form = ({ user, setNewValues, newValues, UpdateValues }) => {
                   <Label>Department *</Label>
                   <input
                     type="text"
-                    placeholder={user.Department}
+                    placeholder={user.department}
                     onChange={(e) => getValue(e.target.name, e.target.value)}
                     name="department"
                   />
@@ -125,7 +125,7 @@ const Form = ({ user, setNewValues, newValues, UpdateValues }) => {
                   <Label>Level *</Label>
                   <input
                     type="text"
-                    placeholder={user.Level}
+                    placeholder={user.level}
                     onChange={(e) => getValue(e.target.name, e.target.value)}
                     name="level"
                   />
