@@ -8,7 +8,7 @@ const NewUserModal = ({
   isOpen,
   onRequestClose,
   onClick,
-  handler,
+  handler, 
   storeIn,
 }) => {
   const customStyles = {

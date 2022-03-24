@@ -1,16 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 
-const AddFormOptions = ({ options, newValue, name }) => {
-  const changes = (e) => {
-    newValue(e.target.name, e.target.value);
-  };
 
+const AddFormOptions = ({ options, name }) => {
   return (
-    <Select name={name} onChange={(e) => changes(e)}>
+    <Select name={name}>
       <Option value="">choose {name}</Option>
       {options.map((option) => (
-           <Option key={option} value={option}>{option}</Option>
+        <Option key={option} value={option}>
+          {option}
+        </Option>
       ))}
     </Select>
   );

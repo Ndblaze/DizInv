@@ -2,11 +2,46 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { MdOutlineClose } from "react-icons/md";
 import image from "../asserts/images/addForm.svg";
-import AddFormOptions from "./AddFormOptions";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
+import TextField from "./TextField";
+import TextFieldOptions from "./TextFieldOptions";
 
 const AddNewFormStudentSpeciality = ({ onClick, storeIn }) => {
+  //validation
+  const validation = Yup.object({
+    firstName: Yup.string()
+      .min(3, "field must be more than 3 characters")
+      .required("field is required"),
+    lastName: Yup.string()
+      .min(3, "field must be more than 3 characters")
+      .required("field is required"),
+    email: Yup.string().email("enter correct email").required("email required"),
+    password: Yup.string()
+      .min(6, "password must be at least 6 characters")
+      .required("field is required"),
+    phone: Yup.string("numbers only")
+      .required("field is required")
+      .min(10, "must be 10 numbers")
+      .max(10, "must be 10 numbers"),
+    address: Yup.string()
+      .min(7, "enter full address")
+      .required("field is required"),
+    city: Yup.string()
+      .min(4, "enter full city name")
+      .required("field is required"),
+    inscription: Yup.string()
+      .min(8, "cannot be less than 8 characters")
+      .max(15, "cannot be over 15 characters")
+      .required("field is required"),
+    department: Yup.string().required("this field is required"),
+    speciality: Yup.string().required("this field is required"),
+    level: Yup.string().required("this field is required"),
+    group: Yup.string().required("this field is required"),
+  });
+
   //data from the add new modal
-  const [newStudent, setNewStudent] = useState({
+  const initialValues = {
     firstName: "",
     lastName: "",
     email: "",
@@ -20,18 +55,10 @@ const AddNewFormStudentSpeciality = ({ onClick, storeIn }) => {
     department: "",
     group: "",
     storeIn: storeIn,
-  });
-
-  const newValue = (name, value) => {
-    setNewStudent({
-      ...newStudent,
-      [name]: value,
-    });
   };
+
   const addNewUser = (e) => {
     e.preventDefault();
-
-    console.log(newStudent);
   };
 
   return (
@@ -40,128 +67,122 @@ const AddNewFormStudentSpeciality = ({ onClick, storeIn }) => {
         <Img src={image} alt="add form image" />
       </Hero>
       <Content>
-        <form>
-          <Header>
-            {storeIn} Form
-            <CloseIcon onClick={onClick} />
-          </Header>
-          <Shared>
-            <InputShared>
-              <Label>First name *</Label>
-              <input
-                type="text"
-                onChange={(e) => newValue(e.target.name, e.target.value)}
-                name="firstName"
-              />
-            </InputShared>
-            <InputShared>
-              <Label>Last name *</Label>
-              <input
-                type="text"
-                onChange={(e) => newValue(e.target.name, e.target.value)}
-                name="lastName"
-              />
-            </InputShared>
-          </Shared>
-          <NonShared>
-            <Input>
-              <Label>Email *</Label>
-              <input
-                type="text"
-                onChange={(e) => newValue(e.target.name, e.target.value)}
-                name="email"
-              />
-            </Input>
-          </NonShared>
-          <NonShared>
-            <Input>
-              <Label>Address *</Label>
-              <input
-                type="text"
-                onChange={(e) => newValue(e.target.name, e.target.value)}
-                name="address"
-              />
-            </Input>
-          </NonShared>
-          <Shared>
-            <InputShared>
-              <Label>City *</Label>
-              <input
-                type="text"
-                onChange={(e) => newValue(e.target.name, e.target.value)}
-                name="city"
-              />
-            </InputShared>
-            <InputShared>
-              <Label>Phone no *</Label>
-              <input
-                type="text"
-                onChange={(e) => newValue(e.target.name, e.target.value)}
-                name="phone"
-              />
-            </InputShared>
-          </Shared>
-          <Shared>
-            <InputShared>
-              <Label>password *</Label>
-              <input
-                type="text"
-                onChange={(e) => newValue(e.target.name, e.target.value)}
-                name="password"
-              />
-            </InputShared>
-            <InputShared>
-              <Label>Department *</Label>
-              <AddFormOptions
-                options={["TLSI", "IFA"]}
-                newValue={newValue}
-                name="department"
-              />
-            </InputShared>
-          </Shared>
-          <NonShared>
-            <Input>
-              <Label>Inscription no *</Label>
-              <input
-                type="text"
-                onChange={(e) => newValue(e.target.name, e.target.value)}
-                name="inscription"
-              />
-            </Input>
-          </NonShared>
-          <Shared>
-            <InputShared3>
-              <Label>Level *</Label>
-              <AddFormOptions
-                options={["Licence 3", "Master 1", "Master 2"]}
-                newValue={newValue}
-                name="level"
-              />
-            </InputShared3>
-            <InputShared3>
-              <Label>speciality *</Label>
-              <AddFormOptions
-                options={["GL", "TI", "SCI", "SI", "MWT"]}
-                newValue={newValue}
-                name="speciality"
-              />
-            </InputShared3>
-            <InputShared3>
-              <Label>Group *</Label>
-              <AddFormOptions
-                options={["G1", "G2", "G3", "G4"]}
-                newValue={newValue}
-                name="group"
-              />
-            </InputShared3>
-          </Shared>
-          <ButtonContainer>
-            <Save type="submit" onClick={(e) => addNewUser(e)}>
-              Add
-            </Save>
-            <Cancel type="reset" value="Reset" />
-          </ButtonContainer>
-        </form>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validation}
+          onSubmit={(values) => console.log(values)}
+        >
+          {(formik) => (
+            <div>
+              <Header>
+                {storeIn} Form
+                <CloseIcon onClick={onClick} />
+              </Header>
+              <Form style={{ width: "95%" }}>
+                <Shared>
+                  <InputShared>
+                    <Label>First name *</Label>
+                    <TextField type="text" name="firstName" />
+                  </InputShared>
+                  <InputShared>
+                    <Label>Last name *</Label>
+                    <TextField type="text" name="lastName" />
+                  </InputShared>
+                </Shared>
+                <NonShared>
+                  <Input>
+                    <Label>Email *</Label>
+                    <TextField type="email" name="email" />
+                  </Input>
+                </NonShared>
+                <NonShared>
+                  <Input>
+                    <Label>Address *</Label>
+                    <TextField type="text" name="address" />
+                  </Input>
+                </NonShared>
+                <Shared>
+                  <InputShared>
+                    <Label>City *</Label>
+                    <TextField type="text" name="city" />
+                  </InputShared>
+                  <InputShared>
+                    <Label>Phone no *</Label>
+                    <TextField type="text" name="phone" />
+                  </InputShared>
+                </Shared>
+                <Shared>
+                  <InputShared>
+                    <Label>password *</Label>
+                    <TextField type="password" name="password" />
+                  </InputShared>
+                  <InputShared>
+                    <Label>Department *</Label>
+                    <TextFieldOptions
+                      options={[
+                        { key: "Choose dept.", value: "" },
+                        { key: "TLSI", value: "TLSI" },
+                        { key: "IFA", value: "IFA" },
+                      ]}
+                      name="department"
+                    />
+                  </InputShared>
+                </Shared>
+                <NonShared>
+                  <Input>
+                    <Label>Inscription no *</Label>
+                    <TextField type="text" name="inscription" />
+                  </Input>
+                </NonShared>
+                <Shared>
+                  <InputShared3>
+                    <Label>Level *</Label>
+                    <TextFieldOptions
+                      options={[
+                        { key: "choose level", value: "" },
+                        { key: "Licence 3", value: "Licence 3" },
+                        { key: "Master 1", value: "Master 1" },
+                        { key: "Master 2", value: "Master 2" },
+                      ]}
+                      name="level"
+                    />
+                  </InputShared3>
+                  <InputShared3>
+                    <Label>speciality *</Label>
+                    <TextFieldOptions
+                      options={[
+                        { key: "choose section", value: "" },
+                        { key: "GL", value: "GL" },
+                        { key: "TI", value: "TI" },
+                        { key: "SCI", value: "SCI" },
+                        { key: "SI", value: "SI" },
+                        { key: "MWT", value: "MWT" },
+                      ]}
+                      name="speciality"
+                    />
+                  </InputShared3>
+                  <InputShared3>
+                    <Label>Group *</Label>
+                    <TextFieldOptions
+                      options={[
+                        { key: "choose group", value: "" },
+                        { key: "G1", value: "G1" },
+                        { key: "G2", value: "G2" },
+                        { key: "G3", value: "G3" },
+                        { key: "G4", value: "G4" },
+                      ]}
+                      name="group"
+                    />
+                  </InputShared3>
+                </Shared>
+                <ButtonContainer>
+                  <Save type="submit">Add</Save>
+                  <Cancel type="reset" value="Reset" />
+                </ButtonContainer>
+              </Form>
+            </div>
+          )}
+        </Formik>
       </Content>
     </Wrapper>
   );
@@ -183,7 +204,7 @@ const Content = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  & > form {
+  & > div {
     width: 95%;
     display: flex;
     flex-direction: column;
