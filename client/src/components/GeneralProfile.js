@@ -112,7 +112,7 @@ const GeneralProfile = ({
     </Wrapper>
   );
 };
-
+ 
 export default GeneralProfile;
 
 const Wrapper = styled.div`

@@ -10,7 +10,7 @@ const AddFormOptions = ({ options, newValue, name }) => {
     <Select name={name} onChange={(e) => changes(e)}>
       <Option value="">choose {name}</Option>
       {options.map((option) => (
-           <Option value={option}>{option}</Option>
+           <Option key={option} value={option}>{option}</Option>
       ))}
     </Select>
   );

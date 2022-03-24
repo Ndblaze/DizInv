@@ -3,7 +3,7 @@ import styled from "styled-components";
 import axios from "axios";
 import { FaArrowLeft } from "react-icons/fa";
 import GeneralProfile from "../../components/GeneralProfile";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import HashLoader from "react-spinners/HashLoader";
 import { css } from "@emotion/react";
@@ -20,6 +20,7 @@ const override = css`
 
 const UserProfile = () => {
   const params = useParams();
+  const navigation = useNavigate();
   const [user, setUser] = useState({});
   const [profileType, setProfileType] = useState("");
   const [firstLetter, setFirstLetter] = useState();
@@ -39,11 +40,11 @@ const UserProfile = () => {
           setUser(res.data[0]);
           setFirstLetter(res.data[0].firstName.slice(0, 1).toUpperCase());
         }
-        if (res.data[0].hasOwnProperty("inscription")) {
+        if (res.data[0].hasOwnProperty("inscription")) { 
           setProfileType("student");
         }
         setLoading(false);
-      })
+      })  
       .catch((err) => {
         setLoading(false);
         console.log(err.message);
@@ -83,7 +84,7 @@ const UserProfile = () => {
           />
         )}
         <HeaderContainer>
-          <BackIcon />
+          <BackIcon onClick={() => navigation(-1) } />
           <Hearder>
             {user.firstName}-{user.inscription}
           </Hearder>

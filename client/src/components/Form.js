@@ -132,12 +132,18 @@ const Form = ({ user, setNewValues, newValues, UpdateValues, profileType }) => {
                 </InputShared3>
                 <InputShared3>
                   <Label>Section *</Label>
-                  <input
+                  {user.hasOwnProperty('section') && <input
                     type="text"
                     placeholder={user.section}
                     onChange={(e) => getValue(e.target.name, e.target.value)}
                     name="section"
-                  />
+                  />}
+                  {user.hasOwnProperty('speciality') && <input
+                    type="text"
+                    placeholder={user.speciality}
+                    onChange={(e) => getValue(e.target.name, e.target.value)}
+                    name="section"
+                  />}
                 </InputShared3>
                 <InputShared3>
                   <Label>Group *</Label>

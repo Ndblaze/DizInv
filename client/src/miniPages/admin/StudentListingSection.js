@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import toast, { Toaster } from "react-hot-toast";
+import { HiOutlineAcademicCap } from "react-icons/hi";
+import { HiAcademicCap } from "react-icons/hi";
 import axios from "axios";
-import { GiDiploma } from "react-icons/gi";
+import { useParams } from "react-router-dom";
 
-import NewUserModal from "../../components/NewUserModal";
 import HeaderNav from "../../components/HeaderNav";
-import Table from "../../components/Table";
 import ListNav from "../../components/ListNav";
+import Table from "../../components/Table";
 
-const Licence3 = () => {
+import toast, { Toaster } from "react-hot-toast";
+import NewUserModal from "../../components/NewUserModal";
 
-  const [speciality, setSpeciality] = useState("Speciality");
+const StudentListingSection = () => {
+  const params = useParams();
+  const [section, setSection] = useState("Section");
   const [group, setGroup] = useState("Group");
   const [query, setQuery] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -19,6 +22,10 @@ const Licence3 = () => {
   //data been pushed to Table
   const [allList, setAllList] = useState([]);
   const [filtered, setFiltered] = useState([]);
+
+  //common changes to change
+  const [getStudentParameter, setGetStudentParameter] = useState("");
+  const [IconChange, setIconChange] = useState();
 
   const DeleteUser = (message) => {
     toast.success(message, {
@@ -30,13 +37,21 @@ const Licence3 = () => {
   };
 
   useEffect(() => {
+    if (params.id === "licence1") {
+      setGetStudentParameter("Licence 1");
+      setIconChange(<HiOutlineAcademicCap />);
+    }
+    if (params.id === "licence2") {
+      setGetStudentParameter("Licence 2");
+      setIconChange(<HiAcademicCap />);
+    }
     getStudents();
-  }, []);
+  }, [params]);
 
   const getStudents = async () => {
-    const level = "Licence 3";
+    //console.log(params)
     await axios
-      .get(`http://localhost:5000/api/admin/students/${level}`)
+      .get(`http://localhost:5000/api/admin/students/${params.id}`)
       .then((res) => {
         if (res.data.length > 0) {
           setAllList(res.data);
@@ -48,7 +63,6 @@ const Licence3 = () => {
       });
   };
 
-  
   useEffect(() => {
     let newData = allList;
 
@@ -60,24 +74,9 @@ const Licence3 = () => {
         );
       });
     }
-    if (speciality === "GL") {
+    if (section !== "Section") {
       newData = newData.filter((item) => {
-        return item.speciality === "Genie logiciel";
-      });
-    }
-    if (speciality === "TI") {
-      newData = newData.filter((item) => {
-        return item.speciality === "Technology information";
-      });
-    }
-    if (speciality === "SCI") {
-      newData = newData.filter((item) => {
-        return item.speciality === "Genie logiciel";
-      });
-    }
-    if (speciality === "SI") {
-      newData = newData.filter((item) => {
-        return item.speciality === "Genie logiciel";
+        return item.section === section;
       });
     }
     if (group !== "Group") {
@@ -86,22 +85,26 @@ const Licence3 = () => {
       });
     }
     setFiltered(newData);
-  }, [speciality, group, query]);
+  }, [section, group, query]);
+
+  useEffect(() => {
+    setGroup("Group");
+  }, [section]);
 
   return (
     <Wrapper>
       <Content>
         <Toaster />
         <HeaderNav
-          level="Licence 3"
-          Icon={GiDiploma}
+          level={getStudentParameter}
+          Icon={IconChange}
           onClick={() => setModalIsOpen(true)}
         />
         <List>
           <ListNav
-            level="speciality"
-            speciality={speciality}
-            setSpeciality={setSpeciality}
+            level="section"
+            section={section}
+            setSection={setSection}
             setGroup={setGroup}
             group={group}
             onChange={(e) => {
@@ -119,16 +122,16 @@ const Licence3 = () => {
           isOpen={modalIsOpen}
           onRequestClose={() => setModalIsOpen(false)}
           onClick={() => setModalIsOpen(false)}
-          handler="speciality"
+          // handler="speciality"
+          handler="section"
           storeIn="Student"
         />
       </Content>
     </Wrapper>
-  )
-}
+  );
+};
 
-export default Licence3
-
+export default StudentListingSection;
 
 const Wrapper = styled.div`
   padding: 40px 40px 0 0px;

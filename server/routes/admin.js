@@ -8,17 +8,47 @@ router.get("/dashboard", (req, res) => {
   res.send(users);
 });
 
-router.get("/students/:level", (req, res) => {
-  const parameter = req.params.level;
-  res.status(200).send(
-    students.filter((item) => {
-      return item.level === parameter;
-    }) 
-  );
+router.get("/students/:id", (req, res) => {
+  const parameter = req.params.id;
+
+  if (parameter === "licence1") {
+    res.status(200).send(
+      students.filter((item) => {
+        return item.level === "Licence 1";
+      })
+    );
+  }
+  if (parameter === "licence2") {
+    res.status(200).send(
+      students.filter((item) => {
+        return item.level === "Licence 2";
+      })
+    );
+  }
+  if (parameter === "licence3") {
+    res.status(200).send(
+      students.filter((item) => {
+        return item.level === "Licence 3";
+      })
+    );
+  }
+  if (parameter === "master1") {
+    res.status(200).send(
+      students.filter((item) => {
+        return item.level === "Master 1";
+      })
+    );
+  }
+  if (parameter === "master2") {
+    res.status(200).send(
+      students.filter((item) => {
+        return item.level === "Master 2";
+      })
+    );
+  }
 });
 
-
-//getting user profile 
+//getting user profile
 router.get("/student-profile/:id", (req, res) => {
   const parameter = req.params.id;
   res.status(200).send(
@@ -42,8 +72,8 @@ router.delete("/delete/:id", (req, res) => {
     return;
   }
 
-  //yes there exists then we delete it here 
-  students = students.filter((item) => item.inscription !== parameter); 
+  //yes there exists then we delete it here
+  students = students.filter((item) => item.inscription !== parameter);
   res.status(200).send({ status: "SUCCESS" });
 });
 

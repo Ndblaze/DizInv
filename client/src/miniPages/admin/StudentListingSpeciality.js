@@ -2,16 +2,19 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
-import { HiAcademicCap } from "react-icons/hi";
+import { useParams } from "react-router-dom";
+import { GiDiploma } from "react-icons/gi";
+import { FaGraduationCap } from "react-icons/fa";
+import { GiTiedScroll } from "react-icons/gi";
 
 import NewUserModal from "../../components/NewUserModal";
 import HeaderNav from "../../components/HeaderNav";
 import Table from "../../components/Table";
 import ListNav from "../../components/ListNav";
 
-const Licence2 = () => {
+const StudentListingSpeciality = () => {
+  const params = useParams();
   const [speciality, setSpeciality] = useState("Speciality");
-  const [section, setSection] = useState("Section");
   const [group, setGroup] = useState("Group");
   const [query, setQuery] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -19,6 +22,10 @@ const Licence2 = () => {
   //data been pushed to Table
   const [allList, setAllList] = useState([]);
   const [filtered, setFiltered] = useState([]);
+
+   //common changes to change
+   const [getStudentParameter, setGetStudentParameter] = useState("");
+   const [IconChange, setIconChange] = useState();
 
   const DeleteUser = (message) => {
     toast.success(message, {
@@ -30,13 +37,25 @@ const Licence2 = () => {
   };
 
   useEffect(() => {
+    if (params.id === "licence3") {
+      setGetStudentParameter("Licence 3");
+      setIconChange(<GiDiploma />);
+    }
+    if (params.id === "master1") {
+      setGetStudentParameter("Master 1");
+      setIconChange(<FaGraduationCap />);
+    }
+    if (params.id === "master2") {
+      setGetStudentParameter("Master 2");
+      setIconChange(<GiTiedScroll />);
+    }
     getStudents();
-  }, []);
+  }, [params]);
 
   const getStudents = async () => {
-    const level = "Licence 2";
+    //console.log(params)
     await axios
-      .get(`http://localhost:5000/api/admin/students/${level}`)
+      .get(`http://localhost:5000/api/admin/students/${params.id}`)
       .then((res) => {
         if (res.data.length > 0) {
           setAllList(res.data);
@@ -59,9 +78,24 @@ const Licence2 = () => {
         );
       });
     }
-    if (section !== "Section") {
+    if (speciality === "GL") {
       newData = newData.filter((item) => {
-        return item.section === section;
+        return item.speciality === "Genie logiciel";
+      });
+    }
+    if (speciality === "TI") {
+      newData = newData.filter((item) => {
+        return item.speciality === "Technology information";
+      });
+    }
+    if (speciality === "SCI") {
+      newData = newData.filter((item) => {
+        return item.speciality === "Genie logiciel";
+      });
+    }
+    if (speciality === "SI") {
+      newData = newData.filter((item) => {
+        return item.speciality === "Genie logiciel";
       });
     }
     if (group !== "Group") {
@@ -70,27 +104,25 @@ const Licence2 = () => {
       });
     }
     setFiltered(newData);
-  }, [section, group, query]);
+  }, [speciality, group, query]);
 
   useEffect(() => {
     setGroup("Group");
-  }, [section, speciality]);
+  }, [speciality]);
 
   return (
     <Wrapper>
       <Content>
         <Toaster />
         <HeaderNav
-          level="Licence 2"
-          Icon={HiAcademicCap}
+          level={getStudentParameter}
+          Icon={IconChange}
           onClick={() => setModalIsOpen(true)}
         />
         <List>
           <ListNav
-            level="section"
+            level="speciality"
             speciality={speciality}
-            section={section}
-            setSection={setSection}
             setSpeciality={setSpeciality}
             setGroup={setGroup}
             group={group}
@@ -109,8 +141,7 @@ const Licence2 = () => {
           isOpen={modalIsOpen}
           onRequestClose={() => setModalIsOpen(false)}
           onClick={() => setModalIsOpen(false)}
-          // handler="speciality"
-          handler="section"
+          handler="speciality"
           storeIn="Student"
         />
       </Content>
@@ -118,7 +149,7 @@ const Licence2 = () => {
   );
 };
 
-export default Licence2;
+export default StudentListingSpeciality;
 
 const Wrapper = styled.div`
   padding: 40px 40px 0 0px;

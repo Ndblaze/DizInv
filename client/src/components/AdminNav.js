@@ -77,7 +77,7 @@ const AdminNav = () => {
           <Move>
             <MenuLinkIcon
               Name="Licence 1"
-              path="/admin/licence1"
+              path="/admin/section/licence1"
               Icon={HiOutlineAcademicCap}
               Active={active === "Licence 1" ? true : false}
               onClick={() => {
@@ -86,7 +86,7 @@ const AdminNav = () => {
             />
             <MenuLinkIcon
               Name="Licence 2"
-              path="/admin/licence2"
+              path="/admin/section/licence2"
               Icon={HiAcademicCap}
               Active={active === "Licence 2" ? true : false}
               onClick={() => {
@@ -95,7 +95,7 @@ const AdminNav = () => {
             />
             <MenuLinkIcon
               Name="Licence 3"
-              path="/admin/licence3"
+              path="/admin/speciality/licence3"
               Icon={GiDiploma}
               Active={active === "Licence 3" ? true : false}
               onClick={() => {
@@ -104,7 +104,7 @@ const AdminNav = () => {
             />
             <MenuLinkIcon
               Name="Master 1"
-              path="/admin/master1"
+              path="/admin/speciality/master1"
               Icon={FaGraduationCap}
               Active={active === "Master 1" ? true : false}
               onClick={() => {
@@ -113,7 +113,7 @@ const AdminNav = () => {
             />
             <MenuLinkIcon
               Name="Master 2"
-              path="/admin/master2"
+              path="/admin/speciality/master2"
               Icon={GiTiedScroll}
               Active={active === "Master 2" ? true : false}
               onClick={() => {

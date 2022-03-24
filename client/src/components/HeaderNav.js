@@ -7,7 +7,7 @@ const HeaderNav = ({ level, Icon, onClick }) => {
   return (
     <HeaderContainer>
       <div>
-        <LevelIcon><Icon /></LevelIcon>
+        <LevelIcon>{Icon}</LevelIcon>
         <Hearder>{level}</Hearder>
       </div>
       <Add onClick={onClick}>
