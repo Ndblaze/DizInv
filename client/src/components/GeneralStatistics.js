@@ -16,7 +16,7 @@ const GeneralStatistics = ({ Teachers, Students, Modules }) => {
             number={3}
             about="Department"
             background="#E5EAFA"
-          /> 
+          />
         </Stats>
         <Stats>
           <GeneralStatsIcon
@@ -50,7 +50,7 @@ const GeneralStatistics = ({ Teachers, Students, Modules }) => {
   );
 };
 
-export default GeneralStatistics;  
+export default GeneralStatistics;
 
 const Wrapper = styled.div`
   margin-top: 15px;
@@ -73,4 +73,6 @@ const Stats = styled.div`
   justify-content: center;
   align-items: center;
   // border: 1px solid red;
+  padding: 10px;
+  border-radius: 8px;
 `;

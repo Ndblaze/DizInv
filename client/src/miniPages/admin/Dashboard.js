@@ -4,6 +4,7 @@ import GeneralStatistics from "../../components/GeneralStatistics";
 
 //react icons
 import { BiBarChartAlt } from "react-icons/bi";
+import PieChart from "../../components/PieChart";
 
 const Dashboard = () => {
   return (
@@ -24,11 +25,16 @@ const Dashboard = () => {
               <div></div>
             </Down>
           </One>
-          <Two> <div></div> </Two>
+          <Two>
+            {" "}
+            <div>
+              <PieChart />
+            </div>{" "}
+          </Two>
         </Grid>
       </Content>
     </Wrapper>
-  ); 
+  );
 };
 
 export default Dashboard;
@@ -67,7 +73,7 @@ const Grid = styled.div`
 `;
 
 const One = styled.div`
- // border: 1px solid red;
+  // border: 1px solid red;
   flex: 1;
 `;
 
@@ -76,10 +82,13 @@ const Two = styled.div`
   height: 380px;
   display: flex;
   align-items: center;
-  justify-content:center ;
+  justify-content: center;
 
   & > div {
     background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
     height: 100%;
     border-radius: 25px;

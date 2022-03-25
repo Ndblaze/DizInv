@@ -7,10 +7,11 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import TextField from "./TextField";
 import TextFieldOptions from "./TextFieldOptions";
+import TextFieldOptionsGroup from "./TextFieldOptionsGroup";
 
 const AddNewFormStudentSection = ({
   setModalIsOpen,
-  storeIn,
+  storeIn, 
   addedFailed,
   addedSuccecfully,
 }) => {
@@ -97,7 +98,7 @@ const AddNewFormStudentSection = ({
         <Formik
           initialValues={initialValues}
           validationSchema={validation}
-          onSubmit={(values) => addNewUser(values)}
+         // onSubmit={(values) => addNewUser(values)}
         >
           {(formik) => (
             <div>
@@ -106,6 +107,7 @@ const AddNewFormStudentSection = ({
                 <CloseIcon onClick={setModalIsOpen} />
               </Header>
               <Form style={{ width: "95%" }}>
+              {console.log({formik})}
                 <Shared>
                   <InputShared>
                     <Label>First name *</Label>
@@ -187,14 +189,8 @@ const AddNewFormStudentSection = ({
                   </InputShared3>
                   <InputShared3>
                     <Label>Group *</Label>
-                    <TextFieldOptions
-                      options={[
-                        { key: "choose group", value: "" },
-                        { key: "G1", value: "G1" },
-                        { key: "G2", value: "G2" },
-                        { key: "G3", value: "G3" },
-                        { key: "G4", value: "G4" },
-                      ]}
+                    <TextFieldOptionsGroup
+                      formikSection={formik.values.section}
                       name="group"
                     />
                   </InputShared3>
