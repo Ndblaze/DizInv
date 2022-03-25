@@ -60,6 +60,7 @@ router.get("/student-profile/:id", (req, res) => {
 
 router.delete("/delete/:id", (req, res) => {
   const parameter = req.params.id;
+  console.log(parameter);
   const student = students.filter((item) => {
     if (item.inscription === parameter) {
       return item;
@@ -75,6 +76,19 @@ router.delete("/delete/:id", (req, res) => {
   //yes there exists then we delete it here
   students = students.filter((item) => item.inscription !== parameter);
   res.status(200).send({ status: "SUCCESS" });
+});
+
+router.post("/add-new-student", (req, res) => {
+  const { values } = req.body;
+  //  console.log(values);
+  if (values) {
+    students.push(values);
+    res.status(200).send({ status: "SUCCESS" });
+    return;
+  }
+
+  res.send({ status: "FAILED" });
+  return;
 });
 
 module.exports = router;

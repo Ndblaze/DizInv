@@ -11,7 +11,7 @@ const GeneralProfile = ({
   UpdateValues,
   profileType,
   firstLetter,
-  style,
+  style, 
 }) => {
   return (
     <Wrapper style={style}>
@@ -70,7 +70,7 @@ const GeneralProfile = ({
                   <DataContainer>
                     <Data>Inscr. No:</Data>
                     <Value>{user.inscription}</Value>
-                  </DataContainer>
+                  </DataContainer> 
                   <DataContainer>
                     <Data>Deprt:</Data>
                     <Value>{user.department}</Value>

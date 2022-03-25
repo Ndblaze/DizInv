@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
+import axios from "axios";
 import { MdOutlineClose } from "react-icons/md";
 import image from "../asserts/images/addForm.svg";
 import { Formik, Form } from "formik";
@@ -7,7 +8,12 @@ import * as Yup from "yup";
 import TextField from "./TextField";
 import TextFieldOptions from "./TextFieldOptions";
 
-const AddNewFormStudentSpeciality = ({ onClick, storeIn }) => {
+const AddNewFormStudentSpeciality = ({
+  setModalIsOpen,
+  storeIn,
+  addedSuccecfully,
+  addedFailed,
+}) => {
   //validation
   const validation = Yup.object({
     firstName: Yup.string()
@@ -18,8 +24,12 @@ const AddNewFormStudentSpeciality = ({ onClick, storeIn }) => {
       .required("field is required"),
     email: Yup.string().email("enter correct email").required("email required"),
     password: Yup.string()
-      .min(6, "password must be at least 6 characters")
-      .required("field is required"),
+      .min(8, "password must be at least 8 characters")
+      .required("field is required")
+      .matches(
+        /^(?=.*[a-zA-Z])/,
+        "must contain one Uppercase, One Lowwecase, one Number and special character."
+      ),
     phone: Yup.string("numbers only")
       .required("field is required")
       .min(10, "must be 10 numbers")
@@ -54,11 +64,29 @@ const AddNewFormStudentSpeciality = ({ onClick, storeIn }) => {
     speciality: "",
     department: "",
     group: "",
-    storeIn: storeIn,
   };
 
-  const addNewUser = (e) => {
-    e.preventDefault();
+  const addNewUser = async (values) => {
+    //console.log(values);
+    //close the modal
+    setModalIsOpen();
+    await axios
+      .post("http://localhost:5000/api/admin/add-new-student", {
+        values,
+      })
+      .then((res) => {
+        if (res.data.status === "SUCCESS") {
+          // succes toast down to the main component
+          addedSuccecfully("Student was succefully added");
+        }
+        if (res.data.status === "FAILED") {
+          addedFailed("Something went wrong, try again");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        addedFailed("Something went wrong, try again");
+      });
   };
 
   return (
@@ -70,13 +98,13 @@ const AddNewFormStudentSpeciality = ({ onClick, storeIn }) => {
         <Formik
           initialValues={initialValues}
           validationSchema={validation}
-          onSubmit={(values) => console.log(values)}
+          onSubmit={(values) => addNewUser(values)}
         >
           {(formik) => (
             <div>
               <Header>
                 {storeIn} Form
-                <CloseIcon onClick={onClick} />
+                <CloseIcon onClick={setModalIsOpen} />
               </Header>
               <Form style={{ width: "95%" }}>
                 <Shared>

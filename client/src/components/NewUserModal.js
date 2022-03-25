@@ -7,9 +7,11 @@ import AddNewFormStudentSpeciality from "./AddNewFormStudentSpeciality";
 const NewUserModal = ({
   isOpen,
   onRequestClose,
-  onClick,
-  handler, 
+  setModalIsOpen,
+  handler,
   storeIn,
+  addedSuccecfully,
+  addedFailed
 }) => {
   const customStyles = {
     content: {
@@ -25,7 +27,7 @@ const NewUserModal = ({
       overflow: "hidden",
       width: "900px",
       height: "650px",
-    },
+    }, 
     overlay: {
       backgroundColor: "rgba(10, 11, 13, 0.75)",
     },
@@ -40,14 +42,18 @@ const NewUserModal = ({
     >
       {handler === "section" && (
         <AddNewFormStudentSection
-          onClick={onClick}
+          setModalIsOpen={setModalIsOpen}
           storeIn={storeIn}
+          addedSuccecfully={addedSuccecfully}
+          addedFailed={addedFailed}
         />
       )}
       {handler === "speciality" && (
         <AddNewFormStudentSpeciality
-          onClick={onClick}
+          setModalIsOpen={setModalIsOpen}
           storeIn={storeIn}
+          addedSuccecfully={addedSuccecfully}
+          addedFailed={addedFailed}
         />
       )}
     </Modal>

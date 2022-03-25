@@ -36,12 +36,33 @@ const StudentListingSection = () => {
     });
   };
 
+  //this function is called from the addNew forms components
+  const addedSuccecfully = (message) => {
+    toast.success(message, {
+      style: {
+        background: "#25ab42",
+        color: "#fff",
+      },
+    });
+  };
+
+  
+   //this function is called from the addNew forms components
+   const addedFailed = (message) => {
+    toast.error(message, {
+      style: {
+        background: "rgba(255,51,51, 0.7)",
+        color: "#fff",
+      },
+    });
+  };
+
   useEffect(() => {
     if (params.id === "licence1") {
       setGetStudentParameter("Licence 1");
       setIconChange(<HiOutlineAcademicCap />);
     }
-    if (params.id === "licence2") {
+    if (params.id === "licence2") { 
       setGetStudentParameter("Licence 2");
       setIconChange(<HiAcademicCap />);
     }
@@ -111,7 +132,7 @@ const StudentListingSection = () => {
               setQuery(e.target.value);
             }}
             total={filtered.length}
-          />
+          /> 
           <Table
             data={filtered}
             DeleteUser={DeleteUser}
@@ -121,10 +142,11 @@ const StudentListingSection = () => {
         <NewUserModal
           isOpen={modalIsOpen}
           onRequestClose={() => setModalIsOpen(false)}
-          onClick={() => setModalIsOpen(false)}
-          // handler="speciality"
+          setModalIsOpen={() => setModalIsOpen(false)}
+          addedSuccecfully={addedSuccecfully}
+          addedFailed={addedFailed}
           handler="section"
-          storeIn="Student"
+          storeIn="Student" 
         />
       </Content>
     </Wrapper>
