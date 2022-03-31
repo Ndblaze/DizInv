@@ -84,7 +84,7 @@ router.post("/add-new-student", (req, res) => {
   if (values) {
     students.push(values);
     res.status(200).send({ status: "SUCCESS" });
-    return;
+    return; 
   }
 
   res.send({ status: "FAILED" });

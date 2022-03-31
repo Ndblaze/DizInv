@@ -16,16 +16,60 @@ const TextFieldOptionsGroup = ({ ...props }) => {
         {...field}
         {...props}
       >
-        {formikSection === "" ||
-          (formikSection === "Section 1" && (
-            <>
-              <Option value=""> choose group </Option>
-              <Option value="G1"> G1 </Option>
-              <Option value="G2"> G2 </Option>
-              <Option value="G3"> G3 </Option>
-              <Option value="G4"> G4 </Option>
-            </>
-          ))}
+        {formikSection === "GL" && (
+          <>
+            <Option value=""> choose group </Option>
+            <Option value="G1"> G1 </Option>
+            <Option value="G2"> G2 </Option>
+            <Option value="G3"> G3 </Option>
+            <Option value="G4"> G4 </Option>
+          </>
+        )}
+        {formikSection === "TI" && (
+          <>
+            <Option value=""> choose group </Option>
+            <Option value="G1"> G1 </Option>
+            <Option value="G2"> G2 </Option>
+            <Option value="G3"> G3 </Option>
+            <Option value="G4"> G4 </Option>
+          </>
+        )}
+        {formikSection === "SCI" && (
+          <>
+            <Option value=""> choose group </Option>
+            <Option value="G1"> G1 </Option>
+            <Option value="G2"> G2 </Option>
+            <Option value="G3"> G3 </Option>
+            <Option value="G4"> G4 </Option>
+          </>
+        )}
+        {formikSection === "SI" && (
+          <>
+            <Option value=""> choose group </Option>
+            <Option value="G1"> G1 </Option>
+            <Option value="G2"> G2 </Option>
+            <Option value="G3"> G3 </Option>
+            <Option value="G4"> G4 </Option>
+          </>
+        )}
+        {formikSection === "MWT" && (
+          <>
+            <Option value=""> choose group </Option>
+            <Option value="G1"> G1 </Option>
+            <Option value="G2"> G2 </Option>
+            <Option value="G3"> G3 </Option>
+            <Option value="G4"> G4 </Option>
+          </>
+        )}
+        {formikSection === "Section 1" && (
+          <>
+            <Option value=""> choose group </Option>
+            <Option value="G1"> G1 </Option>
+            <Option value="G2"> G2 </Option>
+            <Option value="G3"> G3 </Option>
+            <Option value="G4"> G4 </Option>
+          </>
+        )}
         {formikSection === "Section 2" && (
           <>
             <Option value=""> choose group </Option>

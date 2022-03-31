@@ -51,29 +51,8 @@ const UserProfile = () => {
       });
   };
 
-  //data from the add new userEditProfile
-  const [newValues, setNewValues] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    address: "",
-    city: "",
-    password: "",
-    level: "",
-    inscription: "",
-    section: "",
-    group: "",
-    department: "",
-  });
-
-  const UpdateValues = (e) => {
-    e.preventDefault();
-    console.log(newValues);
-  };
-
   return (
-    <Wrapper>
+    <Wrapper> 
       <Content>
         {loading && (
           <HashLoader
@@ -92,12 +71,9 @@ const UserProfile = () => {
         <GeneralProfile
           style={{
             opacity: loading && 0.4,
-            pointerEvents: loading && "none",
+            pointerEvents: loading && "none", 
           }}
           user={user}
-          setNewValues={setNewValues}
-          newValues={newValues}
-          UpdateValues={UpdateValues}
           firstLetter={firstLetter}
           profileType={profileType}
         /> 

@@ -46,9 +46,8 @@ const StudentListingSection = () => {
     });
   };
 
-  
-   //this function is called from the addNew forms components
-   const addedFailed = (message) => {
+  //this function is called from the addNew forms components
+  const addedFailed = (message) => {
     toast.error(message, {
       style: {
         background: "rgba(255,51,51, 0.7)",
@@ -62,7 +61,7 @@ const StudentListingSection = () => {
       setGetStudentParameter("Licence 1");
       setIconChange(<HiOutlineAcademicCap />);
     }
-    if (params.id === "licence2") { 
+    if (params.id === "licence2") {
       setGetStudentParameter("Licence 2");
       setIconChange(<HiAcademicCap />);
     }
@@ -132,7 +131,7 @@ const StudentListingSection = () => {
               setQuery(e.target.value);
             }}
             total={filtered.length}
-          /> 
+          />
           <Table
             data={filtered}
             DeleteUser={DeleteUser}
@@ -143,10 +142,10 @@ const StudentListingSection = () => {
           isOpen={modalIsOpen}
           onRequestClose={() => setModalIsOpen(false)}
           setModalIsOpen={() => setModalIsOpen(false)}
+          update={getStudents}
           addedSuccecfully={addedSuccecfully}
           addedFailed={addedFailed}
           handler="section"
-          storeIn="Student" 
         />
       </Content>
     </Wrapper>

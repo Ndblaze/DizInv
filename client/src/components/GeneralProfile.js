@@ -1,24 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 import { MdOutlineEditNote } from "react-icons/md";
 import Form from "./Form";
 
-const GeneralProfile = ({
-  user,
-  setNewValues,
-  newValues,
-  UpdateValues,
-  profileType,
-  firstLetter,
-  style, 
-}) => {
+const GeneralProfile = ({ user, profileType, firstLetter, style }) => {
+  const [edit, setEdit] = useState(true);
+
   return (
     <Wrapper style={style}>
       <Content>
         <Info>
           <Personal>
-            <Edit />
+            <Edit onClick={() => setEdit(!edit)} />
             <Header>
               <Photo>{firstLetter}</Photo>
               <Name>
@@ -70,7 +64,7 @@ const GeneralProfile = ({
                   <DataContainer>
                     <Data>Inscr. No:</Data>
                     <Value>{user.inscription}</Value>
-                  </DataContainer> 
+                  </DataContainer>
                   <DataContainer>
                     <Data>Deprt:</Data>
                     <Value>{user.department}</Value>
@@ -80,39 +74,26 @@ const GeneralProfile = ({
                     <Value>{user.level}</Value>
                   </DataContainer>
                   <DataContainer>
-                    {user.department === "Commune Core" ? (
-                      <>
-                        <Data>Scetion/Group:</Data>
-                        <Value>
-                          {user.section} / {user.group}
-                        </Value>{" "}
-                      </>
+                    {user.department === "MI" ? (
+                      <Data>Scetion/Group:</Data>
                     ) : (
-                      <>
-                        <Data>Speciality/Group:</Data>
-                        <Value>
-                          {user.speciality} / {user.group}
-                        </Value>{" "}
-                      </>
+                      <Data>Speciality/Group:</Data>
                     )}
+                    <Value>
+                      {user.section_speciality} / {user.group}
+                    </Value>{" "}
                   </DataContainer>
                 </AcademicDetail>
               </>
             )}
           </Academic>
-        </Info>
-        <Form
-          user={user}
-          profileType={profileType}
-          setNewValues={setNewValues}
-          newValues={newValues}
-          UpdateValues={UpdateValues}
-        />
+        </Info> 
+        <Form user={user} profileType={profileType} edit={edit} />
       </Content>
     </Wrapper>
   );
 };
- 
+
 export default GeneralProfile;
 
 const Wrapper = styled.div`

@@ -10,7 +10,7 @@ import {
   Title,
   BarElement,
 } from "chart.js";
-import { Pie } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 
 ChartJS.register(
   ArcElement,
@@ -50,25 +50,15 @@ const data = {
 };
 
 const options = {
-  layout: {
-    padding: {
-      top: 60,
-      left: 60,
-      right: 60,
-      bottom: 60,
-    },
-  },
   plugins: {
     title: {
       display: true,
-      text: "Pie Chart of users (Teachers, Students)",
+      text: "Bar Chart of users (Teachers, Students)",
       padding: {
-        top: 10,
-        bottom: -20,
+        top: 0,
       },
     },
     legend: {
-      position: "right",
       labels: {
         boxWidth: 15,
         boxHeight: 10,
@@ -77,10 +67,10 @@ const options = {
   },
 };
 
-const PieChart = ({ setChartView }) => {
+const BarChart = ({ setChartView }) => {
   return (
     <Wrapper>
-      <Pie data={data} options={options} />
+      <Bar data={data} options={options} />
       <ButtonContainer>
         <Button onClick={() => setChartView("pie")}>#Piechart</Button>
         <Button onClick={() => setChartView("bar")}>#Barchart</Button>
@@ -90,24 +80,20 @@ const PieChart = ({ setChartView }) => {
   );
 };
 
-export default PieChart;
+export default BarChart;
 
 const Wrapper = styled.div`
   width: 90%;
-  height: 80%;
+  height: 90%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 `;
 
-const ButtonContainer = styled.div`
-  display: flex;
-`;
+const ButtonContainer = styled.div``;
 
 const Button = styled.button`
-  height: 20px;
-  margin-top: -70px;
   margin-right: 10px;
   font-size: 16px;
   color: #adb1c0;

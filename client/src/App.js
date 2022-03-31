@@ -16,19 +16,6 @@ import UserProfile from "./miniPages/admin/UserProfile";
 
 function App() {
   const [user, setUser] = useState({});
-  //const [data, setData] = useState({});
-
-  // useEffect(() => {
-  //   const data = async () => {
-  //     const response = await axios.get(
-  //       "http://localhost:5000/api/admin/dashboard"
-  //     );
-  //     if (response.status === 200) {
-  //       setData(response.data);
-  //     }
-  //   };
-  //   data();
-  // }, []);
 
   useEffect(() => {
     setUser({

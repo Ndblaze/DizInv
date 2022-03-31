@@ -2,16 +2,14 @@ import React from "react";
 import Modal from "react-modal";
 
 import AddNewFormStudentSection from "./AddNewFormStudentSection";
-import AddNewFormStudentSpeciality from "./AddNewFormStudentSpeciality";
 
 const NewUserModal = ({
   isOpen,
   onRequestClose,
   setModalIsOpen,
-  handler,
-  storeIn,
+  update,
   addedSuccecfully,
-  addedFailed
+  addedFailed,
 }) => {
   const customStyles = {
     content: {
@@ -27,7 +25,7 @@ const NewUserModal = ({
       overflow: "hidden",
       width: "900px",
       height: "650px",
-    }, 
+    },
     overlay: {
       backgroundColor: "rgba(10, 11, 13, 0.75)",
     },
@@ -40,22 +38,12 @@ const NewUserModal = ({
       onRequestClose={onRequestClose}
       ariaHideApp={false}
     >
-      {handler === "section" && (
-        <AddNewFormStudentSection
-          setModalIsOpen={setModalIsOpen}
-          storeIn={storeIn}
-          addedSuccecfully={addedSuccecfully}
-          addedFailed={addedFailed}
-        />
-      )}
-      {handler === "speciality" && (
-        <AddNewFormStudentSpeciality
-          setModalIsOpen={setModalIsOpen}
-          storeIn={storeIn}
-          addedSuccecfully={addedSuccecfully}
-          addedFailed={addedFailed}
-        />
-      )}
+      <AddNewFormStudentSection
+        setModalIsOpen={setModalIsOpen}
+        addedSuccecfully={addedSuccecfully}
+        addedFailed={addedFailed}
+        update={update}
+      />
     </Modal>
   );
 };

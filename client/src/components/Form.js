@@ -1,188 +1,254 @@
 import React from "react";
 import styled from "styled-components";
-const Form = ({ user, setNewValues, newValues, UpdateValues, profileType }) => {
+import { Formik, Form } from "formik";
+import TextField from "./TextField";
+import TextFieldOptions from "./TextFieldOptions";
+import TextFieldOptionsGroup from "./TextFieldOptionsGroup";
+import * as Yup from "yup";
 
-  const getValue = (name, value) => {
-    setNewValues({
-      ...newValues,
-      [name]: value,
-    });
-  };
+const ProfileUpdateForm = ({ user, profileType, edit }) => {
+  //validation
+  const validation = Yup.object({
+    firstName: Yup.string()
+      .min(3, "field must be more than 3 characters")
+      .required("field is required"),
+    lastName: Yup.string()
+      .min(3, "field must be more than 3 characters")
+      .required("field is required"),
+    email: Yup.string().email("enter correct email").required("email required"),
+    password: Yup.string()
+      .min(8, "password must be at least 8 characters")
+      .required("field is required")
+      .matches(
+        /^(?=.*[a-zA-Z])/,
+        "must contain one Uppercase, One Lowwecase, one Number and special character."
+      ),
+    phone: Yup.string("numbers only")
+      .required("field is required")
+      .min(10, "must be 10 numbers")
+      .max(10, "must be 10 numbers"),
+    address: Yup.string()
+      .min(7, "enter full address")
+      .required("field is required"),
+    city: Yup.string()
+      .min(4, "enter full city name")
+      .required("field is required"),
+    inscription: Yup.string()
+      .min(8, "cannot be less than 8 characters")
+      .max(15, "cannot be over 15 characters")
+      .required("field is required"),
+    department: Yup.string().required("this field is required"),
+    speciality: Yup.string().required("this field is required"),
+    section: Yup.string().required("this field is required"),
+    level: Yup.string().required("this field is required"),
+    group: Yup.string().required("this field is required"),
+  });
+
+  console.log(user);
 
   return (
     <Wrapper>
-      <Content>
-        <form>
-          <Shared>
-            <InputShared>
-              <Label>first name</Label>
-              <input
-                type="text"
-                placeholder={user.firstName}
-                onChange={(e) => getValue(e.target.name, e.target.value)}
-                name="firstName"
-              />
-            </InputShared>
-            <InputShared>
-              <Label>Last name</Label>
-              <input
-                type="text"
-                placeholder={user.lastName}
-                onChange={(e) => getValue(e.target.name, e.target.value)}
-                name="lastName"
-              />
-            </InputShared>
-          </Shared>
-          <NonShared>
-            <Input>
-              <Label>Email</Label>
-              <input
-                type="text"
-                placeholder={user.email}
-                onChange={(e) => getValue(e.target.name, e.target.value)}
-                name="email"
-              />
-            </Input>
-          </NonShared>
-          <NonShared>
-            <Input>
-              <Label>Address</Label>
-              <input
-                type="text"
-                placeholder={user.address}
-                onChange={(e) => getValue(e.target.name, e.target.value)}
-                name="address"
-              />
-            </Input>
-          </NonShared>
-          <NonShared>
-            <Input>
-              <Label>City</Label>
-              <input
-                type="text"
-                placeholder={user.city}
-                onChange={(e) => getValue(e.target.name, e.target.value)}
-                name="city"
-              />
-            </Input>
-          </NonShared>
-          <Shared>
-            <InputShared>
-              <Label>Password</Label>
-              <input
-                type="text"
-                placeholder={user.password}
-                onChange={(e) => getValue(e.target.name, e.target.value)}
-                name="password"
-              />
-            </InputShared>
-            <InputShared>
-              <Label>Phone</Label>
-              <input
-                type="text"
-                placeholder={user.phone}
-                onChange={(e) => getValue(e.target.name, e.target.value)}
-                name="phone"
-              />
-            </InputShared>
-          </Shared>
-          {profileType === "admin" && (
-            <Shared>
-              <InputShared>
-                <Label>Position</Label>
-                <input type="text" defaultValue={user.position} />
-              </InputShared>
-              <InputShared>
-                <Label>Faculty</Label>
-                <input type="text" defaultValue={user.faculty} />
-              </InputShared>
-            </Shared>
+      <Content style={{ opacity: edit && 0.3, pointerEvents: edit && "none" }}>
+        <Formik
+          enableReinitialize
+          initialValues={user}
+          validationSchema={validation}
+          onSubmit={(values) => console.log(values)}
+        >
+          {(formik) => (
+            <div>
+              <Form style={{ width: "100%" }}>
+                {console.log({ formik })}
+                <Shared>
+                  <InputShared>
+                    <Label>first name</Label>
+                    <TextField type="text" name="firstName" />
+                  </InputShared>
+                  <InputShared>
+                    <Label>Last name</Label>
+                    <TextField type="text" name="lastName" />
+                  </InputShared>
+                </Shared>
+                <NonShared>
+                  <Input>
+                    <Label>Email *</Label>
+                    <TextField type="email" name="email" />
+                  </Input>
+                </NonShared>
+                <NonShared>
+                  <Input>
+                    <Label>Address *</Label>
+                    <TextField type="text" name="address" />
+                  </Input>
+                </NonShared>
+                <Shared>
+                  <InputShared>
+                    <Label>City *</Label>
+                    <TextField type="text" name="city" />
+                  </InputShared>
+                  <InputShared>
+                    <Label>Phone no *</Label>
+                    <TextField type="text" name="phone" />
+                  </InputShared>
+                </Shared>
+                {profileType === "admin" && (
+                  <>
+                    <Shared>
+                      <InputShared>
+                        <Label>password *</Label>
+                        <TextField type="password" name="password" />
+                      </InputShared>
+                    </Shared>
+                    <Shared>
+                      <InputShared>
+                        <Label>Position</Label>
+                        <input type="text" defaultValue={user.position} />
+                      </InputShared>
+                      <InputShared>
+                        <Label>Faculty</Label>
+                        <input type="text" defaultValue={user.faculty} />
+                      </InputShared>
+                    </Shared>
+                  </>
+                )}
+                {profileType === "student" && (
+                  <>
+                    <Shared>
+                      <InputShared>
+                        <Label>password *</Label>
+                        <TextField type="password" name="password" />
+                      </InputShared>
+                      <InputShared>
+                        <Label>Department *</Label>
+                        {user.hasOwnProperty("section") && (
+                          <TextFieldOptions
+                            options={[
+                              { key: "Choose dept.", value: "" },
+                              { key: "Commun Core", value: "Commun Core" },
+                            ]}
+                            name="department"
+                          />
+                        )}
+                        {user.hasOwnProperty("speciality") && (
+                          <TextFieldOptions
+                            options={[
+                              { key: "Choose dept.", value: "" },
+                              { key: "TLSI", value: "TLSI" },
+                              { key: "IFA", value: "IFA" },
+                            ]}
+                            name="department"
+                          />
+                        )}
+                      </InputShared>
+                    </Shared>
+                    <NonShared>
+                      <Input>
+                        <Label>Inscription no *</Label>
+                        <TextField type="text" name="inscription" />
+                      </Input>
+                    </NonShared>
+
+                    <Shared>
+                      <InputShared3>
+                        <Label>Level *</Label>
+                        {user.hasOwnProperty("section") && (
+                          <TextFieldOptions
+                            options={[
+                              { key: "choose level", value: "" },
+                              { key: "Licence 1", value: "Licence 1" },
+                              { key: "Licence 2", value: "Licence 2" },
+                            ]}
+                            name="level"
+                          />
+                        )}
+                        {user.hasOwnProperty("speciality") && (
+                          <TextFieldOptions
+                            options={[
+                              { key: "choose level", value: "" },
+                              { key: "Licence 3", value: "Licence 3" },
+                              { key: "Master 1", value: "Master 1" },
+                              { key: "Master 2", value: "Master 2" },
+                            ]}
+                            name="level"
+                          />
+                        )}
+                      </InputShared3>
+                      <InputShared3>
+                        {user.hasOwnProperty("section") && (
+                          <>
+                            {" "}
+                            <Label>Section *</Label>
+                            <TextFieldOptions
+                              options={[
+                                { key: "choose section", value: "" },
+                                { key: "Section 1", value: "Section 1" },
+                                { key: "Section 2", value: "Section 2" },
+                                { key: "Section 3", value: "Section 3" },
+                                { key: "Section 4", value: "Section 4" },
+                              ]}
+                              name="section"
+                            />{" "}
+                          </>
+                        )}
+                        {user.hasOwnProperty("speciality") && (
+                          <>
+                            <Label>speciality *</Label>
+                            <TextFieldOptions
+                              options={[
+                                { key: "choose section", value: "" },
+                                { key: "GL", value: "GL" },
+                                { key: "TI", value: "TI" },
+                                { key: "SCI", value: "SCI" },
+                                { key: "SI", value: "SI" },
+                                { key: "MWT", value: "MWT" },
+                              ]}
+                              name="speciality"
+                            />
+                          </>
+                        )}
+                      </InputShared3>
+                      <InputShared3>
+                        <Label>Group *</Label>
+                        <TextFieldOptionsGroup
+                          formikSection={formik.values.section}
+                          name="group"
+                        />
+                      </InputShared3>
+                    </Shared>
+                  </>
+                )}
+                <ButtonContainer>
+                  <Save type="submit">Add</Save>
+                  <Cancel type="reset" value="Reset" />
+                </ButtonContainer>
+              </Form>
+            </div>
           )}
-          {profileType === "student" && (
-            <>
-              <Shared>
-                <InputShared>
-                  <Label>Inscrption No *</Label>
-                  <input
-                    type="text"
-                    placeholder={user.inscription}
-                    onChange={(e) => getValue(e.target.name, e.target.value)}
-                    name="inscription"
-                  />
-                </InputShared>
-                <InputShared>
-                  <Label>Department *</Label>
-                  <input
-                    type="text"
-                    placeholder={user.department}
-                    onChange={(e) => getValue(e.target.name, e.target.value)}
-                    name="department"
-                  />
-                </InputShared>
-              </Shared>
-              <Shared>
-                <InputShared3>
-                  <Label>Level *</Label>
-                  <input
-                    type="text"
-                    placeholder={user.level}
-                    onChange={(e) => getValue(e.target.name, e.target.value)}
-                    name="level"
-                  />
-                </InputShared3>
-                <InputShared3>
-                  <Label>Section *</Label>
-                  {user.hasOwnProperty('section') && <input
-                    type="text"
-                    placeholder={user.section}
-                    onChange={(e) => getValue(e.target.name, e.target.value)}
-                    name="section"
-                  />}
-                  {user.hasOwnProperty('speciality') && <input
-                    type="text"
-                    placeholder={user.speciality}
-                    onChange={(e) => getValue(e.target.name, e.target.value)}
-                    name="section"
-                  />}
-                </InputShared3>
-                <InputShared3>
-                  <Label>Group *</Label>
-                  <input
-                    type="text"
-                    placeholder={user.group}
-                    onChange={(e) => getValue(e.target.name, e.target.value)}
-                    name="group"
-                  />
-                </InputShared3>
-              </Shared>
-            </>
-          )}
-          <ButtonContainer>
-            <Save onClick={UpdateValues}>Save</Save>
-            <Cancel>Cancel</Cancel>
-          </ButtonContainer>
-        </form>
+        </Formik>
       </Content>
     </Wrapper>
   );
 };
 
-export default Form;
+export default ProfileUpdateForm;
 
 const Wrapper = styled.div`
-  width: 50%;
+  width: 600px;
   height: fit-content;
   background-color: #ffffff;
   box-shadow: 0 4px 7px rgba(0, 0, 0, 0.05), 0 10px 10px rgba(0, 0, 0, 0.22);
   border-radius: 20px;
-  overflow: hidden;
 `;
 
 const Content = styled.div`
-  padding: 20px;
+  padding: 20px 30px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-  & > form {
-    //  border: 1px solid red;
+  & > div {
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -264,25 +330,24 @@ const Label = styled.span`
 const ButtonContainer = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: -20px;
-  margin-top: 20px;
-  padding-left: 100px;
-  height: 100px;
-  width: 110%;
-  background-color: #f1f3f7;
+  margin-top: 40px;
+  height: 50px;
+  width: 100%;
+  border-top: 1px solid #f1f3f7;
 `;
 
 const Save = styled.button`
-  height: 40px;
-  width: 120px;
-  padding: 8px;
+  height: 30px;
+  width: 100px;
+  padding: 4px;
   color: #ffffff;
   text-align: center;
   background-color: #a649ea;
   margin-right: 20px;
+  margin-left: 30px;
   border-radius: 10px;
   border: none;
-  font-size: 22px;
+  font-size: 16px;
   font-weight: 500;
   box-shadow: 0 4px 7px rgba(0, 0, 0, 0.05), 0 10px 10px rgba(0, 0, 0, 0.22);
 
@@ -290,17 +355,16 @@ const Save = styled.button`
     background-color: #c278f8;
   }
 `;
-const Cancel = styled.button`
-  height: 40px;
-  width: 120px;
-  padding: 8px;
+const Cancel = styled.input`
+  height: 30px;
+  width: 100px;
+  padding: 3px;
   color: #adb1c0;
   text-align: center;
   background-color: #ffffff;
-  margin-right: 20px;
   border-radius: 10px;
   border: none;
-  font-size: 22px;
+  font-size: 16px;
   font-weight: 500;
   box-shadow: 0 4px 7px rgba(0, 0, 0, 0.05), 0 10px 10px rgba(0, 0, 0, 0.22);
 

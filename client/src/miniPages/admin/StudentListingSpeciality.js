@@ -23,9 +23,9 @@ const StudentListingSpeciality = () => {
   const [allList, setAllList] = useState([]);
   const [filtered, setFiltered] = useState([]);
 
-   //common changes to change
-   const [getStudentParameter, setGetStudentParameter] = useState("");
-   const [IconChange, setIconChange] = useState();
+  //common changes to change
+  const [getStudentParameter, setGetStudentParameter] = useState("");
+  const [IconChange, setIconChange] = useState();
 
   const DeleteUser = (message) => {
     toast.success(message, {
@@ -36,8 +36,8 @@ const StudentListingSpeciality = () => {
     });
   };
 
-   //this function is called from the addNew forms components
-   const addedSuccecfully = (message) => {
+  //this function is called from the addNew forms components
+  const addedSuccecfully = (message) => {
     toast.success(message, {
       style: {
         background: "#25ab42",
@@ -46,8 +46,8 @@ const StudentListingSpeciality = () => {
     });
   };
 
-   //this function is called from the addNew forms components
-   const addedFailed = (message) => {
+  //this function is called from the addNew forms components
+  const addedFailed = (message) => {
     toast.error(message, {
       style: {
         background: "rgba(255,51,51, 0.7)",
@@ -79,7 +79,7 @@ const StudentListingSpeciality = () => {
       .then((res) => {
         if (res.data.length > 0) {
           setAllList(res.data);
-          setFiltered(res.data); 
+          setFiltered(res.data);
         }
       })
       .catch((err) => {
@@ -164,7 +164,7 @@ const StudentListingSpeciality = () => {
           addedSuccecfully={addedSuccecfully}
           addedFailed={addedFailed}
           handler="speciality"
-          storeIn="Student"
+          update={getStudents}
         />
       </Content>
     </Wrapper>

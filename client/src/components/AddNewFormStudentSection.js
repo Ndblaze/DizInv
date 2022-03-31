@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { MdOutlineClose } from "react-icons/md";
 import axios from "axios";
 import image from "../asserts/images/addForm.svg";
 import { Formik, Form } from "formik";
@@ -8,13 +7,23 @@ import * as Yup from "yup";
 import TextField from "./TextField";
 import TextFieldOptions from "./TextFieldOptions";
 import TextFieldOptionsGroup from "./TextFieldOptionsGroup";
+import { MdOutlineClose } from "react-icons/md";
+
+import { useParams } from "react-router-dom";
+
+//static datas
+import { formField } from "../static/addUserStaticData";
 
 const AddNewFormStudentSection = ({
   setModalIsOpen,
-  storeIn, 
   addedFailed,
+  update,
   addedSuccecfully,
 }) => {
+
+  //geting the value of the url parameter
+  const { id } = useParams();
+
   //validation
   const validation = Yup.object({
     firstName: Yup.string()
@@ -46,7 +55,7 @@ const AddNewFormStudentSection = ({
       .max(15, "cannot be over 15 characters")
       .required("field is required"),
     department: Yup.string().required("this field is required"),
-    section: Yup.string().required("this field is required"),
+    section_speciality: Yup.string().required("this field is required"),
     level: Yup.string().required("this field is required"),
     group: Yup.string().required("this field is required"),
   });
@@ -62,7 +71,7 @@ const AddNewFormStudentSection = ({
     password: "",
     level: "",
     inscription: "",
-    section: "",
+    section_speciality: "",
     department: "",
     group: "",
   };
@@ -78,6 +87,7 @@ const AddNewFormStudentSection = ({
         if (res.data.status === "SUCCESS") {
           // succes toast down to the main component
           addedSuccecfully("Student was succefully added");
+          update();
         }
         if (res.data.status === "FAILED") {
           addedFailed("Something went wrong, try again");
@@ -96,18 +106,18 @@ const AddNewFormStudentSection = ({
       </Hero>
       <Content>
         <Formik
-          initialValues={initialValues}
+          initialValues={initialValues} 
           validationSchema={validation}
-         // onSubmit={(values) => addNewUser(values)}
+          onSubmit={(values) => addNewUser(values)}
         >
           {(formik) => (
             <div>
               <Header>
-                {storeIn} Form
+                {formField[id].formLevel} Form
                 <CloseIcon onClick={setModalIsOpen} />
               </Header>
               <Form style={{ width: "95%" }}>
-              {console.log({formik})}
+                {console.log({ formik })}
                 <Shared>
                   <InputShared>
                     <Label>First name *</Label>
@@ -148,10 +158,7 @@ const AddNewFormStudentSection = ({
                   <InputShared>
                     <Label>Department *</Label>
                     <TextFieldOptions
-                      options={[
-                        { key: "Choose dept.", value: "" },
-                        { key: "Commun Core", value: "Commun Core" },
-                      ]}
+                      options={formField[id].departmentOptions}
                       name="department"
                     />
                   </InputShared>
@@ -166,31 +173,21 @@ const AddNewFormStudentSection = ({
                   <InputShared3>
                     <Label>Level *</Label>
                     <TextFieldOptions
-                      options={[
-                        { key: "choose level", value: "" },
-                        { key: "Licence 1", value: "Licence 1" },
-                        { key: "Licence 2", value: "Licence 2" },
-                      ]}
+                      options={formField[id].levelOption}
                       name="level"
                     />
                   </InputShared3>
                   <InputShared3>
-                    <Label>Section *</Label>
+                    <Label>Section / Speciality *</Label>
                     <TextFieldOptions
-                      options={[
-                        { key: "choose section", value: "" },
-                        { key: "Section 1", value: "Section 1" },
-                        { key: "Section 2", value: "Section 2" },
-                        { key: "Section 3", value: "Section 3" },
-                        { key: "Section 4", value: "Section 4" },
-                      ]}
-                      name="section"
+                      options={formField[id].section_specialityOption}
+                      name="section_speciality"
                     />
                   </InputShared3>
                   <InputShared3>
                     <Label>Group *</Label>
                     <TextFieldOptionsGroup
-                      formikSection={formik.values.section}
+                      formikSection={formik.values.section_speciality}
                       name="group"
                     />
                   </InputShared3>

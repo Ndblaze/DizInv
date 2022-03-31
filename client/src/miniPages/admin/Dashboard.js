@@ -1,12 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import GeneralStatistics from "../../components/GeneralStatistics";
 
 //react icons
 import { BiBarChartAlt } from "react-icons/bi";
 import PieChart from "../../components/PieChart";
+import BarChart from "../../components/BarChart";
+import LineChart from "../../components/LineChart";
 
 const Dashboard = () => {
+  const [chartView, setChartView] = useState("line");
+
+  // setInterval(() => {
+  //   const charts = ["pie", "bar", "line"];
+  //   setChartView(charts[Math.floor(Math.random() * 3)]);
+  // }, 20000);
+
   return (
     <Wrapper>
       <Content>
@@ -26,10 +35,13 @@ const Dashboard = () => {
             </Down>
           </One>
           <Two>
-            {" "}
             <div>
-              <PieChart />
-            </div>{" "}
+              {chartView === "pie" && <PieChart setChartView={setChartView} />}
+              {chartView === "bar" && <BarChart setChartView={setChartView} />}
+              {chartView === "line" && (
+                <LineChart setChartView={setChartView} />
+              )}
+            </div>
           </Two>
         </Grid>
       </Content>
@@ -78,17 +90,15 @@ const One = styled.div`
 `;
 
 const Two = styled.div`
-  flex: 1;
+  width: 500px;
   height: 380px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
   & > div {
-    background-color: #ffffff;
+    background-color: transparent;
     display: flex;
     justify-content: center;
     align-items: center;
+    // overflow: hidden;
     width: 100%;
     height: 100%;
     border-radius: 25px;

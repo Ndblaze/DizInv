@@ -18,7 +18,6 @@ const TextFieldOptions = ({ ...props }) => {
       >
         {options.map((option) => (
           <Option key={option.value} value={option.value}>
-            {" "}
             {option.key}{" "}
           </Option>
         ))}
