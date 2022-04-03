@@ -87,7 +87,7 @@ export const formField = {
       { key: "SCI", value: "SCI" },
       { key: "SI", value: "SI" },
       { key: "MWT", value: "MWT" },
-    ],
+    ], 
     departmentOptions: [
       { key: "Choose dept.", value: "" },
       { key: "TLSI", value: "TLSI" },

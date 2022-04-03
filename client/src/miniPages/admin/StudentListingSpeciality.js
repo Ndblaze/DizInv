@@ -100,22 +100,22 @@ const StudentListingSpeciality = () => {
     }
     if (speciality === "GL") {
       newData = newData.filter((item) => {
-        return item.speciality === "Genie logiciel";
+        return item.section_speciality === "Genie logiciel";
       });
     }
     if (speciality === "TI") {
       newData = newData.filter((item) => {
-        return item.speciality === "Technology information";
+        return item.section_speciality === "Technology information";
       });
     }
     if (speciality === "SCI") {
       newData = newData.filter((item) => {
-        return item.speciality === "Genie logiciel";
+        return item.section_speciality === "SCI";
       });
     }
     if (speciality === "SI") {
       newData = newData.filter((item) => {
-        return item.speciality === "Genie logiciel";
+        return item.section_speciality === "SI";
       });
     }
     if (group !== "Group") {

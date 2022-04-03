@@ -46,9 +46,9 @@ const Section_Speciality = ({
           ) : ( 
             <>
               <Options onClick={() => chooseSpeciality("GL")}>GL</Options>
-              <Options onClick={() => chooseSpeciality("TI")}>SI</Options>
+              <Options onClick={() => chooseSpeciality("TI")}>TI</Options>
               <Options onClick={() => chooseSpeciality("SCI")}>SCI</Options>
-              <Options onClick={() => chooseSpeciality("SI")}>TI</Options>
+              <Options onClick={() => chooseSpeciality("SI")}>SI</Options>
             </>
           )}
         </SelectBox>

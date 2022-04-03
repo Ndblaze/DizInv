@@ -1,11 +1,10 @@
-import React from 'react'
+import React from "react";
 
-import AdminNav from '../../components/AdminNav.js'
+import AdminNav from "../../components/AdminNav.js";
 
 const Menu = () => {
-  return (
-    <AdminNav />
-  )
-}
+  return <AdminNav />;
+};
 
-export default Menu
+export default Menu;
+ 

@@ -2,26 +2,22 @@ import React from "react";
 import styled from "styled-components";
 import { Outlet } from "react-router-dom";
 
-//file imports
-import Menu from "../miniPages/admin/Menu.js";
-import Nav from "../miniPages/admin/Nav.js";
+import MenuTeacher from "../miniPages/teachers/MenuTeacher";
+import TeacherNav from "../miniPages/teachers/TeacherNav";
 
-
-const Admin = () => {
-
-
+const Teacher = () => {
   return (
     <Wrapper>
-      <Menu />
-      <Content> 
-        <Nav />
+      <MenuTeacher />
+      <Content>
+        <TeacherNav />
         <Outlet />
       </Content>
     </Wrapper>
   );
 };
 
-export default Admin;
+export default Teacher;
 
 const Wrapper = styled.div`
   height: 100vh;
@@ -32,6 +28,6 @@ const Wrapper = styled.div`
 const Content = styled.div`
   width: calc(100% - 300px);
   background-color: #f1f3f7;
-//  border:1px solid red ;
+  //  border:1px solid red ;
   padding-right: 30px;
 `;

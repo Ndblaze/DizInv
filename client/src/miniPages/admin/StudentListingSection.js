@@ -96,7 +96,7 @@ const StudentListingSection = () => {
     }
     if (section !== "Section") {
       newData = newData.filter((item) => {
-        return item.section === section;
+        return item.section_speciality === section;
       });
     }
     if (group !== "Group") {
