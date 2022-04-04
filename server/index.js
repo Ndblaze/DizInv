@@ -4,6 +4,7 @@ const cors = require("cors");
 const path = require("path");
 
 const admin = require("./routes/admin");
+const teacher = require("./routes/teacher");
 const auth = require("./routes/auth");
 const forgot = require("./routes/forgot");
 
@@ -18,6 +19,7 @@ app.use(express.static(__dirname + "public"));
 app.use("/", auth);
 app.use("/", forgot);
 app.use("/api/admin", admin);
+app.use("/api/teacher", teacher);
 
 app.listen(5000, () => {
   console.log("server running on port 5000 ....");

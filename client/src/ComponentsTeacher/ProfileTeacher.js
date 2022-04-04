@@ -2,15 +2,29 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import { MdOutlineEditNote } from "react-icons/md";
+import UpdateProfileForm from "./UpdateProfileForm";
+import axios from "axios";
 
-//for admin use
-import Form from "./Form";
-
-const GeneralProfile = ({ user, profileType, firstLetter, style }) => {
+const ProfileTeacher = ({ user, firstLetter, getProfile }) => {
   const [edit, setEdit] = useState(true);
 
+  //founction to call an Api for the profile update
+  const UpdateTeacher = async (newValues) => {
+    await axios
+      .post(`http://localhost:5000/api/teacher/update-profile`, {
+        newValues,
+      })
+      .then((res) => {
+        console.log(res);
+         getProfile();
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
+
   return (
-    <Wrapper style={style}>
+    <Wrapper>
       <Content>
         <Info>
           <Personal>
@@ -46,79 +60,37 @@ const GeneralProfile = ({ user, profileType, firstLetter, style }) => {
           </Personal>
           <Academic>
             <h1>Academic</h1>
-            {profileType === "admin" && (
-              <>
-                <AcademicDetail>
-                  <DataContainer>
-                    <Data>Position:</Data>
-                    <Value>{user.position}</Value>
-                  </DataContainer>
-                  <DataContainer>
-                    <Data>Faculty:</Data>
-                    <Value>{user.faculty}</Value>
-                  </DataContainer>
-                </AcademicDetail>
-              </>
-            )}
-            {profileType === "student" && (
-              <>
-                <AcademicDetail>
-                  <DataContainer>
-                    <Data>Inscr. No:</Data>
-                    <Value>{user.inscription}</Value>
-                  </DataContainer>
-                  <DataContainer>
-                    <Data>Deprt:</Data>
-                    <Value>{user.department}</Value>
-                  </DataContainer>
-                  <DataContainer>
-                    <Data>Level:</Data>
-                    <Value>{user.level}</Value>
-                  </DataContainer>
-                  <DataContainer>
-                    {user.department === "MI" ? (
-                      <Data>Scetion/Group:</Data>
-                    ) : (
-                      <Data>Speciality/Group:</Data>
-                    )}
-                    <Value>
-                      {user.section_speciality} / {user.group}
-                    </Value>{" "}
-                  </DataContainer>
-                </AcademicDetail>
-              </>
-            )}
-            {profileType === "teacher" && (
-              <>
-                <AcademicDetail>
-                  <DataContainer>
-                    <Data>Dept:</Data>
-                    <Value>{user.department}</Value>
-                  </DataContainer>
-                  <DataContainer>
-                    <Data>Level:</Data>
-                    <Value>{user.level}</Value>
-                  </DataContainer>
-                  <DataContainer>
-                    <Data>Module:</Data>
-                    <Value>{user.module}</Value>
-                  </DataContainer>
-                  <DataContainer>
-                    <Data>Group(s):</Data>
-                    <Value>{user.groups}</Value>
-                  </DataContainer>
-                </AcademicDetail>
-              </>
-            )}
+            <AcademicDetail>
+              <DataContainer>
+                <Data>Dept:</Data>
+                <Value>{user.department}</Value>
+              </DataContainer>
+              <DataContainer>
+                <Data>Level:</Data>
+                <Value>{user.level}</Value>
+              </DataContainer>
+              <DataContainer>
+                <Data>Module:</Data>
+                <Value>{user.module}</Value>
+              </DataContainer>
+              <DataContainer>
+                <Data>Group(s):</Data>
+                <Value>{user.groups}</Value>
+              </DataContainer>
+            </AcademicDetail>
           </Academic>
         </Info>
-        <Form user={user} profileType={profileType} edit={edit} />
+        <UpdateProfileForm
+          user={user}
+          edit={edit}
+          UpdateTeacher={UpdateTeacher}
+        />
       </Content>
     </Wrapper>
   );
 };
 
-export default GeneralProfile;
+export default ProfileTeacher;
 
 const Wrapper = styled.div`
   margin-top: 20px;

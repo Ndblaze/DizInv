@@ -44,7 +44,6 @@ const ProfileUpdateForm = ({ user, profileType, edit }) => {
     group: Yup.string().required("this field is required"),
   });
 
-  console.log(user);
 
   return (
     <Wrapper>
@@ -58,7 +57,7 @@ const ProfileUpdateForm = ({ user, profileType, edit }) => {
           {(formik) => (
             <div>
               <Form style={{ width: "100%" }}>
-                {console.log({ formik })}
+               
                 <Shared>
                   <InputShared>
                     <Label>first name</Label>
