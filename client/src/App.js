@@ -20,6 +20,7 @@ import UserProfile from "./miniPages/admin/UserProfile";
 import Teacher from "./pages/Teacher";
 import TeacherHome from "./miniPages/teachers/TeacherHome";
 import TeacherProfile from "./miniPages/teachers/TeacherProfile";
+import AdminSchedules from "./miniPages/admin/AdminSchedules";
 
 function App() {
   const [user, setUser] = useState({});
@@ -67,6 +68,7 @@ function App() {
                 element={<StudentListingSpeciality />}
               />
               <Route exact path="user/:id" element={<UserProfile />} />
+              <Route exact path="schedules" element={<AdminSchedules />} />
             </Route>
           )}
           {user.type === "teacher" && (

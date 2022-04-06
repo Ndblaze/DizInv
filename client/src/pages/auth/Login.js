@@ -33,8 +33,8 @@ const Login = () => {
         sessionStorage.setItem("success", res.data.success);
 
         //try to put a more stable navigation
-        // window.location.href = "http://localhost:3000/admin/dashboard";
-        window.location.href = "http://localhost:3000/teacher";
+         window.location.href = "http://localhost:3000/admin/dashboard";
+        //window.location.href = "http://localhost:3000/teacher";
       }
       if (!res.data.success) {
         errorMessage(res.data.message);

@@ -21,7 +21,6 @@ router.get("/profile/:email", (req, res) => {
 
 router.post("/update-profile", (req, res) => {
   const { newValues } = req.body;
-
   //find the user with the email,
   const index = teacher.filter((person) => {
     if (person.email === newValues.email) {

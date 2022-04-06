@@ -1,6 +1,7 @@
 const express = require("express");
 
 let { students } = require("../temp data/students");
+let { schedule } = require("../temp data/schedules");
 
 const router = express.Router();
 
@@ -84,11 +85,18 @@ router.post("/add-new-student", (req, res) => {
   if (values) {
     students.push(values);
     res.status(200).send({ status: "SUCCESS" });
-    return; 
+    return;
   }
 
   res.send({ status: "FAILED" });
   return;
+});
+
+router.get("/schedule/:level", (req, res) => {
+  const { level } = req.params;
+  if (level === "Licence 1") {
+    res.send(schedule.licence1);
+  }
 });
 
 module.exports = router;
