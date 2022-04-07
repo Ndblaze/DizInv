@@ -2,10 +2,29 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FcOvertime } from "react-icons/fc";
 import Modal from "react-modal";
+import toast, { Toaster } from "react-hot-toast";
 
 //file imports
 import CreateSchedules from "../../components/CreateSchedules";
 import axios from "axios";
+
+const errorMessage = (message) => {
+  toast.error(message, {
+    style: {
+      background: "rgba(255,51,51, 0.7)",
+      color: "#fff",
+    },
+  });
+};
+
+const successMessage = (message) => {
+  toast.success(message, {
+    style: {
+      background: "#25ab42",
+      color: "#fff",
+    },
+  });
+};
 
 const customStyles = {
   content: {
@@ -53,29 +72,83 @@ const AdminSchedules = () => {
       });
   };
 
-  const createNewSchedule = () => {
+  const schema = () => {
+    console.log(tableLevel, tableColumnSize);
+    let arrHeader = [];
+
+    for (var i = 0; i < tableColumnSize; i++) {
+      arrHeader[i] = { index: i, value: "" };
+    }
+
+    const data = {
+      level: tableLevel,
+      header: arrHeader,
+      sunday: lopeArray(tableColumnSize, "sunday"),
+      monday: lopeArray(tableColumnSize, "monday"),
+      tuesday: lopeArray(tableColumnSize, "tuesday"),
+      wednesday: lopeArray(tableColumnSize, "wednesday"),
+      thursday: lopeArray(tableColumnSize, "thursday"),
+    };
+
+    console.log(data);
+    return data;
+  };
+
+  const lopeArray = (size, day) => {
+    let arr = [];
+    for (var i = 0; i < size; i++) {
+      arr[i] = {
+        indexDay: i,
+        day: day,
+        value: [],
+      };
+    }
+    return arr;
+  };
+
+  const createNewSchedule = async () => {
     setModalIsOpen(false);
+    await axios
+      .post(`http://localhost:5000/api/admin/schedule`, { schema: schema() })
+      .then((res) => {
+        if (res.data.status === "SUCCESS") {
+          getSchedulesFromDB();
+          successMessage("Schema Created Succefully");
+        }
+        if (res.data.status === "FAILD") {
+          errorMessage("Something went wrong, Try again!!");
+        }
+      })
+      .catch((err) => {
+        errorMessage("Something went wrong, Try again!!");
+        console.log(err);
+      });
+  };
 
-    //console.log(tableLevel, tableColumnSize);
-    // let arr = [];
-    // for (var i = 0; i < tableColumnSize; i++) {
-    //   arr[i] = "";
-    // }
-    // const licence1 = {
-    //   level: tableLevel,
-    //   header: arr,
-    //   sunday: arr,
-    //   monday: arr,
-    //   tuesday: arr,
-    //   wednesday: arr,
-    //   thursday: arr,
-    // };
-
-   // console.log(licence1);
+  const SaveChanges = async () => {
+    await axios
+      .post(`http://localhost:5000/api/admin/schedule`, {
+        schema: scheduleData,
+      })
+      .then((res) => {
+        //toast message that it has saved succefully
+        if (res.data.status === "SUCCESS") {
+          getSchedulesFromDB();
+          successMessage("Schema Saved Succefully");
+        }
+        if (res.data.status === "FAILD") {
+          errorMessage("Something went wrong, Try again!!");
+        }
+      })
+      .catch((err) => {
+        errorMessage("Something went wrong, Try again!!");
+        console.log(err);
+      });
   };
 
   return (
     <Wrapper>
+      <Toaster position="top-center" reverseOrder={false} />
       <Content>
         <HeaderContainer>
           <HeaherTitle>
@@ -93,6 +166,7 @@ const AdminSchedules = () => {
               <option value={"Master 1"}>Master 1</option>
               <option value={"Master 2"}>Master 2</option>
             </ChooseSchedule>
+            <Button onClick={() => SaveChanges()}>Save Changes</Button>
             <Button>Edit Current Schedule</Button>
             <Button onClick={() => setModalIsOpen(true)}>
               Create New Schedule
@@ -108,22 +182,20 @@ const AdminSchedules = () => {
       <Modal
         isOpen={modalIsOpen}
         style={customStyles}
+        onRequestClose={() => setModalIsOpen(false)}
         onClick={() => setModalIsOpen(false)}
         ariaHideApp={false}
       >
         <NewSchedule>
-          <NewScheduleHeader>Customize Table</NewScheduleHeader>
+          <NewScheduleHeader>Customize Schema</NewScheduleHeader>
           <Customize>
             <select onChange={(e) => setTableLevel(e.target.value)}>
               <option value={""}>Choose level</option>
-              <option value={"Licence 1"}>Licence 1</option>
-              <option value={"Licence 2"}>Licence 2</option>
-              <option value={"Licence 3"}>Licence 3</option>
-              <option value={"Master 1"}>Master 1</option>
-              <option value={"Master 2"}>Master 2</option>
+              <option value={viewSchedule}> {viewSchedule}</option>
             </select>
             <select onChange={(e) => setTableColumnSize(e.target.value)}>
               <option value={""}>Choose column size</option>
+              <option value={"3"}>3</option>
               <option value={"4"}>4</option>
               <option value={"5"}>5</option>
               <option value={"6"}>6</option>

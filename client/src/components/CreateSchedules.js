@@ -100,6 +100,26 @@ const CreateSchedules = ({ scheduleData, setScheduleData }) => {
     });
   };
 
+  const edithHeader = (th) => {
+    console.log(th);
+
+    let newSchedule = scheduleData;
+    const { index, value } = th;
+    const row = newSchedule.header.findIndex((no) => {
+      return no.index === index;
+    });
+
+    newSchedule.header[row] = {
+      index: index,
+      value: 'value',
+    };
+
+    console.log(newSchedule)
+
+    setScheduleData(newSchedule);
+    clearState();
+  };
+
   return (
     <Wrapper>
       {scheduleData.hasOwnProperty("level") ? (
@@ -110,10 +130,7 @@ const CreateSchedules = ({ scheduleData, setScheduleData }) => {
               <Tr>
                 <Time>Time</Time>
                 {scheduleData.header.map((th) => (
-                  <TimeValues
-                    onClick={(e) => console.log(e, th.index)}
-                    key={th.index}
-                  >
+                  <TimeValues onClick={() => edithHeader(th)} key={th.index}>
                     {th.value}
                   </TimeValues>
                 ))}
@@ -321,9 +338,9 @@ const Wrapper = styled.div`
 `;
 
 const NoSChedule = styled.h2`
-   font-style: italic;
-   align-self: center;
-   color: #adb1c0;
+  font-style: italic;
+  align-self: center;
+  color: #adb1c0;
 `;
 
 const Content = styled.div`

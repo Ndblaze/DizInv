@@ -97,6 +97,55 @@ router.get("/schedule/:level", (req, res) => {
   if (level === "Licence 1") {
     res.send(schedule.licence1);
   }
+  if (level === "Licence 2") {
+    res.send(schedule.licence2);
+  }
+  if (level === "Licence 3") {
+    res.send(schedule.licence3);
+  }
+  if (level === "Master 1") {
+    res.send(schedule.master1);
+  }
+  if (level === "Master 2") {
+    res.send(schedule.master2);
+  }
+});
+
+router.post("/schedule", (req, res) => {
+  const { schema } = req.body;
+
+  if (schema.hasOwnProperty("level") === false) {
+    res.send({ status: "FAILD" });
+    return;
+  }
+
+  if (schema.level === "Licence 1") {
+    schedule.licence1 = schema;
+    res.send({ status: "SUCCESS" });
+    return;
+  }
+  if (schema.level === "Licence 2") {
+    schedule.licence2 = schema;
+    res.send({ status: "SUCCESS" });
+    return;
+  }
+  if (schema.level === "Licence 3") {
+    schedule.licence3 = schema;
+    res.send({ status: "SUCCESS" });
+    return;
+  }
+  if (schema.level === "Master 1") {
+    schedule.master1 = schema;
+    res.send({ status: "SUCCESS" });
+    return;
+  }
+  if (schema.level === "Master 2") {
+    schedule.master2 = schema;
+    res.send({ status: "SUCCESS" });
+    return;
+  }
+  res.send({ status: "FAILD" });
+  return;
 });
 
 module.exports = router;

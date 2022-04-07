@@ -1,5 +1,17 @@
 const schedule = {
-  licence1: null,
+  licence1: {},
+  licence2: {},
+  licence3: {},
+  master1: {},
+  master2: {},
+
+} 
+
+module.exports = { schedule };
+ 
+
+
+//demo schema
   // licence1: {
   //   level: "Licence 1",
   //   header: [
@@ -174,6 +186,3 @@ const schedule = {
   //     },
   //   ],
   // },
-};
-
-module.exports = { schedule };
