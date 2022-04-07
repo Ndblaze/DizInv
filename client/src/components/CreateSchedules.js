@@ -1,8 +1,88 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import NewSeance from "./NewSeance";
+import { v4 as uuidv4 } from "uuid";
 
-const CreateSchedules = ({ scheduleData, setViewSchedule }) => {
-  console.log(scheduleData);
+const CreateSchedules = ({ scheduleData, setScheduleData }) => {
+  const [refresh, setRefresh] = useState(true);
+
+  const [editLocation, setEditLocation] = useState({});
+
+  //initialValues
+  const [initial, setInitial] = useState({
+    valueID: uuidv4(),
+    module: "",
+    teacher: {},
+    room: "",
+  });
+
+  //add sceance modal open and close
+  const [addSceanceModal, setAddSceanceModal] = useState(false);
+
+  //refresh the state when a value is updated
+  useEffect(() => {}, [refresh]);
+
+  const formEditLocationClick = (td) => {
+    setEditLocation({ indexDay: td.indexDay, day: td.day });
+    setAddSceanceModal(true);
+  };
+
+  const editSceance = (e) => {
+    e.preventDefault();
+
+    let newSchedule = scheduleData;
+    const { day, indexDay } = editLocation;
+    const { valueID, module, room } = initial;
+    const row = newSchedule[day][indexDay].value.findIndex((value) => {
+      if (value === undefined) {
+        //find ad way to manage the error of not having an initial value here
+        return console.log("non");
+      } else {
+        return value.valueID === valueID;
+      }
+    });
+
+    newSchedule[day][indexDay].value[row] = {
+      valueID: valueID,
+      module: module,
+      room: room,
+      teacher: {},
+    };
+
+    setScheduleData(newSchedule);
+    clearState();
+  };
+
+  const addSceance = (e) => {
+    e.preventDefault();
+
+    let newSchedule = scheduleData;
+    const { day, indexDay } = editLocation;
+    const { module, room } = initial;
+
+    newSchedule[day][indexDay].value.push({
+      valueID: uuidv4(),
+      module: module,
+      room: room,
+      teacher: {},
+    });
+
+    setScheduleData(newSchedule);
+    clearState();
+  };
+
+  const clearState = () => {
+    setRefresh(!refresh);
+    setAddSceanceModal(false);
+    setEditLocation({});
+    setInitial({
+      valueID: uuidv4(),
+      module: "",
+      teacher: {},
+      room: "",
+    });
+  };
+
   return (
     <Wrapper>
       {scheduleData.hasOwnProperty("level") ? (
@@ -26,20 +106,26 @@ const CreateSchedules = ({ scheduleData, setViewSchedule }) => {
               <Tr>
                 <Days>Sunday</Days>
                 {scheduleData.sunday.map((td) => (
-                  <DaysValues key={td.indexCol}>
-                    <InnerTable onClick={(e) => console.log(e, td.indexCol)}>
+                  <DaysValues
+                    key={td.indexDay}
+                    onClick={() => formEditLocationClick(td)}
+                  >
+                    <InnerTable>
                       <InnerTablbeThead>
                         <InnerTableTr>
-                          <th>module</th>
+                          <th>matiere</th>
                           <th>teacher</th>
                           <th>room</th>
                         </InnerTableTr>
                       </InnerTablbeThead>
                       <InnerTablbeTbody>
                         {td.value.map((value) => (
-                          <InnerTableTr key={value.indexVal}>
+                          <InnerTableTr
+                            key={value.valueID}
+                            onClick={() => setInitial(value)}
+                          >
                             <td>{value.module}</td>
-                            <td>{value.teacher}</td>
+                            <td></td>
                             <td>{value.room}</td>
                           </InnerTableTr>
                         ))}
@@ -51,7 +137,32 @@ const CreateSchedules = ({ scheduleData, setViewSchedule }) => {
               <Tr>
                 <Days>Monday</Days>
                 {scheduleData.monday.map((td) => (
-                  <DaysValues>{td}</DaysValues>
+                  <DaysValues
+                    key={td.indexDay}
+                    onClick={() => formEditLocationClick(td)}
+                  >
+                    <InnerTable>
+                      <InnerTablbeThead style={{ display: "none" }}>
+                        <InnerTableTr>
+                          <th>matiere</th>
+                          <th>teacher</th>
+                          <th>room</th>
+                        </InnerTableTr>
+                      </InnerTablbeThead>
+                      <InnerTablbeTbody>
+                        {td.value.map((value) => (
+                          <InnerTableTr
+                            key={value.valueID}
+                            onClick={() => setInitial(value)}
+                          >
+                            <td>{value.module}</td>
+                            <td></td>
+                            <td>{value.room}</td>
+                          </InnerTableTr>
+                        ))}
+                      </InnerTablbeTbody>
+                    </InnerTable>
+                  </DaysValues>
                 ))}
               </Tr>
               <Tr>
@@ -78,6 +189,14 @@ const CreateSchedules = ({ scheduleData, setViewSchedule }) => {
       ) : (
         ""
       )}
+      <NewSeance
+        isOpen={addSceanceModal}
+        close={() => setAddSceanceModal(false)}
+        editSceance={editSceance}
+        addSceance={addSceance}
+        initial={initial}
+        setInitial={setInitial}
+      />
     </Wrapper>
   );
 };
@@ -120,7 +239,9 @@ const Table = styled.table`
 
 const Thead = styled.thead``;
 
-const Tr = styled.tr``;
+const Tr = styled.tr`
+  // border-bottom: 1px solid #000;
+`;
 
 const Time = styled.th`
   font-size: 14px;
@@ -131,7 +252,7 @@ const Time = styled.th`
 `;
 const TimeValues = styled.th`
   font-size: 14px;
-  width: 200px;
+  width: 250px;
   border: 1px solid #adb1c0;
   text-align: center;
   height: 50px;
@@ -142,14 +263,14 @@ const Days = styled.td`
   border: 1px solid #adb1c0;
   height: fit-content;
   text-align: center;
-  height: 100px;
+  height: 150px;
 `;
 const DaysValues = styled.td`
-  width: 200px;
+  width: 250px;
   border: 1px solid #adb1c0;
   height: fit-content;
   text-align: center;
-  height: 100px;
+  height: 150px;
 `;
 
 const Tbody = styled.tbody``;
@@ -158,7 +279,7 @@ const Tbody = styled.tbody``;
 
 const InnerTable = styled.table`
   border-collapse: collapse;
-  width: 200px;
+  width: 100%;
   height: 100%;
 `;
 

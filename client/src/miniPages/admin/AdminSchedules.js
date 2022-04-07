@@ -30,81 +30,17 @@ const customStyles = {
 const AdminSchedules = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [viewSchedule, setViewSchedule] = useState("Licence 1");
+
+  //modal form inputs values
   const [tableColumnSize, setTableColumnSize] = useState();
   const [tableLevel, setTableLevel] = useState();
+
+  //schedule state manipulation
   const [scheduleData, setScheduleData] = useState({});
 
-  const schedule = {
-    licence1: {
-      level: "Licence 1",
-      header: [
-        { index: 1, value: "9:00am - 10:00am" },
-        { index: 2, value: "10:00am - 12:00pm" },
-        { index: 3, value: "12:00pm - 13:00pm" },
-        { index: 4, value: "13:00pm - 14:00pm" },
-        { index: 5, value: "14:00pm - 15:30am" },
-      ],
-      sunday: [
-        {
-          indexCol: "sunday-col-1",
-          value: [
-            { indexVal: 1, module: "DAC G1, G2 TD", teacher: "", room: "A1" },
-            { indexVal: 2, module: "MEL G4, G3 TP", teacher: "", room: "A2" },
-            { indexVal: 3, module: "TABD Cours ", teacher: "", room: "A3" },
-            { indexVal: 4, module: "GL2", teacher: "", room: "A4" },
-          ],
-        },
-        {
-          indexCol: "sunday-col-2",
-          value: [
-            { indexVal: 1, module: "DAC G1, G2 TD", teacher: "", room: "A1" },
-            { indexVal: 2, module: "MEL G4, G3 TP", teacher: "", room: "A2" },
-            { indexVal: 3, module: "TABD Cours ", teacher: "", room: "A3" },
-            { indexVal: 4, module: "GL2", teacher: "", room: "A4" },
-          ],
-        },
-        {
-          indexCol: "sunday-col-3",
-          value: [
-            { indexVal: 1, module: "DAC G1, G2 TD", teacher: "", room: "A1" },
-            { indexVal: 2, module: "MEL G4, G3 TP", teacher: "", room: "A2" },
-            { indexVal: 3, module: "TABD Cours ", teacher: "", room: "A3" },
-            { indexVal: 4, module: "GL2", teacher: "", room: "A4" },
-          ],
-        },
-        {
-          indexCol: "sunday-col-4",
-          value: [
-            { indexVal: 1, module: "DAC G1, G2 TD", teacher: "", room: "A1" },
-            { indexVal: 2, module: "MEL G4, G3 TP", teacher: "", room: "A2" },
-            { indexVal: 3, module: "TABD Cours ", teacher: "", room: "A3" },
-            { indexVal: 4, module: "GL2", teacher: "", room: "A4" },
-          ],
-        },
-        {
-          indexCol: "sunday-col-5",
-          value: [
-            { indexVal: 1, module: "DAC G1, G2 TD", teacher: "", room: "A1" },
-            { indexVal: 2, module: "MEL G4, G3 TP", teacher: "", room: "A2" },
-            { indexVal: 3, module: "TABD Cours ", teacher: "", room: "A3" },
-            { indexVal: 4, module: "GL2", teacher: "", room: "A4" },
-          ],
-        },
-      ],
-      monday: ["", "", "", "", ""],
-      tuesday: ["", "", "", "", ""],
-      wednesday: ["", "", "", "", ""],
-      thursday: ["", "", "", "", ""],
-    },
-  };
-
   useEffect(() => {
-    setScheduleData(schedule.licence1);
+    getSchedulesFromDB();
   }, [viewSchedule]);
-
-  // useEffect(() => {
-  //   getSchedulesFromDB();
-  // }, [viewSchedule]);
 
   const getSchedulesFromDB = async () => {
     await axios
@@ -163,7 +99,7 @@ const AdminSchedules = () => {
 
         <CreateSchedules
           scheduleData={scheduleData}
-          setViewSchedule={setViewSchedule}
+          setScheduleData={setScheduleData}
         />
       </Content>
       <Modal
