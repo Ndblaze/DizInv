@@ -54,21 +54,24 @@ const AdminSchedules = () => {
   };
 
   const createNewSchedule = () => {
-    let arr = [];
-    for (var i = 0; i < tableColumnSize; i++) {
-      arr[i] = "";
-    }
-    const licence1 = {
-      level: tableLevel,
-      header: arr,
-      sunday: arr,
-      monday: arr,
-      tuesday: arr,
-      wednesday: arr,
-      thursday: arr,
-    };
+    setModalIsOpen(false);
 
-    console.log(licence1);
+    //console.log(tableLevel, tableColumnSize);
+    // let arr = [];
+    // for (var i = 0; i < tableColumnSize; i++) {
+    //   arr[i] = "";
+    // }
+    // const licence1 = {
+    //   level: tableLevel,
+    //   header: arr,
+    //   sunday: arr,
+    //   monday: arr,
+    //   tuesday: arr,
+    //   wednesday: arr,
+    //   thursday: arr,
+    // };
+
+   // console.log(licence1);
   };
 
   return (

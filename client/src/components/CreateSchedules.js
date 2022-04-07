@@ -71,6 +71,23 @@ const CreateSchedules = ({ scheduleData, setScheduleData }) => {
     clearState();
   };
 
+  const deleteSceance = (e) => {
+    e.preventDefault();
+
+    let newSchedule = scheduleData;
+    const { day, indexDay } = editLocation;
+    const { valueID } = initial;
+
+    newSchedule[day][indexDay].value = newSchedule[day][indexDay].value.filter(
+      (v) => {
+        return v.valueID !== valueID;
+      }
+    );
+
+    setScheduleData(newSchedule);
+    clearState();
+  };
+
   const clearState = () => {
     setRefresh(!refresh);
     setAddSceanceModal(false);
@@ -168,34 +185,113 @@ const CreateSchedules = ({ scheduleData, setScheduleData }) => {
               <Tr>
                 <Days>Tuesday</Days>
                 {scheduleData.tuesday.map((td) => (
-                  <DaysValues>{td}</DaysValues>
+                  <DaysValues
+                    key={td.indexDay}
+                    onClick={() => formEditLocationClick(td)}
+                  >
+                    <InnerTable>
+                      <InnerTablbeThead style={{ display: "none" }}>
+                        <InnerTableTr>
+                          <th>matiere</th>
+                          <th>teacher</th>
+                          <th>room</th>
+                        </InnerTableTr>
+                      </InnerTablbeThead>
+                      <InnerTablbeTbody>
+                        {td.value.map((value) => (
+                          <InnerTableTr
+                            key={value.valueID}
+                            onClick={() => setInitial(value)}
+                          >
+                            <td>{value.module}</td>
+                            <td></td>
+                            <td>{value.room}</td>
+                          </InnerTableTr>
+                        ))}
+                      </InnerTablbeTbody>
+                    </InnerTable>
+                  </DaysValues>
                 ))}
               </Tr>
               <Tr>
                 <Days>Wednesday</Days>
                 {scheduleData.wednesday.map((td) => (
-                  <DaysValues>{td}</DaysValues>
+                  <DaysValues
+                    key={td.indexDay}
+                    onClick={() => formEditLocationClick(td)}
+                  >
+                    <InnerTable>
+                      <InnerTablbeThead style={{ display: "none" }}>
+                        <InnerTableTr>
+                          <th>matiere</th>
+                          <th>teacher</th>
+                          <th>room</th>
+                        </InnerTableTr>
+                      </InnerTablbeThead>
+                      <InnerTablbeTbody>
+                        {td.value.map((value) => (
+                          <InnerTableTr
+                            key={value.valueID}
+                            onClick={() => setInitial(value)}
+                          >
+                            <td>{value.module}</td>
+                            <td></td>
+                            <td>{value.room}</td>
+                          </InnerTableTr>
+                        ))}
+                      </InnerTablbeTbody>
+                    </InnerTable>
+                  </DaysValues>
                 ))}
               </Tr>
               <Tr>
                 <Days>Thursday</Days>
                 {scheduleData.thursday.map((td) => (
-                  <DaysValues>{td}</DaysValues>
+                  <DaysValues
+                    key={td.indexDay}
+                    onClick={() => formEditLocationClick(td)}
+                  >
+                    <InnerTable>
+                      <InnerTablbeThead style={{ display: "none" }}>
+                        <InnerTableTr>
+                          <th>matiere</th>
+                          <th>teacher</th>
+                          <th>room</th>
+                        </InnerTableTr>
+                      </InnerTablbeThead>
+                      <InnerTablbeTbody>
+                        {td.value.map((value) => (
+                          <InnerTableTr
+                            key={value.valueID}
+                            onClick={() => setInitial(value)}
+                          >
+                            <td>{value.module}</td>
+                            <td></td>
+                            <td>{value.room}</td>
+                          </InnerTableTr>
+                        ))}
+                      </InnerTablbeTbody>
+                    </InnerTable>
+                  </DaysValues>
                 ))}
               </Tr>
             </Tbody>
           </Table>
         </Content>
       ) : (
-        ""
+        <NoSChedule>
+          There is no schedule for this level, create a new schedule!!
+        </NoSChedule>
       )}
       <NewSeance
         isOpen={addSceanceModal}
         close={() => setAddSceanceModal(false)}
         editSceance={editSceance}
         addSceance={addSceance}
+        deleteSceance={deleteSceance}
         initial={initial}
         setInitial={setInitial}
+        clearState={clearState}
       />
     </Wrapper>
   );
@@ -223,6 +319,13 @@ const Wrapper = styled.div`
     background-color: #f6e8ff;
   }
 `;
+
+const NoSChedule = styled.h2`
+   font-style: italic;
+   align-self: center;
+   color: #adb1c0;
+`;
+
 const Content = styled.div`
   height: fit-content;
   width: fit-content;
@@ -298,6 +401,10 @@ const InnerTableTr = styled.tr`
     font-size: 9px;
     border-bottom: 1px solid #adb1c0;
     border-right: 1px solid #adb1c0;
+  }
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.9);
   }
 `;
 const InnerTablbeTbody = styled.tbody``;

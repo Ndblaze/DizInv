@@ -29,6 +29,8 @@ const NewSeance = ({
   setInitial,
   editSceance,
   addSceance,
+  deleteSceance,
+  clearState,
 }) => {
   const updateInitial = (name, value) => {
     setInitial({
@@ -37,6 +39,16 @@ const NewSeance = ({
     });
 
     console.log(initial);
+  };
+
+  const CancelClick = () => {
+    close();
+    clearState();
+  };
+
+  const contronButtons = {
+    opacity: initial.module.length <= 0 && "0.3",
+    pointerEvents: initial.module.length <= 0 && "none",
   };
 
   return (
@@ -58,9 +70,13 @@ const NewSeance = ({
           />
           <ButtonContainers>
             <Buttons onClick={(e) => addSceance(e)}>Add</Buttons>
-            <Buttons onClick={(e) => editSceance(e)}>Edit</Buttons>
-            <Buttons>Delete</Buttons>
-            <Buttons onClick={close}>Cancel</Buttons>
+            <Buttons style={contronButtons} onClick={(e) => editSceance(e)}>
+              Edit
+            </Buttons>
+            <Buttons style={contronButtons} onClick={(e) => deleteSceance(e)}>
+              Delete
+            </Buttons>
+            <Buttons onClick={CancelClick}>Cancel</Buttons>
           </ButtonContainers>
         </form>
       </Wrapper>
