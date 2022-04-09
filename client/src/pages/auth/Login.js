@@ -33,14 +33,22 @@ const Login = () => {
         sessionStorage.setItem("success", res.data.success);
 
         //try to put a more stable navigation
-         window.location.href = "http://localhost:3000/admin/dashboard";
-        //window.location.href = "http://localhost:3000/teacher";
+        if (res.data.type === "admin") {
+          window.location.href = "http://localhost:3000/admin/dashboard";
+        } else if (
+          res.data.type === "teacher" ||
+          res.data.type === "ChelfDepartment"
+        ) {
+          window.location.href = "http://localhost:3000/teacher";
+        } else {
+          console.log(res);
+        }
       }
       if (!res.data.success) {
         errorMessage(res.data.message);
       }
     } catch (error) {
-      errorMessage(error.message);
+      errorMessage(`${error.message} or Server Down`);
       console.log(error.message);
     }
   };

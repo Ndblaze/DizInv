@@ -6,6 +6,7 @@ import MenuLinkIcon from "../components/MenuLinkIcon";
 //icons and images
 import { BiUser } from "react-icons/bi";
 import { HiOutlineLogout, HiHome } from "react-icons/hi";
+import ChelfMenu from "../componentsChelf/ChelfMenu";
 
 const TeacherMenu = () => {
   const [active, setActive] = useState("");
@@ -32,6 +33,9 @@ const TeacherMenu = () => {
       <Content>
         <Logo src={logo} alt="logo" />
         <Menu>
+          {sessionStorage.getItem("type") === "ChelfDepartment" && (
+            <ChelfMenu active={active} changeActiveIcon={changeActiveIcon} />
+          )}
           <MenuLinkIcon
             Name="Home"
             path="/teacher/home"

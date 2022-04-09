@@ -134,15 +134,6 @@ const AdminNav = () => {
               }}
             />
             <MenuLinkIcon
-              Name="Sessions"
-              path="/admin/sessions"
-              Icon={GiSandsOfTime}
-              Active={active === "Sessions" ? true : false}
-              onClick={() => {
-                changeActiveIcon("Sessions");
-              }}
-            />
-            <MenuLinkIcon
               Name="Schedules"
               path="/admin/schedules"
               Icon={FcOvertime}
@@ -197,7 +188,7 @@ const Menu = styled.div`
 `;
 
 const Header = styled.h1`
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
   color: #777b86;
   margin-bottom: 2px;

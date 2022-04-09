@@ -9,12 +9,17 @@ router.get("/profile/:email", (req, res) => {
   // console.log(email);
 
   //find the persons data from the database
-  teacher.filter((person) => {
+  const person = teacher.filter((person) => {
     if (person.email === email) {
-      res.send({ status: "SUCCESS", person: person });
-      return;
+      return person;
     }
   });
+
+  //verify that there is a person and send
+  if (person.length > 0) {
+    res.send({ status: "SUCCESS", person: person[0] });
+    return;
+  }
 
   res.send({ status: "FAILED" });
 });

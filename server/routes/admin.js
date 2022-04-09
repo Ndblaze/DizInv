@@ -148,4 +148,12 @@ router.post("/schedule", (req, res) => {
   return;
 });
 
+/* 
+    when sendomg the schedule to the datebase we send it as a string by converting it with
+    JSON.stringify() method and send to the database 
+
+    when getting back the schedule from the database we get the string that we have stored and change it 
+    to an object with JSON.parse() method and send to the front end.
+*/
+
 module.exports = router;

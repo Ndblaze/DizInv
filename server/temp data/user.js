@@ -5,7 +5,7 @@ const users = [
     type: "admin",
   },
   {
-    email: "malak.menia@univ-constantine2.dz",
+    email: "malak.menia@univ-constantine2.dz", 
     password: "Malak3000",
     type: "admin",
   },
@@ -26,8 +26,8 @@ const users = [
   },
   {
     email: "nabil.bilala@univ-constantine2.dz",
-    password: "Nabil3000",
-    type: "chelf departement",
+    password: "Nabil3000", 
+    type: "ChelfDepartment", 
   },
   {
     email: "moses.oko@univ-constantine2.dz",
