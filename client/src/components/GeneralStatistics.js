@@ -6,14 +6,14 @@ import { FcDepartment } from "react-icons/fc";
 import { GiTeacher } from "react-icons/gi";
 import { FaWalking, FaBook } from "react-icons/fa";
 
-const GeneralStatistics = ({ Teachers, Students, Modules }) => {
+const GeneralStatistics = ({ Teachers, Students, Modules, department }) => {
   return (
     <Wrapper>
       <Content>
         <Stats>
           <GeneralStatsIcon
             Icon={FcDepartment}
-            number={3}
+            number={department}
             about="Department"
             background="#E5EAFA"
           />

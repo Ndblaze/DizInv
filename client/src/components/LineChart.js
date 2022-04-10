@@ -34,7 +34,7 @@ export const options = {
     },
     title: {
       display: true,
-      text: "Pie Chart of users (Teachers, Students)",
+      text: "Line Chart of users (Teachers, Students)",
     },
   },
 };

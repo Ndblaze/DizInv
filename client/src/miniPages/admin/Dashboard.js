@@ -4,6 +4,8 @@ import GeneralStatistics from "../../components/GeneralStatistics";
 
 //react icons
 import { BiBarChartAlt } from "react-icons/bi";
+
+//charts
 import PieChart from "../../components/PieChart";
 import BarChart from "../../components/BarChart";
 import LineChart from "../../components/LineChart";
@@ -16,6 +18,61 @@ const Dashboard = () => {
   //   setChartView(charts[Math.floor(Math.random() * 3)]);
   // }, 20000);
 
+  const data = {
+    labels: [
+      "Teachers",
+      "Licence 1",
+      "Licence 2",
+      "Licence 3",
+      "Master 1",
+      "Master 2",
+    ],
+    datasets: [
+      {
+        label: "Users Analytics",
+        data: [500, 700, 450, 300, 280, 150],
+        backgroundColor: [
+          "rgba(255, 99, 132, 0.5)",
+          "rgba(54, 162, 235, 0.5)",
+          "rgba(255, 206, 86, 0.5)",
+          "rgba(241, 90, 192, 0.5)",
+          "rgba(153, 102, 255, 0.5)",
+          "rgba(147, 250, 165, 0.5)",
+        ],
+
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const optionsPie = {
+    layout: {
+      padding: {
+        top: 60,
+        left: 60,
+        right: 60,
+        bottom: 60,
+      },
+    },
+    plugins: {
+      title: {
+        display: true,
+        text: "Pie Chart of users (Teachers, Students)",
+        padding: {
+          top: 10,
+          bottom: -20,
+        },
+      },
+      legend: {
+        position: "right",
+        labels: {
+          boxWidth: 15,
+          boxHeight: 10,
+        },
+      },
+    },
+  };
+
   return (
     <Wrapper>
       <Content>
@@ -23,7 +80,7 @@ const Dashboard = () => {
           <DashboardIcon />
           <Hearder>Dashboard</Hearder>
         </HeaderContainer>
-        <GeneralStatistics Teachers={500} Students={1500} Modules={46} />
+        <GeneralStatistics department={3} Teachers={500} Students={1500} Modules={46} />
 
         <Grid>
           <One>
@@ -36,10 +93,16 @@ const Dashboard = () => {
           </One>
           <Two>
             <div>
-              {chartView === "pie" && <PieChart setChartView={setChartView} />}
-              {chartView === "bar" && <BarChart setChartView={setChartView} />}
+              {chartView === "pie" && (
+                <PieChart
+                  setChartView={setChartView}
+                  data={data}
+                  optionsPie={optionsPie}
+                />
+              )}
+              {chartView === "bar" && <BarChart setChartView={setChartView} data={data} />}
               {chartView === "line" && (
-                <LineChart setChartView={setChartView} />
+                <LineChart setChartView={setChartView} data={data} />
               )}
             </div>
           </Two>
