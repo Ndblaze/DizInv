@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import NewSeance from "./NewSeance";
 import { v4 as uuidv4 } from "uuid";
+import NewSeanceTime from "./NewSeanceTime";
 
 const CreateSchedules = ({ scheduleData, setScheduleData }) => {
   const [refresh, setRefresh] = useState(true);
@@ -16,8 +17,14 @@ const CreateSchedules = ({ scheduleData, setScheduleData }) => {
     room: "",
   });
 
+  //modal time index to be editted or deleted
+  const [currentTimeIndex, setCurrentTimeIndex] = useState({});
+
   //add sceance modal open and close
   const [addSceanceModal, setAddSceanceModal] = useState(false);
+
+  //add sceance modal Time open and close
+  const [addSceanceTime, setAddSceanceTime] = useState(false);
 
   //refresh the state when a value is updated
   useEffect(() => {}, [refresh]);
@@ -91,6 +98,7 @@ const CreateSchedules = ({ scheduleData, setScheduleData }) => {
   const clearState = () => {
     setRefresh(!refresh);
     setAddSceanceModal(false);
+    setAddSceanceTime(false);
     setEditLocation({});
     setInitial({
       valueID: uuidv4(),
@@ -100,21 +108,49 @@ const CreateSchedules = ({ scheduleData, setScheduleData }) => {
     });
   };
 
-  const edithHeader = (th) => {
-    console.log(th);
+  //opening and initiallizing the clicked time value
+  const openTimeModal = (th) => {
+    setAddSceanceTime(true);
+    setCurrentTimeIndex(th);
+  };
+
+  //edith or add new time to schedule to table
+  const edithTime = (e) => {
+    e.preventDefault();
 
     let newSchedule = scheduleData;
-    const { index, value } = th;
+    const { index, value } = currentTimeIndex;
     const row = newSchedule.header.findIndex((no) => {
       return no.index === index;
     });
 
     newSchedule.header[row] = {
       index: index,
-      value: 'value',
+      value: value,
     };
 
-    console.log(newSchedule)
+    console.log(newSchedule);
+
+    setScheduleData(newSchedule);
+    clearState();
+  };
+
+  //delete the value of already added time to schedule to table
+  const deleteTime = (e) => {
+    e.preventDefault();
+
+    let newSchedule = scheduleData;
+    const { index } = currentTimeIndex;
+    const row = newSchedule.header.findIndex((no) => {
+      return no.index === index;
+    });
+
+    newSchedule.header[row] = {
+      index: index,
+      value: "",
+    };
+
+    console.log(newSchedule);
 
     setScheduleData(newSchedule);
     clearState();
@@ -130,7 +166,7 @@ const CreateSchedules = ({ scheduleData, setScheduleData }) => {
               <Tr>
                 <Time>Time</Time>
                 {scheduleData.header.map((th) => (
-                  <TimeValues onClick={() => edithHeader(th)} key={th.index}>
+                  <TimeValues onClick={() => openTimeModal(th)} key={th.index}>
                     {th.value}
                   </TimeValues>
                 ))}
@@ -309,6 +345,14 @@ const CreateSchedules = ({ scheduleData, setScheduleData }) => {
         initial={initial}
         setInitial={setInitial}
         clearState={clearState}
+      />
+      <NewSeanceTime
+        isOpen={addSceanceTime}
+        close={() => setAddSceanceTime(false)}
+        edithTime={edithTime}
+        deleteTime={deleteTime}
+        currentTimeIndex={currentTimeIndex}
+        setCurrentTimeIndex={setCurrentTimeIndex}
       />
     </Wrapper>
   );

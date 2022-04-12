@@ -35,11 +35,11 @@ const Login = () => {
         //try to put a more stable navigation
         if (res.data.type === "admin") {
           window.location.href = "http://localhost:3000/admin/dashboard";
-        } else if (
-          res.data.type === "teacher" ||
-          res.data.type === "ChelfDepartment"
-        ) {
-          window.location.href = "http://localhost:3000/teacher";
+        } else if (res.data.type === "teacher") {
+          window.location.href = "http://localhost:3000/teacher/home";
+        } else if (res.data.type === "ChelfDepartment") {
+          window.location.href =
+            "http://localhost:3000/teacher/chelf/dashboard";
         } else {
           console.log(res);
         }

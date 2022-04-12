@@ -22,33 +22,24 @@ const customStyles = {
   },
 };
 
-const NewSeance = ({
+const NewSeanceTime = ({
   isOpen,
   close,
-  initial,
-  setInitial,
-  editSceance,
-  addSceance,
-  deleteSceance,
-  clearState,
+  edithTime,
+  deleteTime,
+  currentTimeIndex,
+  setCurrentTimeIndex,
 }) => {
-  const updateInitial = (name, value) => {
-    setInitial({
-      ...initial,
+  const updateCurrentTimeIndex = (name, value) => {
+    setCurrentTimeIndex({
+      ...currentTimeIndex,
       [name]: value,
     });
 
-    console.log(initial);
+    //console.log(currentTimeIndex);
   };
-
   const CancelClick = () => {
     close();
-    clearState();
-  };
-
-  const contronButtons = {
-    opacity: initial.module.length <= 0 && "0.3",
-    pointerEvents: initial.module.length <= 0 && "none",
   };
 
   return (
@@ -57,25 +48,16 @@ const NewSeance = ({
         <form>
           <Header>Add Edit Delete sceance</Header>
           <Inputs
-            placeholder="enter matiere ...."
-            defaultValue={initial.module}
-            onChange={(e) => updateInitial(e.target.name, e.target.value)}
-            name="module"
-          />
-          <Inputs
-            placeholder="enter room ...."
-            defaultValue={initial.room}
-            onChange={(e) => updateInitial(e.target.name, e.target.value)}
-            name="room"
+            placeholder="enter duration ...."
+            defaultValue={currentTimeIndex.value}
+            onChange={(e) =>
+              updateCurrentTimeIndex(e.target.name, e.target.value)
+            }
+            name="value"
           />
           <ButtonContainers>
-            <Buttons onClick={(e) => addSceance(e)}>Add</Buttons>
-            <Buttons style={contronButtons} onClick={(e) => editSceance(e)}>  
-              Edit
-            </Buttons>
-            <Buttons style={contronButtons} onClick={(e) => deleteSceance(e)}>
-              Delete
-            </Buttons>
+            <Buttons onClick={(e) => edithTime(e)}>Edit</Buttons>
+            <Buttons onClick={(e) => deleteTime(e)}>Delete</Buttons>
             <Buttons onClick={CancelClick}>Cancel</Buttons>
           </ButtonContainers>
         </form>
@@ -84,7 +66,7 @@ const NewSeance = ({
   );
 };
 
-export default NewSeance;
+export default NewSeanceTime;
 
 const Wrapper = styled.div`
   width: 100%;

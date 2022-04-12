@@ -20,7 +20,7 @@ const errorMessage = (message) => {
 const successMessage = (message) => {
   toast.success(message, {
     style: {
-      background: "#25ab42",
+      background: "#25ab42",   
       color: "#fff",
     },
   });
