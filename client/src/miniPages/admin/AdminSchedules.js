@@ -126,6 +126,7 @@ const AdminSchedules = () => {
   };
 
   const SaveChanges = async () => {
+    //console.log(scheduleData)
     await axios
       .post(`http://localhost:5000/api/admin/schedule`, {
         schema: scheduleData,

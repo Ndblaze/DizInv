@@ -27,6 +27,8 @@ import ChelfDepartment from "./pages/ChelfDepartment";
 import ChelfSession from "./miniPages/chelfDepartment/ChelfSession";
 import ChelfDashBoard from "./miniPages/chelfDepartment/ChelfDashBoard";
 import ChelfJustification from "./miniPages/chelfDepartment/ChelfJustification";
+import TeacherSchedule from "./miniPages/teachers/TeacherSchedule";
+import TeacherMainHome from "./miniPages/teachers/TeacherMainHome";
 
 function App() {
   const [user, setUser] = useState({});
@@ -79,7 +81,15 @@ function App() {
           )}
           {user.type === "teacher" && (
             <Route path="/teacher" element={<Teacher />}>
-              <Route exact path="home" element={<TeacherHome />} />
+              <Route exact path="" element={<TeacherMainHome />}>
+                <Route exact path="home" element={<TeacherHome />} />
+                <Route
+                  exact
+                  path="view-schedule"
+                  element={<TeacherSchedule />}
+                />
+              </Route>
+
               <Route exact path="profile" element={<TeacherProfile />} />
             </Route>
           )}
@@ -95,7 +105,14 @@ function App() {
                   element={<ChelfJustification />}
                 />
               </Route>
-              <Route exact path="home" element={<TeacherHome />} />
+              <Route exact path="" element={<TeacherMainHome />}>
+                <Route exact path="home" element={<TeacherHome />} />
+                <Route
+                  exact
+                  path="view-schedule"
+                  element={<TeacherSchedule />}
+                />
+              </Route>
               <Route exact path="profile" element={<TeacherProfile />} />
             </Route>
           )}

@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { HiHome } from "react-icons/hi";
+import { Link } from "react-router-dom";
+
 import Hero from "../../ComponentsTeacher/Hero";
 import { BsTable } from "react-icons/bs";
 import { RiArrowDropRightLine } from "react-icons/ri";
@@ -13,7 +15,7 @@ const listCard = [
     icon: <BsTable />,
     discription:
       "Get access to your own specific schedules by clicking on the continue button.",
-    path: "/schedules",
+    path: "/teacher/view-schedule",
     boxShadow: {
       boxShadow: "0 1px 1px #e3beff, 0 2px 4px #e3beff",
     },
@@ -81,7 +83,13 @@ const TeacherHome = () => {
                 <Discription>{list.discription}</Discription>
               </CardDiscription>
               <CardButton style={list.colorButton}>
-                Continue <RiArrowDropRightLine />
+                <Link
+                  style={{ textDecoration: "none", color: "#fff" }}
+                  to={list.path}
+                >
+                  Continue
+                </Link>{" "}
+                <RiArrowDropRightLine />
               </CardButton>
             </Card>
           ))}
@@ -95,6 +103,7 @@ export default TeacherHome;
 
 const Wrapper = styled.div`
   padding: 40px 40px 0 0px;
+  width: 100%;
 `;
 
 const Content = styled.div``;

@@ -13,7 +13,7 @@ const CreateSchedules = ({ scheduleData, setScheduleData }) => {
   const [initial, setInitial] = useState({
     valueID: uuidv4(),
     module: "",
-    teacher: {},
+    teacher: { name: "", email: "" },
     room: "",
   });
 
@@ -53,7 +53,7 @@ const CreateSchedules = ({ scheduleData, setScheduleData }) => {
       valueID: valueID,
       module: module,
       room: room,
-      teacher: {},
+      teacher: { name: "", email: "" },
     };
 
     setScheduleData(newSchedule);
@@ -71,7 +71,7 @@ const CreateSchedules = ({ scheduleData, setScheduleData }) => {
       valueID: uuidv4(),
       module: module,
       room: room,
-      teacher: {},
+      teacher: { name: "", email: "" },
     });
 
     setScheduleData(newSchedule);
@@ -103,7 +103,7 @@ const CreateSchedules = ({ scheduleData, setScheduleData }) => {
     setInitial({
       valueID: uuidv4(),
       module: "",
-      teacher: {},
+      teacher: { name: "", email: "" },
       room: "",
     });
   };
@@ -195,7 +195,7 @@ const CreateSchedules = ({ scheduleData, setScheduleData }) => {
                             onClick={() => setInitial(value)}
                           >
                             <td>{value.module}</td>
-                            <td></td>
+                            <td>{value.teacher.name}</td>
                             <td>{value.room}</td>
                           </InnerTableTr>
                         ))}
@@ -226,7 +226,7 @@ const CreateSchedules = ({ scheduleData, setScheduleData }) => {
                             onClick={() => setInitial(value)}
                           >
                             <td>{value.module}</td>
-                            <td></td>
+                            <td>{value.teacher.name}</td>
                             <td>{value.room}</td>
                           </InnerTableTr>
                         ))}
@@ -257,7 +257,7 @@ const CreateSchedules = ({ scheduleData, setScheduleData }) => {
                             onClick={() => setInitial(value)}
                           >
                             <td>{value.module}</td>
-                            <td></td>
+                            <td>{value.teacher.name}</td>
                             <td>{value.room}</td>
                           </InnerTableTr>
                         ))}
@@ -288,7 +288,7 @@ const CreateSchedules = ({ scheduleData, setScheduleData }) => {
                             onClick={() => setInitial(value)}
                           >
                             <td>{value.module}</td>
-                            <td></td>
+                            <td>{value.teacher.name}</td>
                             <td>{value.room}</td>
                           </InnerTableTr>
                         ))}
@@ -319,7 +319,7 @@ const CreateSchedules = ({ scheduleData, setScheduleData }) => {
                             onClick={() => setInitial(value)}
                           >
                             <td>{value.module}</td>
-                            <td></td>
+                            <td>{value.teacher.name}</td>
                             <td>{value.room}</td>
                           </InnerTableTr>
                         ))}

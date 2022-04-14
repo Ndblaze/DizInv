@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import AssignTeacherModal from "./AssignTeacherModal";
 
 const SessionChelf = ({ scheduleData, setScheduleData }) => {
   const [refresh, setRefresh] = useState(true);
@@ -8,18 +9,88 @@ const SessionChelf = ({ scheduleData, setScheduleData }) => {
 
   //initialValues
   const [initial, setInitial] = useState({
-    valueID: '',
+    valueID: "",
     module: "",
-    teacher: {},
+    teacher: { name: "", email: "" },
     room: "",
   });
+
+  //open and close the add teacher modal
+  const [addTeacher, setAddTeacher] = useState(false);
 
   //refresh the state when a value is updated
   useEffect(() => {}, [refresh]);
 
   const formEditLocationClick = (td) => {
     setEditLocation({ indexDay: td.indexDay, day: td.day });
-    //setAddSceanceModal(true);
+    setAddTeacher(true);
+  };
+
+  const clearState = () => {
+    setRefresh(!refresh);
+    setAddTeacher(false);
+    setEditLocation({});
+    setInitial({
+      valueID: "",
+      module: "",
+      teacher: { name: "", email: "" },
+      room: "",
+    });
+  };
+
+
+  //you need to verify teacher email before adding ,,,,,,,,,,,,,
+
+  const editTeacher = (e) => {
+    e.preventDefault();
+
+    let newSchedule = scheduleData;
+    const { day, indexDay } = editLocation;
+    const { valueID, module, room, teacher } = initial;
+    const row = newSchedule[day][indexDay].value.findIndex((value) => {
+      if (value === undefined) {
+        //find ad way to manage the error of not having an initial value here
+        return console.log("non");
+      } else {
+        return value.valueID === valueID;
+      }
+    });
+
+    newSchedule[day][indexDay].value[row] = {
+      valueID: valueID,
+      module: module,
+      room: room,
+      teacher: teacher,
+    };
+
+    setScheduleData(newSchedule);
+    clearState();
+  };
+
+  const deletTeacher = (e) => {
+    e.preventDefault();
+
+    let newSchedule = scheduleData;
+    const { day, indexDay } = editLocation;
+    const { valueID, module, room, teacher } = initial;
+    const row = newSchedule[day][indexDay].value.findIndex((value) => {
+      if (value === undefined) {
+        //find ad way to manage the error of not having an initial value here
+        return console.log("non");
+      } else {
+        return value.valueID === valueID;
+      }
+    });
+
+    newSchedule[day][indexDay].value[row] = {
+      valueID: valueID,
+      module: module,
+      room: room,
+      teacher: { name: "", email: "" },
+    };
+
+    setScheduleData(newSchedule);
+    clearState();
   };
 
   return (
@@ -32,16 +103,14 @@ const SessionChelf = ({ scheduleData, setScheduleData }) => {
               <Tr>
                 <Time>Time</Time>
                 {scheduleData.header.map((th) => (
-                  <TimeValues key={th.index}>
-                    {th.value}
-                  </TimeValues>
+                  <TimeValues key={th.index}>{th.value}</TimeValues>
                 ))}
               </Tr>
             </Thead>
             <Tbody>
               <Tr>
                 <Days>Sunday</Days>
-                {scheduleData.sunday.map((td) => ( 
+                {scheduleData.sunday.map((td) => (
                   <DaysValues
                     key={td.indexDay}
                     onClick={() => formEditLocationClick(td)}
@@ -61,7 +130,7 @@ const SessionChelf = ({ scheduleData, setScheduleData }) => {
                             onClick={() => setInitial(value)}
                           >
                             <td>{value.module}</td>
-                            <td></td>
+                            <td>{value.teacher.name}</td>
                             <td>{value.room}</td>
                           </InnerTableTr>
                         ))}
@@ -92,7 +161,7 @@ const SessionChelf = ({ scheduleData, setScheduleData }) => {
                             onClick={() => setInitial(value)}
                           >
                             <td>{value.module}</td>
-                            <td></td>
+                            <td>{value.teacher.name}</td>
                             <td>{value.room}</td>
                           </InnerTableTr>
                         ))}
@@ -123,7 +192,7 @@ const SessionChelf = ({ scheduleData, setScheduleData }) => {
                             onClick={() => setInitial(value)}
                           >
                             <td>{value.module}</td>
-                            <td></td>
+                            <td>{value.teacher.name}</td>
                             <td>{value.room}</td>
                           </InnerTableTr>
                         ))}
@@ -154,7 +223,7 @@ const SessionChelf = ({ scheduleData, setScheduleData }) => {
                             onClick={() => setInitial(value)}
                           >
                             <td>{value.module}</td>
-                            <td></td>
+                            <td>{value.teacher.name}</td>
                             <td>{value.room}</td>
                           </InnerTableTr>
                         ))}
@@ -185,7 +254,7 @@ const SessionChelf = ({ scheduleData, setScheduleData }) => {
                             onClick={() => setInitial(value)}
                           >
                             <td>{value.module}</td>
-                            <td></td>
+                            <td>{value.teacher.name}</td>
                             <td>{value.room}</td>
                           </InnerTableTr>
                         ))}
@@ -202,6 +271,15 @@ const SessionChelf = ({ scheduleData, setScheduleData }) => {
           There is no schedule for this level, create a new schedule!!
         </NoSChedule>
       )}
+      <AssignTeacherModal
+        isOpen={addTeacher}
+        close={() => setAddTeacher(false)}
+        editTeacher={editTeacher}
+        deletTeacher={deletTeacher}
+        initial={initial}
+        setInitial={setInitial}
+        clearState={clearState}
+      />
     </Wrapper>
   );
 };
@@ -317,4 +395,3 @@ const InnerTableTr = styled.tr`
   }
 `;
 const InnerTablbeTbody = styled.tbody``;
-
