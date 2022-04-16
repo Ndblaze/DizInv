@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
+import axios from "axios";
 import { HiHome } from "react-icons/hi";
 import { Link } from "react-router-dom";
 
@@ -64,6 +65,34 @@ const listCard = [
 ];
 
 const TeacherHome = () => {
+  useEffect(() => {
+    getTeacherData();
+  }, []);
+
+
+  //the chelf api to get teacher infor and store on the session storage of the browser
+  const getTeacherData = async () => {
+    await axios
+      .get(
+        `http://localhost:5000/api/chelf/data/${sessionStorage.getItem(
+          "email"
+        )}`
+      )
+      .then((res) => {
+        if (res.data.status === "SUCCESS") {
+          let { level } = res.data.data;
+          const data = JSON.stringify(res.data.data);
+          sessionStorage.setItem("userData", data);
+          sessionStorage.setItem("level", level);
+        }
+        if (res.data.status === "FAILED") {
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <Wrapper>
       <Content>

@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import styled from "styled-components";
+import Select from "react-select";
+import axios from "axios";
 
 const customStyles = {
   content: {
@@ -15,7 +17,7 @@ const customStyles = {
     borderRadius: "20px",
     overflow: "hidden",
     width: "450px",
-    height: "250px",
+    height: "500px",
   },
   overlay: {
     backgroundColor: "rgba(10, 11, 13, 0.75)",
@@ -31,6 +33,8 @@ const AssignTeacherModal = ({
   deletTeacher,
   clearState,
 }) => {
+  const [emailOptions, setEmailOptions] = useState([]);
+
   const updateInitial = (name, value) => {
     if (name === "name") {
       let newInitial = initial;
@@ -54,11 +58,53 @@ const AssignTeacherModal = ({
     clearState();
   };
 
+  function customTheme(theme) {
+    return {
+      ...theme,
+      colors: {
+        ...theme.colors,
+        primary25: "#c575ff",
+        primary: "#c575ff",
+      },
+    };
+  }
+
+  const Styles = {
+    option: (provided, state) => ({
+      ...provided,
+      fontSize: "13px",
+    }),
+  };
+
+  useEffect(() => {
+    getTeacherOptions();
+  }, []);
+
+  const getTeacherOptions = async () => {
+    await axios
+      .get(
+        `http://localhost:5000/api/chelf/emails/${sessionStorage.getItem(
+          "department"
+        )}`
+      )
+      .then((res) => {
+        if (res.data.status === "SUCCESS") {
+          setEmailOptions(res.data.emails);
+        }
+        if (res.data.status === "FAILED") {
+          getTeacherOptions();
+        }
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
+
   return (
     <Modal isOpen={isOpen} style={customStyles} ariaHideApp={false}>
       <Wrapper>
         <form>
-          <Header>Add Edit Delete sceance</Header>
+          <Header> Edit Delete Teacher sceance</Header>
           <Inputs
             placeholder="enter first name of teacher only ...."
             defaultValue={initial.teacher.name}
@@ -66,13 +112,16 @@ const AssignTeacherModal = ({
             name="name"
             type="text"
           />
-          <Inputs
+
+          <SelectEmail
+            onChange={(e) => updateInitial("email", e.value)}
             placeholder="enter teachers email ...."
-            defaultValue={initial.teacher.email}
-            onChange={(e) => updateInitial(e.target.name, e.target.value)}
-            name="email"
-            type="email"
+            theme={customTheme}
+            options={emailOptions}
+            isSearchable
+            styles={Styles}
           />
+
           <ButtonContainers>
             <Buttons onClick={(e) => editTeacher(e)}>Edit</Buttons>
             <Buttons onClick={(e) => deletTeacher(e)}>Delete</Buttons>
@@ -99,7 +148,7 @@ const Wrapper = styled.div`
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    // justify-content: center;
     align-items: center;
   }
 `;
@@ -107,15 +156,28 @@ const Wrapper = styled.div`
 const Header = styled.h1`
   font-size: 18px;
   text-align: center;
+  margin-bottom: 20px;
+  margin-top: 20px;
 `;
 
 const Inputs = styled.input`
   width: 80%;
   height: 35px;
   padding-left: 10px;
-  border-radius: 10px;
+  border-radius: 5px;
+  margin-bottom: 20px;
   outline: none;
-  border: 1px solid #000;
+  border: 1px solid #c4c4c4;
+
+  &:hover {
+    border: 2px solid #c575ff;
+  }
+`;
+
+const SelectEmail = styled(Select)`
+  width: 82%;
+  position: absolute;
+  margin-bottom: 20px;
 `;
 
 const ButtonContainers = styled.div``;

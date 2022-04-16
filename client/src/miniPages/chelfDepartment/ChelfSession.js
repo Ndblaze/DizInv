@@ -28,12 +28,7 @@ const ChelfSession = () => {
   //chelf department information
   const [userData, setUserData] = useState({});
 
-  const [modalIsOpen, setModalIsOpen] = useState(false);
   const [viewSchedule, setViewSchedule] = useState("Licence 1");
-
-  //modal form inputs values
-  const [tableColumnSize, setTableColumnSize] = useState();
-  const [tableLevel, setTableLevel] = useState();
 
   //schedule state manipulation
   const [scheduleData, setScheduleData] = useState({});
@@ -92,7 +87,7 @@ const ChelfSession = () => {
               {userData.department === "MI" ? (
                 <>
                   <option value={"Licence 1"}>Licence 1</option>
-                  <option value={"Licence 2"}>Licence 2</option>{" "}
+                  <option value={"Licence 2"}>Licence 2</option>
                 </>
               ) : (
                 <>
