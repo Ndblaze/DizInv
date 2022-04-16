@@ -120,7 +120,7 @@ const StudentListingSection = () => {
           Icon={IconChange}
           onClick={() => setModalIsOpen(true)}
         />
-        <List>
+        <List>  
           <ListNav
             level="section"
             section={section}

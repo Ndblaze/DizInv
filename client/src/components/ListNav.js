@@ -4,6 +4,7 @@ import Group from "./Group";
 import ListTotal from "./ListTotal";
 import Search from "./Search";
 import Section_Speciality from "./Section_Speciality";
+import SelectDepartment from "./SelectDepartment";
 
 const ListNav = ({
   total,
@@ -15,6 +16,9 @@ const ListNav = ({
   setSpeciality,
   setGroup,
   group,
+  Teacher,
+  dept,
+  setDept,
 }) => {
   const [box, setBox] = useState(false);
   const [groupBox, setGroupBox] = useState(false);
@@ -29,6 +33,11 @@ const ListNav = ({
     setSpeciality(value);
   };
 
+  const chooseDepartment = (value) => {
+    setBox(!box);
+    setDept(value);
+  };
+
   const choice = (value) => {
     setGroupBox(!groupBox);
     setGroup(value);
@@ -39,25 +48,36 @@ const ListNav = ({
       <SearchContainer>
         <Search onChange={onChange} />
       </SearchContainer>
-      <Section_Speciality
-        onClick={() => setGroupBox(false)}
-        level={level}
-        chooseSection={chooseSection}
-        chooseSpeciality={chooseSpeciality}
-        speciality={speciality} 
-        section={section}
-        setBox={setBox}
-        box={box}
-      />
-      <Group
-        onClick={() => setBox(false)}
-        section={section}
-        group={group}
-        speciality={speciality}
-        setGroupBox={setGroupBox}
-        groupBox={groupBox}
-        choice={choice}
-      />
+      {!Teacher ? (
+        <>
+          <Section_Speciality
+            onClick={() => setGroupBox(false)}
+            level={level}
+            chooseSection={chooseSection}
+            chooseSpeciality={chooseSpeciality}
+            speciality={speciality}
+            section={section}
+            setBox={setBox}
+            box={box}
+          />
+          <Group
+            onClick={() => setBox(false)}
+            section={section}
+            group={group}
+            speciality={speciality}
+            setGroupBox={setGroupBox}
+            groupBox={groupBox}
+            choice={choice}
+          />
+        </>
+      ) : (
+        <SelectDepartment
+          chooseDepartment={chooseDepartment}
+          dept={dept}
+          setBox={setBox}
+          box={box}
+        />
+      )}
       <ListTotal total={total} />
     </Wrapper>
   );

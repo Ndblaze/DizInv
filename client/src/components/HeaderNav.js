@@ -13,7 +13,7 @@ const HeaderNav = ({ level, Icon, onClick }) => {
       <Add onClick={onClick}>
         <AddIcon />
         <p>New</p>
-      </Add>
+      </Add>   
     </HeaderContainer>
   );
 };

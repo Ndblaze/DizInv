@@ -2,6 +2,7 @@ const express = require("express");
 
 let { students } = require("../temp data/students");
 let { schedule } = require("../temp data/schedules");
+let { teacher } = require("../temp data/teachers");
 
 const router = express.Router();
 
@@ -155,5 +156,9 @@ router.post("/schedule", (req, res) => {
     when getting back the schedule from the database we get the string that we have stored and change it 
     to an object with JSON.parse() method and send to the front end.
 */
+
+router.get("/get-teachers", (req, res) => {
+  res.status(200).send(teacher);
+});
 
 module.exports = router;
