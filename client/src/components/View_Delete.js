@@ -28,7 +28,7 @@ const View = styled(Link)`
 const Delete = styled.div`
   background-color: #ffd5ea;
   color: #ab2525;
-  padding: 2px 15px;
+  padding: 2px 15px; 
   font-size: 13px;
   border-radius: 10px;
   text-align: center;

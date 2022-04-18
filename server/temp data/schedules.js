@@ -112,7 +112,7 @@ module.exports = { schedule };
   //     },
   //     {
   //       indexDay: 1,
-  //       day: "tuesday",
+  //       day: "tuesday", 
   //       value: [],
   //     },
   //     {

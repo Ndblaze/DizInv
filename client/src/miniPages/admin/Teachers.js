@@ -7,15 +7,46 @@ import { GiTeacher } from "react-icons/gi";
 //pages import
 import HeaderNav from "../../components/HeaderNav";
 import ListNav from "../../components/ListNav";
-import Table from "../../components/Table";
+import TableTeacher from "../../components/TableTeacher";
+import NewUserModal from "../../components/NewUserModal";
 
 const Teachers = () => {
   const [query, setQuery] = useState("");
   const [dept, setDept] = useState("Department");
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   //data been pushed to Table
   const [allList, setAllList] = useState([]);
   const [filtered, setFiltered] = useState([]);
+
+  const DeleteUser = (message) => {
+    toast.success(message, {
+      style: {
+        background: "#25ab42",
+        color: "#fff",
+      },
+    });
+  };
+
+  //this function is called from the addNew forms components
+  const addedSuccecfully = (message) => {
+    toast.success(message, {
+      style: {
+        background: "#25ab42",
+        color: "#fff",
+      },
+    });
+  };
+
+  //this function is called from the addNew forms components
+  const addedFailed = (message) => {
+    toast.error(message, {
+      style: {
+        background: "rgba(255,51,51, 0.7)",
+        color: "#fff",
+      },
+    });
+  };
 
   useEffect(() => {
     getTeachers();
@@ -25,6 +56,7 @@ const Teachers = () => {
     await axios
       .get(`http://localhost:5000/api/admin/get-teachers`)
       .then((res) => {
+        console.log(res.data);
         if (res.data.length > 0) {
           setAllList(res.data);
           setFiltered(res.data);
@@ -62,7 +94,7 @@ const Teachers = () => {
         <HeaderNav
           level={"Teacher"}
           Icon={<GiTeacher />}
-          //  onClick={() => setModalIsOpen(true)}
+          onClick={() => setModalIsOpen(true)}
         />
 
         <List>
@@ -76,12 +108,22 @@ const Teachers = () => {
             total={filtered.length}
           />
 
-          <Table
+          <TableTeacher
             data={filtered}
-            // DeleteUser={DeleteUser}
-            // updateUI={getStudents}
+            DeleteUser={DeleteUser}
+            updateUI={getTeachers}
           />
         </List>
+
+        <NewUserModal
+          isOpen={modalIsOpen}
+          onRequestClose={() => setModalIsOpen(false)}
+          setModalIsOpen={() => setModalIsOpen(false)}
+          update={getTeachers}
+          addedSuccecfully={addedSuccecfully}
+          addedFailed={addedFailed}
+          Teacher
+        />
       </Content>
     </Wrapper>
   );

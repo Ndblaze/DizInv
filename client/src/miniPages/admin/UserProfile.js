@@ -33,18 +33,23 @@ const UserProfile = () => {
   const getStudents = async () => {
     setLoading(true);
     await axios
-      .get(`http://localhost:5000/api/admin/student-profile/${params.id}`)
+      .get(
+        `http://localhost:5000/api/admin/user-profile/${params.handler}/${params.id}`
+      )
       .then((res) => {
         if (res.data.length > 0) {
           // console.log(res.data[0]);
           setUser(res.data[0]);
           setFirstLetter(res.data[0].firstName.slice(0, 1).toUpperCase());
         }
-        if (res.data[0].hasOwnProperty("inscription")) { 
+        if (res.data[0].hasOwnProperty("inscription")) {
           setProfileType("student");
         }
+        if (res.data[0].hasOwnProperty("status")) {
+          setProfileType("teacher");
+        }
         setLoading(false);
-      })  
+      })
       .catch((err) => {
         setLoading(false);
         console.log(err.message);
@@ -52,7 +57,7 @@ const UserProfile = () => {
   };
 
   return (
-    <Wrapper> 
+    <Wrapper>
       <Content>
         {loading && (
           <HashLoader
@@ -63,20 +68,23 @@ const UserProfile = () => {
           />
         )}
         <HeaderContainer>
-          <BackIcon onClick={() => navigation(-1) } />
-          <Hearder>
-            {user.firstName}-{user.inscription}
-          </Hearder>
+          <BackIcon onClick={() => navigation(-1)} />
+          {user.hasOwnProperty("firstName") && (
+            <Hearder>
+              {user.firstName.toUpperCase()}-{user.lastName.toUpperCase()} {""}
+              {user.inscription}
+            </Hearder>
+          )}
         </HeaderContainer>
         <GeneralProfile
           style={{
             opacity: loading && 0.4,
-            pointerEvents: loading && "none", 
+            pointerEvents: loading && "none",
           }}
           user={user}
           firstLetter={firstLetter}
           profileType={profileType}
-        /> 
+        />
       </Content>
     </Wrapper>
   );

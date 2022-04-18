@@ -75,7 +75,7 @@ function App() {
                 path="speciality/:id"
                 element={<StudentListingSpeciality />}
               />
-              <Route exact path="user/:id" element={<UserProfile />} />
+              <Route exact path="user/:handler/:id" element={<UserProfile />} />
               <Route exact path="schedules" element={<AdminSchedules />} />
             </Route>
           )}

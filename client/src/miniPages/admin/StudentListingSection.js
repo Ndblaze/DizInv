@@ -136,7 +136,7 @@ const StudentListingSection = () => {
             data={filtered}
             DeleteUser={DeleteUser}
             updateUI={getStudents}
-          />
+          /> 
         </List>
         <NewUserModal
           isOpen={modalIsOpen}
@@ -145,7 +145,6 @@ const StudentListingSection = () => {
           update={getStudents}
           addedSuccecfully={addedSuccecfully}
           addedFailed={addedFailed}
-          handler="section"
         />
       </Content>
     </Wrapper>

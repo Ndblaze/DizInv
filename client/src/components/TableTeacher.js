@@ -7,7 +7,7 @@ import View_Delete from "./View_Delete";
 
 import { TiUserDelete } from "react-icons/ti";
 
-const Table = ({ data, DeleteUser, updateUI }) => {
+const TableTeacher = ({ data, DeleteUser, updateUI }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   //item to delete
   const [newDelete, setNewDelete] = useState();
@@ -21,7 +21,7 @@ const Table = ({ data, DeleteUser, updateUI }) => {
   const onSubmitDelete = async () => {
     await axios
       .delete(
-        `http://localhost:5000/api/admin/delete/${"student"}/${newDelete}`
+        `http://localhost:5000/api/admin/delete/${"teacher"}/${newDelete}`
       )
       .then((res) => {
         if (res.data.status === "SUCCESS") {
@@ -79,7 +79,7 @@ const Table = ({ data, DeleteUser, updateUI }) => {
           </TableHeader>
           <TableBody>
             {data.map((item) => (
-              <TrBody key={item.inscription}>
+              <TrBody key={item.id}>
                 <PhotoBody>
                   <TablePhoto Name={item.firstName.slice(0, 1).toUpperCase()} />
                 </PhotoBody>
@@ -89,12 +89,12 @@ const Table = ({ data, DeleteUser, updateUI }) => {
                 <MobileBody>{item.phone}</MobileBody>
                 <EmailBody>{item.email.split("univ")[0]}...</EmailBody>
                 <Tbody2>
-                  <View_Delete text="View" path={`student/${item.inscription}`} />
+                  <View_Delete text="View" path={`teacher/${item.id}`} />
                 </Tbody2>
                 <Tbody2>
                   <View_Delete
                     text="Delete"
-                    onClick={() => onDelete(item.inscription)}
+                    onClick={() => onDelete(item.id)}
                   />
                 </Tbody2>
               </TrBody>
@@ -112,18 +112,19 @@ const Table = ({ data, DeleteUser, updateUI }) => {
         <DeletStudent>
           <DeletStudentUp>
             <DeletStudentIcon />
-            <DeletStudentHeader>Delete User</DeletStudentHeader>
+            <DeletStudentHeader>Delete Teacher</DeletStudentHeader>
           </DeletStudentUp>
           <DeletStudentButtonContainer>
             <DeletStudentWarning>
-              User will be permanently remove <br /> from your database !!
+              Teacher will be permanently remove <br />
+              from your database !!
             </DeletStudentWarning>
             <div>
               <DeletStudentButtonCancel onClick={() => setModalIsOpen(false)}>
                 Cancel
               </DeletStudentButtonCancel>
               <DeletStudentButtonDelete onClick={onSubmitDelete}>
-                Delete Student
+                Delete Teacher
               </DeletStudentButtonDelete>
             </div>
           </DeletStudentButtonContainer>
@@ -133,7 +134,7 @@ const Table = ({ data, DeleteUser, updateUI }) => {
   );
 };
 
-export default Table;
+export default TableTeacher;
 
 const Wrapper = styled.div`
   margin: 0;

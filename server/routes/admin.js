@@ -51,33 +51,72 @@ router.get("/students/:id", (req, res) => {
 });
 
 //getting user profile
-router.get("/student-profile/:id", (req, res) => {
-  const parameter = req.params.id;
-  res.status(200).send(
-    students.filter((item) => {
-      return item.inscription === parameter;
-    })
-  );
+router.get("/user-profile/:handler/:id", (req, res) => {
+  const { handler, id } = req.params;
+ // console.log(handler, id);
+
+  if (handler === 'student') {
+    res.status(200).send(
+      students.filter((item) => {
+        return item.inscription === id;
+      })
+    );
+  }
+  if (handler === 'teacher') {
+    res.status(200).send(
+      teacher.filter((item) => {
+        return item.id === id;
+      })
+    );
+  }
 });
 
-router.delete("/delete/:id", (req, res) => {
-  const parameter = req.params.id;
-  console.log(parameter);
-  const student = students.filter((item) => {
-    if (item.inscription === parameter) {
-      return item;
-    }
-  });
+// router.delete("/delete/teacher/:id", (req, res) => {
+//   const parameter = req.params.id;
+//   console.log(parameter);
+// })
 
-  //check student if exists
-  if (student.length <= 0) {
-    res.send({ status: "NON" });
+router.delete("/delete/:handler/:id", (req, res) => {
+  const { handler, id } = req.params;
+  console.log(handler, id);
+
+  if (handler === "student") {
+    const student = students.filter((item) => {
+      if (item.inscription === id) {
+        return item;
+      }
+    });
+
+    //check student if exists
+    if (student.length <= 0) {
+      res.send({ status: "NON" });
+      return;
+    }
+
+    //yes there exists then we delete it here
+    students = students.filter((item) => item.inscription !== id);
+    res.status(200).send({ status: "SUCCESS" });
     return;
   }
 
-  //yes there exists then we delete it here
-  students = students.filter((item) => item.inscription !== parameter);
-  res.status(200).send({ status: "SUCCESS" });
+  if (handler === "teacher") {
+    const Teachers = teacher.filter((item) => {
+      if (item.id === id) {
+        return item;
+      }
+    });
+
+    //check student if exists
+    if (Teachers.length <= 0) {
+      res.send({ status: "NON" });
+      return;
+    }
+
+    //yes there exists then we delete it here
+    teacher = teacher.filter((item) => item.id !== id);
+    res.status(200).send({ status: "SUCCESS" });
+    return;
+  }
 });
 
 router.post("/add-new-student", (req, res) => {
