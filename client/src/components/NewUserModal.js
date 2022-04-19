@@ -41,7 +41,12 @@ const NewUserModal = ({
       ariaHideApp={false}
     >
       {Teacher ? (
-        <AddNewFormTeacher />
+        <AddNewFormTeacher
+          setModalIsOpen={setModalIsOpen}
+          addedSuccecfully={addedSuccecfully}
+          addedFailed={addedFailed}
+          update={update}
+        />
       ) : (
         <AddNewFormStudentSection
           setModalIsOpen={setModalIsOpen}

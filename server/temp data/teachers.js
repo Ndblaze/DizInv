@@ -4,7 +4,7 @@ const teacher = [
     firstName: "zakarah",
     lastName: "lakar",
     email: "zakarah.lakar@univ-constantine2.dz",
-    phone: "798961871",
+    phone: "0798961871",
     address: "UV18 batiment oscar",
     city: "Constantine, nouvelle",
     password: "lakar@500",
