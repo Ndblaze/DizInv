@@ -3,6 +3,7 @@ const express = require("express");
 let { students } = require("../temp data/students");
 let { schedule } = require("../temp data/schedules");
 let { teacher } = require("../temp data/teachers");
+let { modules } = require("../temp data/modules");
 
 const router = express.Router();
 
@@ -53,16 +54,16 @@ router.get("/students/:id", (req, res) => {
 //getting user profile
 router.get("/user-profile/:handler/:id", (req, res) => {
   const { handler, id } = req.params;
- // console.log(handler, id);
+  // console.log(handler, id);
 
-  if (handler === 'student') {
+  if (handler === "student") {
     res.status(200).send(
       students.filter((item) => {
         return item.inscription === id;
       })
     );
   }
-  if (handler === 'teacher') {
+  if (handler === "teacher") {
     res.status(200).send(
       teacher.filter((item) => {
         return item.id === id;
@@ -80,6 +81,7 @@ router.delete("/delete/:handler/:id", (req, res) => {
   const { handler, id } = req.params;
   console.log(handler, id);
 
+  //delet student
   if (handler === "student") {
     const student = students.filter((item) => {
       if (item.inscription === id) {
@@ -99,6 +101,7 @@ router.delete("/delete/:handler/:id", (req, res) => {
     return;
   }
 
+  //delet teacher
   if (handler === "teacher") {
     const Teachers = teacher.filter((item) => {
       if (item.id === id) {
@@ -198,6 +201,42 @@ router.post("/schedule", (req, res) => {
 
 router.get("/get-teachers", (req, res) => {
   res.status(200).send(teacher);
+});
+
+//api for modules>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+router.get("/modules", (req, res) => {
+  //console.log(modules)
+  res.status(200).send(modules);
+});
+
+router.delete("/delete/module/:department/:code", (req, res) => {
+  const { department, code } = req.params;
+  console.log(department, code);
+
+  // delete module
+  const Module = modules.filter((item) => {
+    if (item.department === department && item.code === code) {
+      return item;
+    }
+  });
+
+  //check student if exists
+  if (Module.length <= 0) {
+    res.send({ status: "NON" });
+    return;
+  }
+
+  //yes there exists then we delete it here
+  modules = modules.filter((item) => {
+    //remember to use the code and the department to delete items from the database
+    if (item.code !== code) {
+      return item;
+    }
+  }); 
+
+  res.status(200).send({ status: "SUCCESS" });
+  return;
 });
 
 module.exports = router;

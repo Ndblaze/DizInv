@@ -15,6 +15,7 @@ import Profile from "./miniPages/admin/Profile";
 import StudentListingSection from "./miniPages/admin/StudentListingSection";
 import StudentListingSpeciality from "./miniPages/admin/StudentListingSpeciality";
 import UserProfile from "./miniPages/admin/UserProfile";
+import AdminModules from "./miniPages/admin/AdminModules";
 
 //pages imported Teacher
 import Teacher from "./pages/Teacher";
@@ -76,6 +77,7 @@ function App() {
                 element={<StudentListingSpeciality />}
               />
               <Route exact path="user/:handler/:id" element={<UserProfile />} />
+              <Route exact path="modules" element={<AdminModules />} />
               <Route exact path="schedules" element={<AdminSchedules />} />
             </Route>
           )}

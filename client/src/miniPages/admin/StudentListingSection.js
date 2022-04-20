@@ -122,6 +122,7 @@ const StudentListingSection = () => {
         />
         <List>  
           <ListNav
+            Students
             level="section"
             section={section}
             setSection={setSection}

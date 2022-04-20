@@ -141,6 +141,7 @@ const StudentListingSpeciality = () => {
         />
         <List>
           <ListNav
+            Students
             level="speciality"
             speciality={speciality}
             setSpeciality={setSpeciality}

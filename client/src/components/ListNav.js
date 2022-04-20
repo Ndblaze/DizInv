@@ -17,6 +17,8 @@ const ListNav = ({
   setGroup,
   group,
   Teacher,
+  Modules,
+  Students,
   dept,
   setDept,
 }) => {
@@ -48,7 +50,7 @@ const ListNav = ({
       <SearchContainer>
         <Search onChange={onChange} />
       </SearchContainer>
-      {!Teacher ? (
+      {Students && (
         <>
           <Section_Speciality
             onClick={() => setGroupBox(false)}
@@ -70,7 +72,9 @@ const ListNav = ({
             choice={choice}
           />
         </>
-      ) : (
+      )}
+
+      {Teacher && (
         <SelectDepartment
           chooseDepartment={chooseDepartment}
           dept={dept}
@@ -78,6 +82,7 @@ const ListNav = ({
           box={box}
         />
       )}
+
       <ListTotal total={total} />
     </Wrapper>
   );

@@ -7,12 +7,13 @@ import { GiTeacher } from "react-icons/gi";
 //pages import
 import HeaderNav from "../../components/HeaderNav";
 import ListNav from "../../components/ListNav";
-import TableTeacher from "../../components/TableTeacher";
 import NewUserModal from "../../components/NewUserModal";
 
-const Teachers = () => {
+import { FaBook } from "react-icons/fa";
+import TableModules from "../../components/TableModules";
+
+const AdminModules = () => {
   const [query, setQuery] = useState("");
-  const [dept, setDept] = useState("Department");
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   //data been pushed to Table
@@ -23,6 +24,14 @@ const Teachers = () => {
     toast.success(message, {
       style: {
         background: "#25ab42",
+        color: "#fff",
+      },
+    });
+  };
+  const DeleteUserFailed = (message) => {
+    toast.error(message, {
+      style: {
+        background: "rgba(255,51,51, 0.7)",
         color: "#fff",
       },
     });
@@ -49,12 +58,12 @@ const Teachers = () => {
   };
 
   useEffect(() => {
-    getTeachers();
+    getModules();
   }, []);
 
-  const getTeachers = async () => {
+  const getModules = async () => {
     await axios
-      .get(`http://localhost:5000/api/admin/get-teachers`)
+      .get(`http://localhost:5000/api/admin/modules`)
       .then((res) => {
         console.log(res.data);
         if (res.data.length > 0) {
@@ -72,46 +81,36 @@ const Teachers = () => {
 
     if (query !== "") {
       newData = newData.filter((item) => {
-        return (
-          item.firstName.toUpperCase().includes(query.toUpperCase()) ||
-          item.lastName.toUpperCase().includes(query.toUpperCase())
-        );
+        return item.name.toUpperCase().includes(query.toUpperCase());
       });
     }
-    if (dept !== "Department") {
-      newData = newData.filter((item) => {
-        return item.department === dept;
-      });
-    }
-
     setFiltered(newData);
-  }, [dept, query]);
+  }, [query]);
 
   return (
     <Wrapper>
       <Content>
         <Toaster />
         <HeaderNav
-          level={"Teacher"}
-          Icon={<GiTeacher />}
-          onClick={() => setModalIsOpen(true)}
+          level={"Modules"}
+          Icon={<FaBook />}
+          //onClick={() => setModalIsOpen(true)}
         />
 
         <List>
           <ListNav
-            Teacher
-            dept={dept}
-            setDept={setDept}
+            Modules
             onChange={(e) => {
               setQuery(e.target.value);
             }}
-            total={filtered.length}  
+            total={filtered.length}
           />
 
-          <TableTeacher
+          <TableModules
             data={filtered}
             DeleteUser={DeleteUser}
-            updateUI={getTeachers}
+            DeleteUserFailed={DeleteUserFailed}
+            updateUI={getModules}
           />
         </List>
 
@@ -119,17 +118,16 @@ const Teachers = () => {
           isOpen={modalIsOpen}
           onRequestClose={() => setModalIsOpen(false)}
           setModalIsOpen={() => setModalIsOpen(false)}
-          update={getTeachers}
-          addedSuccecfully={addedSuccecfully}
-          addedFailed={addedFailed}
-          Teacher
+          update={getModules}
+          //   addedSuccecfully={addedSuccecfully}
+          //   addedFailed={addedFailed}
         />
       </Content>
     </Wrapper>
   );
 };
 
-export default Teachers;
+export default AdminModules;
 
 const Wrapper = styled.div`
   padding: 40px 40px 0 0px;

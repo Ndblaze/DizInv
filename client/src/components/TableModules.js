@@ -2,26 +2,24 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import Modal from "react-modal";
-import TablePhoto from "./TablePhoto";
-import View_Delete from "./View_Delete";
 
 import { TiUserDelete } from "react-icons/ti";
 
-const Table = ({ data, DeleteUser, updateUI }) => {
+const TableModules = ({ data, DeleteUser, updateUI, DeleteUserFailed }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   //item to delete
-  const [newDelete, setNewDelete] = useState();
+  const [newDelete, setNewDelete] = useState({});
   //console.log(newDelete);
 
-  const onDelete = (id) => {
+  const onDelete = (department, code) => {
     setModalIsOpen(true);
-    setNewDelete(id);
+    setNewDelete({ department: department, code: code });
   };
 
   const onSubmitDelete = async () => {
     await axios
       .delete(
-        `http://localhost:5000/api/admin/delete/${"student"}/${newDelete}`
+        `http://localhost:5000/api/admin/delete/module/${newDelete.department}/${newDelete.code}`
       )
       .then((res) => {
         if (res.data.status === "SUCCESS") {
@@ -33,7 +31,7 @@ const Table = ({ data, DeleteUser, updateUI }) => {
         }
         if (res.data.status === "NON") {
           setModalIsOpen(false);
-          DeleteUser("Something went wrong, Try again !!");
+          DeleteUserFailed("Something went wrong, Try again !!");
         }
       })
       .catch((err) => {
@@ -62,40 +60,42 @@ const Table = ({ data, DeleteUser, updateUI }) => {
       backgroundColor: "rgba(10, 11, 13, 0.75)",
     },
   };
-
   return (
     <Wrapper>
       <Content>
         <table>
           <TableHeader>
             <TrHead>
-              <Photo>Photo</Photo>
+              <Code>Code</Code>
               <Name>Name</Name>
-              <Mobile>Mobile</Mobile>
-              <Email>Email</Email>
-              <View>View</View>
+              <Department>Department</Department>
+              <Level>Level</Level>
+              <Edit>Edit</Edit>
               <Delete>Delete</Delete>
             </TrHead>
           </TableHeader>
           <TableBody>
             {data.map((item) => (
               <TrBody key={item.inscription}>
-                <PhotoBody>
-                  <TablePhoto Name={item.firstName.slice(0, 1).toUpperCase()} />
-                </PhotoBody>
-                <NameBody>
-                  {item.firstName} {item.lastName}
-                </NameBody>     
-                <MobileBody>{item.phone}</MobileBody>
-                <EmailBody>{item.email.split("univ")[0]}...</EmailBody>
+                <CodeBody>{item.code}</CodeBody>
+                <NameBody>{item.name}</NameBody>
+                <DepartmentBody>{item.department}</DepartmentBody>
+                <LevelBody>{item.level}</LevelBody>
                 <Tbody2>
-                  <View_Delete text="View" path={`student/${item.inscription}`} />
+                  <EditButton
+                    text="Edit"
+                    onClick={() => console.log(item.code)}
+                  >
+                    Edit
+                  </EditButton>
                 </Tbody2>
                 <Tbody2>
-                  <View_Delete
+                  <DeleteButton
                     text="Delete"
-                    onClick={() => onDelete(item.inscription)}
-                  />
+                    onClick={() => onDelete(item.department, item.code)}
+                  >
+                    Delete
+                  </DeleteButton>
                 </Tbody2>
               </TrBody>
             ))}
@@ -112,18 +112,18 @@ const Table = ({ data, DeleteUser, updateUI }) => {
         <DeletStudent>
           <DeletStudentUp>
             <DeletStudentIcon />
-            <DeletStudentHeader>Delete User</DeletStudentHeader>
+            <DeletStudentHeader>Delete Module</DeletStudentHeader>
           </DeletStudentUp>
           <DeletStudentButtonContainer>
             <DeletStudentWarning>
-              User will be permanently remove <br /> from your database !!
+              Module will be permanently remove <br /> from your database !!
             </DeletStudentWarning>
             <div>
               <DeletStudentButtonCancel onClick={() => setModalIsOpen(false)}>
                 Cancel
               </DeletStudentButtonCancel>
               <DeletStudentButtonDelete onClick={onSubmitDelete}>
-                Delete Student
+                Delete Module
               </DeletStudentButtonDelete>
             </div>
           </DeletStudentButtonContainer>
@@ -133,7 +133,7 @@ const Table = ({ data, DeleteUser, updateUI }) => {
   );
 };
 
-export default Table;
+export default TableModules;
 
 const Wrapper = styled.div`
   margin: 0;
@@ -167,7 +167,7 @@ const TableHeader = styled.thead`
 `;
 const TrHead = styled.tr`
   padding: 5px 30px 5px 10px;
-  height: 40px;
+  height: 40px;   
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -176,27 +176,27 @@ const TrHead = styled.tr`
   border-bottom: 2px solid #f6e8ff;
 `;
 
-const Photo = styled.th`
+const Code = styled.th`
   width: 100px;
   padding: 3px;
   text-align: center;
 `;
 const Name = styled.th`
-  width: 200px;
+  width: 300px;
   padding: 3px;
   text-align: left;
 `;
-const Mobile = styled.th`
+const Department = styled.th`
   width: 150px;
   padding: 3px;
   text-align: center;
 `;
-const Email = styled.th`
-  width: 230px;
+const Level = styled.th`
+  width: 200px;
   padding: 3px;
-  text-align: left;
+  text-align: center;
 `;
-const View = styled.th`
+const Edit = styled.th`
   width: 100px;
   padding: 3px;
   text-align: center;
@@ -225,26 +225,26 @@ const TrBody = styled.tr`
 `;
 
 const NameBody = styled.td`
-  width: 200px;
+  width: 300px;
   padding: 3px;
   text-align: left;
-  text-transform: uppercase;
+  text-transform: capitalize;
 `;
 
-const MobileBody = styled.td`
+const DepartmentBody = styled.td`
   width: 170px;
   padding: 3px;
   text-align: center;
 `;
 
-const EmailBody = styled.td`
-  width: 230px;
+const LevelBody = styled.td`
+  width: 200px;
   padding: 3px;
-  text-align: left;
-  text-transform: lowercase;
+  text-align: center;
+  text-transform: capitalize;
 `;
 
-const PhotoBody = styled.td`
+const CodeBody = styled.td`
   width: 100px;
   padding: 3px;
   display: flex;
@@ -259,6 +259,28 @@ const Tbody2 = styled.td`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const EditButton = styled.div`
+  background-color: #d9fcd9;
+  color: #25ab42;
+  padding: 2px 15px;
+  font-size: 13px;
+  border-radius: 10px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+`;
+
+const DeleteButton = styled.div`
+  background-color: #ffd5ea;
+  color: #ab2525;
+  padding: 2px 15px;
+  font-size: 13px;
+  border-radius: 10px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
 `;
 
 // work on modal delleting student
