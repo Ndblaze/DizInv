@@ -5,7 +5,13 @@ import Modal from "react-modal";
 
 import { TiUserDelete } from "react-icons/ti";
 
-const TableModules = ({ data, DeleteUser, updateUI, DeleteUserFailed }) => {
+const TableModules = ({
+  data,
+  DeleteUser,
+  updateUI,
+  DeleteUserFailed,
+  editModalFormValue,
+}) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   //item to delete
   const [newDelete, setNewDelete] = useState({});
@@ -24,7 +30,7 @@ const TableModules = ({ data, DeleteUser, updateUI, DeleteUserFailed }) => {
       .then((res) => {
         if (res.data.status === "SUCCESS") {
           setModalIsOpen(false);
-          DeleteUser("User deleted succefully");
+          DeleteUser("Module deleted succefully");
 
           //after delet call back the get request to get back up to date data
           updateUI();
@@ -76,7 +82,7 @@ const TableModules = ({ data, DeleteUser, updateUI, DeleteUserFailed }) => {
           </TableHeader>
           <TableBody>
             {data.map((item) => (
-              <TrBody key={item.inscription}>
+              <TrBody key={item.code}>
                 <CodeBody>{item.code}</CodeBody>
                 <NameBody>{item.name}</NameBody>
                 <DepartmentBody>{item.department}</DepartmentBody>
@@ -84,7 +90,7 @@ const TableModules = ({ data, DeleteUser, updateUI, DeleteUserFailed }) => {
                 <Tbody2>
                   <EditButton
                     text="Edit"
-                    onClick={() => console.log(item.code)}
+                    onClick={() => editModalFormValue(item)}
                   >
                     Edit
                   </EditButton>
@@ -167,7 +173,7 @@ const TableHeader = styled.thead`
 `;
 const TrHead = styled.tr`
   padding: 5px 30px 5px 10px;
-  height: 40px;   
+  height: 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;

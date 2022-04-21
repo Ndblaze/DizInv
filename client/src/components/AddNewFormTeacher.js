@@ -12,8 +12,6 @@ import { MdOutlineClose } from "react-icons/md";
 import { v4 as uuidv4 } from "uuid";
 import Select from "react-select";
 
-//static datas
-import { formField } from "../static/addUserStaticData";
 
 const AddNewFormTeacher = ({
   setModalIsOpen,
@@ -76,7 +74,7 @@ const AddNewFormTeacher = ({
     menu: (provided, state) => ({
       ...provided,
       height: "200px",
-      overflowY: "scroll",
+      overflowY: "scroll",   
     }),
     option: (provided, state) => ({
       ...provided,

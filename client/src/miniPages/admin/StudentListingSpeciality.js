@@ -166,6 +166,7 @@ const StudentListingSpeciality = () => {
           addedFailed={addedFailed}
           handler="speciality"
           update={getStudents}
+          Student
         />
       </Content>
     </Wrapper>

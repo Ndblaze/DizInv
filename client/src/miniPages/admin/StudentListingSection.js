@@ -124,7 +124,7 @@ const StudentListingSection = () => {
           <ListNav
             Students
             level="section"
-            section={section}
+            section={section} 
             setSection={setSection}
             setGroup={setGroup}
             group={group}
@@ -146,6 +146,7 @@ const StudentListingSection = () => {
           update={getStudents}
           addedSuccecfully={addedSuccecfully}
           addedFailed={addedFailed}
+          Student
         />
       </Content>
     </Wrapper>

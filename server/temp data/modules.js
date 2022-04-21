@@ -36,7 +36,7 @@ const modules = [
       level: 'Licence 1'
     },
     {
-      code: "SI",
+      code: "SIT",
       name: "System Inteligence",
       department: "IFA",
       level: 'Licence 3'

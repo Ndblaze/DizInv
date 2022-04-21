@@ -20,6 +20,12 @@ const AdminModules = () => {
   const [allList, setAllList] = useState([]);
   const [filtered, setFiltered] = useState([]);
 
+  //form initial value
+  const [formValue, setFormValue] = useState({});
+
+  //form mood: add or edit
+  const [mood, setMood] = useState("");
+
   const DeleteUser = (message) => {
     toast.success(message, {
       style: {
@@ -87,6 +93,16 @@ const AdminModules = () => {
     setFiltered(newData);
   }, [query]);
 
+  const editModalFormValue = (values) => {
+    setFormValue(values);
+    setMood("edit");
+    setModalIsOpen(true);
+  };
+  const clearEditModalFormValue = () => {
+    setFormValue({});
+    setModalIsOpen(false);
+  };
+
   return (
     <Wrapper>
       <Content>
@@ -94,7 +110,7 @@ const AdminModules = () => {
         <HeaderNav
           level={"Modules"}
           Icon={<FaBook />}
-          //onClick={() => setModalIsOpen(true)}
+          onClick={() => setModalIsOpen(true)}
         />
 
         <List>
@@ -111,16 +127,21 @@ const AdminModules = () => {
             DeleteUser={DeleteUser}
             DeleteUserFailed={DeleteUserFailed}
             updateUI={getModules}
+            editModalFormValue={editModalFormValue}
           />
         </List>
 
         <NewUserModal
           isOpen={modalIsOpen}
-          onRequestClose={() => setModalIsOpen(false)}
-          setModalIsOpen={() => setModalIsOpen(false)}
+          onRequestClose={() => clearEditModalFormValue()}
+          setModalIsOpen={() => clearEditModalFormValue()}
           update={getModules}
-          //   addedSuccecfully={addedSuccecfully}
-          //   addedFailed={addedFailed}
+          moduleFormValues={formValue}
+          addedSuccecfully={addedSuccecfully}
+          addedFailed={addedFailed}
+          Module
+          mood={mood}
+          setMood={setMood}
         />
       </Content>
     </Wrapper>

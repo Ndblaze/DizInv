@@ -233,9 +233,58 @@ router.delete("/delete/module/:department/:code", (req, res) => {
     if (item.code !== code) {
       return item;
     }
-  }); 
+  });
 
   res.status(200).send({ status: "SUCCESS" });
+  return;
+});
+
+router.post("/add-module", (req, res) => {
+  const { module, mood } = req.body;
+  const { code } = module;
+
+  // check if module exist
+  const Module = modules.filter((item) => {
+    if (item.code === code) {
+      return item;
+    }
+  });
+
+  // No it does not exists and u are adding
+  if (Module.length <= 0 && mood.length <= 0) {
+    modules.push(module);
+    res.send({ status: "SUCCESS", message: "Module Added succefully!!" });
+    return;
+  }
+
+  // No it does not exists and u want to edit
+  if (Module.length <= 0 && mood === "edit") {
+    res.send({
+      status: "WARN",
+      message: "Module-Code doesen't exist, can't edit !!",
+    });
+    return;
+  }
+
+  // Module already exits
+  if (Module.length > 0 && mood.length <= 0) {
+    res.send({
+      status: "WARN",
+      message: "Module or Module-code already exits, can't add !!",
+    });
+    return;
+  }
+
+  //yes module exits
+  //this edit is not working yet
+  if (Module.length > 0 && mood === "edit") {
+    Module[0] = module;
+    res.send({ status: "SUCCESS", message: "Module Edited succefully!!" });
+    return;
+  }
+
+  //failed
+  res.send({ status: "NON", message: " Operation failed, try again!!" });
   return;
 });
 

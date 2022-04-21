@@ -1,5 +1,6 @@
 import React from "react";
 import Modal from "react-modal";
+import AddModuleForm from "./AddModuleForm";
 
 import AddNewFormStudentSection from "./AddNewFormStudentSection";
 import AddNewFormTeacher from "./AddNewFormTeacher";
@@ -12,6 +13,11 @@ const NewUserModal = ({
   addedSuccecfully,
   addedFailed,
   Teacher,
+  Student,
+  Module,
+  moduleFormValues,
+  mood,
+  setMood,
 }) => {
   const customStyles = {
     content: {
@@ -40,19 +46,32 @@ const NewUserModal = ({
       onRequestClose={onRequestClose}
       ariaHideApp={false}
     >
-      {Teacher ? (
+      {Teacher && (
         <AddNewFormTeacher
           setModalIsOpen={setModalIsOpen}
           addedSuccecfully={addedSuccecfully}
           addedFailed={addedFailed}
           update={update}
         />
-      ) : (
+      )}
+      {Student && (
         <AddNewFormStudentSection
           setModalIsOpen={setModalIsOpen}
           addedSuccecfully={addedSuccecfully}
           addedFailed={addedFailed}
           update={update}
+        />
+      )}
+
+      {Module && (
+        <AddModuleForm
+          setModalIsOpen={setModalIsOpen}
+          addedSuccecfully={addedSuccecfully}
+          addedFailed={addedFailed}
+          update={update}
+          moduleFormValues={moduleFormValues}
+          mood={mood}
+          setMood={setMood}
         />
       )}
     </Modal>
