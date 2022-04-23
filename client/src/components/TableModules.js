@@ -82,7 +82,7 @@ const TableModules = ({
           </TableHeader>
           <TableBody>
             {data.map((item) => (
-              <TrBody key={item.code}>
+              <TrBody key={item.id}>
                 <CodeBody>{item.code}</CodeBody>
                 <NameBody>{item.name}</NameBody>
                 <DepartmentBody>{item.department}</DepartmentBody>

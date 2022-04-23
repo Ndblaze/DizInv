@@ -98,6 +98,12 @@ const AdminModules = () => {
     setMood("edit");
     setModalIsOpen(true);
   };
+
+  const addModalFormValue = () => {
+    setMood("add");
+    setModalIsOpen(true);
+  };
+
   const clearEditModalFormValue = () => {
     setFormValue({});
     setModalIsOpen(false);
@@ -110,7 +116,7 @@ const AdminModules = () => {
         <HeaderNav
           level={"Modules"}
           Icon={<FaBook />}
-          onClick={() => setModalIsOpen(true)}
+          onClick={() => addModalFormValue()}
         />
 
         <List>

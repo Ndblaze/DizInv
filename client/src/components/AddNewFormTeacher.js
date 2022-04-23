@@ -12,7 +12,6 @@ import { MdOutlineClose } from "react-icons/md";
 import { v4 as uuidv4 } from "uuid";
 import Select from "react-select";
 
-
 const AddNewFormTeacher = ({
   setModalIsOpen,
   addedFailed,
@@ -20,6 +19,8 @@ const AddNewFormTeacher = ({
   addedSuccecfully,
 }) => {
   const [teacherGroups, setTeacherGroups] = useState([]);
+  const [teacherModule, setTeacherModule] = useState();
+  const [moduleListOptions, setModuleListOptions] = useState([]);
 
   //validation
   const validation = Yup.object({
@@ -48,7 +49,6 @@ const AddNewFormTeacher = ({
         "must contain one Uppercase, One Lowwecase, one Number and special character."
       ),
     department: Yup.string().required("this field is required"),
-    module: Yup.string().required("this field is required"),
     status: Yup.string().required("this field is required"),
     level: Yup.string().required("this field is required"),
   });
@@ -71,10 +71,13 @@ const AddNewFormTeacher = ({
   };
 
   const customStyles = {
+    menuList: () => ({
+      height: 10,
+    }),
     menu: (provided, state) => ({
       ...provided,
-      height: "200px",
-      overflowY: "scroll",   
+      height: "170px",
+      overflowY: "scroll",
     }),
     option: (provided, state) => ({
       ...provided,
@@ -82,10 +85,25 @@ const AddNewFormTeacher = ({
     }),
   };
 
+  const getModuleOptions = async () => {
+    await axios
+      .get(`http://localhost:5000/api/admin/modules/teacher-form-option`)
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.length > 0) {
+          setModuleListOptions(res.data);
+        }
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
+
   const AddTeacher = (value) => {
     const data = {
       ...value,
       groups: teacherGroups.map((e) => e.value),
+      module: teacherModule,
     };
 
     console.log(data);
@@ -209,6 +227,33 @@ const AddNewFormTeacher = ({
                     <TextField type="text" name="phone" />
                   </InputShared>
                 </Shared>
+                <NonShared>
+                  <Input>
+                    <Label>Group (s) *</Label>
+                    <Select
+                      isMulti
+                      placeholder="Select group(s)...."
+                      styles={customStyles}
+                      name="colors"
+                      options={groupOptions}
+                      onChange={(e) => setTeacherGroups(e)}
+                    />
+                  </Input>
+                </NonShared>
+                <NonShared>
+                  <Input>
+                    <Label>Module *</Label>
+                    <div onClick={() => getModuleOptions()}>
+                      <Select
+                        placeholder="Select module from list...."
+                        styles={customStyles}
+                        name="module"
+                        options={moduleListOptions}
+                        onChange={(e) => setTeacherModule(e.value)}
+                      />
+                    </div>
+                  </Input>
+                </NonShared>
                 <Shared>
                   <InputShared>
                     <Label>password *</Label>
@@ -227,25 +272,7 @@ const AddNewFormTeacher = ({
                     />
                   </InputShared>
                 </Shared>
-                <NonShared>
-                  <Input>
-                    <Label>Group (s) *</Label>
-                    <Select
-                      isMulti
-                      placeholder="Select group(s)...."
-                      styles={customStyles}
-                      name="colors"
-                      options={groupOptions}
-                      onChange={(e) => setTeacherGroups(e)}
-                    />
-                  </Input>
-                </NonShared>
-                <NonShared>
-                  <Input>
-                    <Label>Module *</Label>
-                    <TextField type="text" name="module" />
-                  </Input>
-                </NonShared>
+
                 <Shared>
                   <InputShared>
                     <Label>Level *</Label>

@@ -7,6 +7,7 @@ import * as Yup from "yup";
 import TextField from "./TextField";
 import TextFieldOptions from "./TextFieldOptions";
 import { MdOutlineClose } from "react-icons/md";
+import { v4 as uuidv4 } from "uuid";
 
 const AddModuleForm = ({
   moduleFormValues,
@@ -32,6 +33,7 @@ const AddModuleForm = ({
   });
 
   const initialValues = {
+    id: moduleFormValues.id || uuidv4(),
     code: moduleFormValues.code || "",
     name: moduleFormValues.name || "",
     department: moduleFormValues.department || "",
@@ -40,7 +42,10 @@ const AddModuleForm = ({
 
   const AddEditModule = async (module) => {
     await axios
-      .post(`http://localhost:5000/api/admin/add-module`, { module, mood })
+      .post(`http://localhost:5000/api/admin/add-module`, {
+        module,
+        mood,
+      })
       .then((res) => {
         console.log(res);
         if (res.data.status === "SUCCESS") {

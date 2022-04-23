@@ -30,6 +30,7 @@ import ChelfDashBoard from "./miniPages/chelfDepartment/ChelfDashBoard";
 import ChelfJustification from "./miniPages/chelfDepartment/ChelfJustification";
 import TeacherSchedule from "./miniPages/teachers/TeacherSchedule";
 import TeacherMainHome from "./miniPages/teachers/TeacherMainHome";
+import TeacherManagePresence from "./miniPages/teachers/TeacherManagePresence";
 
 function App() {
   const [user, setUser] = useState({});
@@ -91,7 +92,11 @@ function App() {
                   element={<TeacherSchedule />}
                 />
               </Route>
-
+              <Route
+                exact
+                path="manage-presence"
+                element={<TeacherManagePresence />}
+              />
               <Route exact path="profile" element={<TeacherProfile />} />
             </Route>
           )}
@@ -113,6 +118,11 @@ function App() {
                   exact
                   path="view-schedule"
                   element={<TeacherSchedule />}
+                />
+                <Route
+                  exact
+                  path="manage-presence"
+                  element={<TeacherManagePresence />}
                 />
               </Route>
               <Route exact path="profile" element={<TeacherProfile />} />

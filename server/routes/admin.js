@@ -203,6 +203,15 @@ router.get("/get-teachers", (req, res) => {
   res.status(200).send(teacher);
 });
 
+//get list of modules for adding teachers options
+router.get("/modules/teacher-form-option", (req, res) => {
+  const moduleList = modules.map((module) => ({
+    value: `${module.name}`,
+    label: `${module.code} - ${module.name} (${module.department})`,
+  }));
+  res.status(200).send(moduleList);
+});
+
 //api for modules>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 router.get("/modules", (req, res) => {
@@ -241,17 +250,17 @@ router.delete("/delete/module/:department/:code", (req, res) => {
 
 router.post("/add-module", (req, res) => {
   const { module, mood } = req.body;
-  const { code } = module;
+  // console.log(module);
 
   // check if module exist
   const Module = modules.filter((item) => {
-    if (item.code === code) {
+    if (item.id === module.id) {
       return item;
     }
   });
 
   // No it does not exists and u are adding
-  if (Module.length <= 0 && mood.length <= 0) {
+  if (Module.length <= 0 && mood === "add") {
     modules.push(module);
     res.send({ status: "SUCCESS", message: "Module Added succefully!!" });
     return;
@@ -267,7 +276,7 @@ router.post("/add-module", (req, res) => {
   }
 
   // Module already exits
-  if (Module.length > 0 && mood.length <= 0) {
+  if (Module.length > 0 && mood === "add") {
     res.send({
       status: "WARN",
       message: "Module or Module-code already exits, can't add !!",
@@ -276,9 +285,11 @@ router.post("/add-module", (req, res) => {
   }
 
   //yes module exits
-  //this edit is not working yet
   if (Module.length > 0 && mood === "edit") {
-    Module[0] = module;
+    Module[0].code = module.code;
+    Module[0].name = module.name;
+    Module[0].department = module.department;
+    Module[0].level = module.level;
     res.send({ status: "SUCCESS", message: "Module Edited succefully!!" });
     return;
   }

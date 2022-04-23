@@ -33,7 +33,7 @@ const listCard = [
     icon: <MdLibraryAddCheck />,
     discription:
       "Manually manage the list of present students in a session by clicking on the continue button.",
-    path: "/schedules",
+    path: "/teacher/manage-presence",
     boxShadow: {
       boxShadow: "0 1px 1px #A9F7FF, 0 2px 4px #A9F7FF",
     },
@@ -69,7 +69,6 @@ const TeacherHome = () => {
     getTeacherData();
   }, []);
 
-
   //the chelf api to get teacher infor and store on the session storage of the browser
   const getTeacherData = async () => {
     await axios
@@ -80,10 +79,15 @@ const TeacherHome = () => {
       )
       .then((res) => {
         if (res.data.status === "SUCCESS") {
-          let { level } = res.data.data;
-          const data = JSON.stringify(res.data.data);
-          sessionStorage.setItem("userData", data);
+          let { department, module, status, groups, level, sceance } =
+            res.data.data;
+
+          sessionStorage.setItem("department", department);
+          sessionStorage.setItem("module", module);
+          sessionStorage.setItem("status", status);
+          sessionStorage.setItem("groups", groups);
           sessionStorage.setItem("level", level);
+          sessionStorage.setItem("sceance", sceance);
         }
         if (res.data.status === "FAILED") {
         }
@@ -103,7 +107,7 @@ const TeacherHome = () => {
         <Hero />
         <CardContainer>
           {listCard.map((list) => (
-            <Card style={list.boxShadow}>
+            <Card style={list.boxShadow} key={list.title}>
               <TitleContainer style={list.colorTitle}>
                 <TitelIcon>{list.icon}</TitelIcon>
                 <Title>{list.title}</Title>

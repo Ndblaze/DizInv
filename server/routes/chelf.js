@@ -16,10 +16,10 @@ router.get("/data/:email", (req, res) => {
   });
 
   if (person.length > 0) {
-    const { department, module, status, groups, level } = person[0];
+    const { department, module, status, groups, level, sceance } = person[0];
     res.send({
       status: "SUCCESS",
-      data: { department, module, status, groups, level },
+      data: { department, module, status, groups, level, sceance },
     });
 
     return;
@@ -39,7 +39,7 @@ router.get("/emails/:department", (req, res) => {
     if (teacher.department === department) {
       return teacher;
     }
-  });
+  }); 
 
   if (teachers.length > 0) {
     const emails = teachers.map((email) => ({

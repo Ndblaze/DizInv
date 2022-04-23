@@ -15,7 +15,7 @@ const Teachers = () => {
   const [dept, setDept] = useState("Department");
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  //data been pushed to Table
+  //data been pushed to Table 
   const [allList, setAllList] = useState([]);
   const [filtered, setFiltered] = useState([]);
 
