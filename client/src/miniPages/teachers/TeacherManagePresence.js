@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import axios from "axios";
 import { FaArrowLeft } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const TeacherManagePresence = () => {
   const navigation = useNavigate();
@@ -25,7 +24,7 @@ const TeacherManagePresence = () => {
       <Content>
         <HeaderContainer>
           <BackIcon onClick={() => navigation(-1)} />
-          <Hearder>Manage Presence</Hearder>
+          <Hearder>Choose Group</Hearder>
         </HeaderContainer>
         <GroupList>
           <Hearder>
@@ -34,7 +33,13 @@ const TeacherManagePresence = () => {
           </Hearder>
           <Groups>
             {manageGroup.map((group) => (
-              <Folder>
+              <Folder
+                to={`/teacher/${sessionStorage.getItem(
+                  "module"
+                )}/${sessionStorage
+                  .getItem("sceance")
+                  .toUpperCase()}/${group}`}
+              >
                 <Hearder>{group}</Hearder>{" "}
               </Folder>
             ))}
@@ -88,7 +93,7 @@ const Groups = styled.div`
   justify-content: space-evenly;
 `;
 
-const Folder = styled.div`
+const Folder = styled(Link)`
   width: 200px;
   height: 130px;
   margin-top: 50px;
@@ -99,6 +104,7 @@ const Folder = styled.div`
   justify-content: center;
   align-items: center;
   border: 2px solid #c278f8;
+  text-decoration: none;
 
   &:hover {
     background-color: #e3beff;

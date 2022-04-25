@@ -100,7 +100,7 @@ const Teachers = () => {
         <List>
           <ListNav
             Teacher
-            dept={dept}
+            dept={dept} 
             setDept={setDept}
             onChange={(e) => {
               setQuery(e.target.value);
