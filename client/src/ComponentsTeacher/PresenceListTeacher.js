@@ -2,15 +2,16 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import ListNavPresence from "../miniPages/teachers/ListNavPresence";
+import PresenceTable from "./PresenceTable";
 
 const PresenceListTeacher = () => {
   const [query, setQuery] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  console.log(query)
+  console.log(query);
 
   //get list of a certain date
   const [dateQuery, setDateQuery] = useState();
-  console.log(dateQuery)
+  console.log(dateQuery);
 
   //data been pushed to Table
   const [allList, setAllList] = useState([]);
@@ -26,6 +27,8 @@ const PresenceListTeacher = () => {
               setQuery(e.target.value);
             }}
           />
+
+          <PresenceTable />
         </List>
       </Content>
     </Wrapper>

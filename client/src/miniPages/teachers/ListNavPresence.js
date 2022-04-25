@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Search from "../../components/Search";
-import { BiMessageSquareAdd } from "react-icons/bi";
+import { BiMessageSquareAdd, BiMessageSquareEdit } from "react-icons/bi";
 import { CgFileRemove } from "react-icons/cg";
 
 import Select from "react-select";
@@ -145,6 +145,11 @@ const ListNavPresence = ({ getQuery, setDateQuery }) => {
           <BiMessageSquareAdd />
         </AddDeleteSceance>
         <AddDeleteSceance
+          style={{ backgroundColor: "#d8ffd8", color: "#3bff3b" }}
+        >
+          <BiMessageSquareEdit />
+        </AddDeleteSceance>
+        <AddDeleteSceance
           style={{ backgroundColor: "#ffcbe5", color: "#ff7fbf" }}
         >
           <CgFileRemove />
@@ -183,10 +188,10 @@ const Operation = styled.div`
 `;
 
 const AddDeleteSceance = styled.div`
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   border-radius: 5px;
-  font-size: 25px;
+  font-size: 23px;
   display: flex;
   align-items: center;
   justify-content: center;
