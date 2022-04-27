@@ -20,6 +20,7 @@ const AddNewFormTeacher = ({
 }) => {
   const [teacherGroups, setTeacherGroups] = useState([]);
   const [teacherModule, setTeacherModule] = useState();
+  const [teacherSceanceType, setTeacherSceanceType] = useState([]);
   const [moduleListOptions, setModuleListOptions] = useState([]);
 
   //validation
@@ -41,13 +42,13 @@ const AddNewFormTeacher = ({
     city: Yup.string()
       .min(4, "enter full city name")
       .required("field is required"),
-    password: Yup.string()
-      .min(6, "password must be at least 6 characters")
-      .required("field is required")
-      .matches(
-        /^(?=.*[a-zA-Z])/,
-        "must contain one Uppercase, One Lowwecase, one Number and special character."
-      ),
+    // password: Yup.string()
+    //   .min(6, "password must be at least 6 characters")
+    //   .required("field is required")
+    //   .matches(
+    //     /^(?=.*[a-zA-Z])/,
+    //     "must contain one Uppercase, One Lowwecase, one Number and special character."
+    //   ),
     department: Yup.string().required("this field is required"),
     status: Yup.string().required("this field is required"),
     level: Yup.string().required("this field is required"),
@@ -62,12 +63,13 @@ const AddNewFormTeacher = ({
     phone: "",
     address: "",
     city: "",
-    password: "",
+    password: uuidv4(),
     department: "",
     module: "",
     status: "",
     groups: [],
     level: "",
+    sceance: [],
   };
 
   const customStyles = {
@@ -82,6 +84,13 @@ const AddNewFormTeacher = ({
     option: (provided, state) => ({
       ...provided,
       fontSize: "13px",
+    }),
+  };
+
+  const SceanceStyles = {
+    option: (provided, state) => ({
+      ...provided,
+      fontSize: "10px",
     }),
   };
 
@@ -103,6 +112,7 @@ const AddNewFormTeacher = ({
     const data = {
       ...value,
       groups: teacherGroups.map((e) => e.value),
+      sceance: teacherSceanceType.map((e) => e.value),
       module: teacherModule,
     };
 
@@ -256,8 +266,28 @@ const AddNewFormTeacher = ({
                 </NonShared>
                 <Shared>
                   <InputShared>
-                    <Label>password *</Label>
-                    <TextField type="password" name="password" />
+                    <Label>sceance type *</Label>
+                    <Select
+                      isMulti
+                      styles={SceanceStyles}
+                      placeholder="Select type"
+                      name="password"
+                      options={[
+                        {
+                          value: "cours",
+                          label: "cours",
+                        },
+                        {
+                          value: "TD",
+                          label: "TD",
+                        },
+                        {
+                          value: "TP",
+                          label: "TP",
+                        },
+                      ]}
+                      onChange={(e) => setTeacherSceanceType(e)}
+                    />
                   </InputShared>
                   <InputShared>
                     <Label>Department *</Label>

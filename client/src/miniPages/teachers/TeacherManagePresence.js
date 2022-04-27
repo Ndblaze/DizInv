@@ -2,12 +2,23 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate, Link } from "react-router-dom";
+import Select from "react-select";
+
+const SceanceStyles = {
+  option: (provided, state) => ({
+    ...provided,
+    fontSize: "10px",
+  }),
+};
 
 const TeacherManagePresence = () => {
   const navigation = useNavigate();
   const [manageGroup, setManageGroup] = useState([]);
+  const [sceanceList, setSceanceList] = useState([]);
+  const [currentSceance, setcurrentSceance] = useState();
 
-  console.log(manageGroup);
+  // console.log(manageGroup);
+  // console.log(currentSceance);
 
   useEffect(() => {
     const group = sessionStorage.getItem("groups");
@@ -17,18 +28,55 @@ const TeacherManagePresence = () => {
       const arr = [group];
       setManageGroup(arr);
     }
+
+    //seting the sceance even if its array or normal to match our app
+    const sceance = sessionStorage.getItem("sceance");
+    if (sceance.includes(",")) {
+      const list = sceance.split(",");
+      const options = list.map((type) => ({
+        value: type,
+        label: type,
+      }));
+
+      setSceanceList(options);
+      setcurrentSceance(options[0].value);
+    } else {
+      setSceanceList([
+        {
+          value: sceance,
+          label: sceance,
+        },
+      ]);
+      setcurrentSceance(sceance);
+    }
   }, []);
 
   return (
     <Wrapper>
       <Content>
         <HeaderContainer>
-          <BackIcon onClick={() => navigation(-1)} />
-          <Hearder>Choose Group</Hearder>
+          <div style={{ display: "flex" }}>
+            <BackIcon onClick={() => navigation(-1)} />
+            <Hearder>Choose Group</Hearder>
+          </div>
+          <div style={{ display: "flex" }}>
+            <Hearder>Sceance type:</Hearder>
+            {sceanceList.length > 0 && (
+              <SelectSceance
+                className="basic-single"
+                classNamePrefix="select"
+                styles={SceanceStyles}
+                defaultValue={sceanceList[0]}
+                options={sceanceList}
+                onChange={(e) => setcurrentSceance(e.value)}
+              />
+            )}
+          </div>
         </HeaderContainer>
+
         <GroupList>
           <Hearder>
-            {sessionStorage.getItem("sceance").toUpperCase()} -{" "}
+            {currentSceance} -{" "}
             {sessionStorage.getItem("module")}
           </Hearder>
           <Groups>
@@ -36,9 +84,7 @@ const TeacherManagePresence = () => {
               <Folder
                 to={`/teacher/${sessionStorage.getItem(
                   "module"
-                )}/${sessionStorage
-                  .getItem("sceance")
-                  .toUpperCase()}/${group}`}
+                )}/${currentSceance}/${group}`}
               >
                 <Hearder>{group}</Hearder>{" "}
               </Folder>
@@ -61,10 +107,15 @@ const Content = styled.div`
   //border: 1px solid red;
 `;
 
+const SelectSceance = styled(Select)`
+  width: 200px;
+  margin-left: 20px;
+`;
+
 const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
-  // justify-content: space-between;
+  justify-content: space-between;
 `;
 
 const BackIcon = styled(FaArrowLeft)`

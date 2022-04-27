@@ -13,7 +13,7 @@ const teacher = [
     status: "teacher",
     groups: ["G1", "G2", "G3"],
     level: "Licence 1",
-    sceance: "Td",
+    sceance: ["TD"],
   },
   {
     id: "khdehwie34232",
@@ -29,7 +29,7 @@ const teacher = [
     status: "Chelf Department",
     groups: ["G1", "G2", "G3", "G4"],
     level: "Licence 1",
-    sceance: "Tp",
+    sceance: ["TD", "TP"],
   },
   {
     id: "nmbdu732u389r2",
@@ -45,7 +45,7 @@ const teacher = [
     status: "Chelf Department",
     groups: ["G1", "G2", "G3", "G4"],
     level: "Licence 1",
-    sceance: "Td",
+    sceance: ["TD"],
   },
   {
     id: "jdi237y2h2uh2",
@@ -61,7 +61,7 @@ const teacher = [
     status: "Chelf Department",
     groups: ["G1", "G2", "G3", "G4"],
     level: "Licence 1",
-    sceance: "Td",
+    sceance: ["TD", "TP"],
   },
   {
     id: "qekkjnie23823r2323",
@@ -77,7 +77,7 @@ const teacher = [
     status: "Chelf Department",
     groups: ["G1", "G2", "G3", "G4"],
     level: "Licence 1",
-    sceance: "Tp",
+    sceance: ["Tp"],
   },
   {
     id: "owi0232092",
@@ -93,7 +93,7 @@ const teacher = [
     status: "Chelf Department",
     groups: ["G1", "G2", "G3", "G4"],
     level: "Licence 1",
-    sceance: "Tp",
+    sceance: ["Tp"],
   },
   {
     id: "qe23r22jdhi2u3323",
@@ -109,7 +109,7 @@ const teacher = [
     status: "Chelf Department",
     groups: ["G1", "G2", "G3", "G4"],
     level: "Licence 1",
-    sceance: "Td",
+    sceance: ["Td"],
   },
   {
     id: "iweu9283iwu2",
@@ -125,7 +125,7 @@ const teacher = [
     status: "Chelf Department",
     groups: ["G1", "G2", "G3", "G4"],
     level: "Licence 1",
-    sceance: "Td",
+    sceance: ["Td"],
   },
   {
     id: "mso23e283902",
@@ -141,7 +141,7 @@ const teacher = [
     status: "Chelf Department",
     groups: ["G1", "G2", "G3", "G4"],
     level: "Licence 1",
-    sceance: "Tp",
+    sceance: ["Tp"],
   },
   {
     id: "nnqi3uy222222u2",
@@ -157,7 +157,7 @@ const teacher = [
     status: "Chelf Department",
     groups: ["G1", "G2", "G3", "G4"],
     level: "Licence 1",
-    sceance: "Tp",
+    sceance: ["Tp"],
   },
   {
     id: "kjni28892922",
@@ -173,7 +173,7 @@ const teacher = [
     status: "Chelf Department",
     groups: ["G1", "G2", "G3", "G4"],
     level: "Licence 1",
-    sceance: "Td",
+    sceance: ["Td"],
   },
   {
     id: "kmdo2i3ru2d",
@@ -189,7 +189,7 @@ const teacher = [
     status: "Chelf Department",
     groups: ["G1", "G2", "G3", "G4"],
     level: "Licence 1",
-    sceance: "Td",
+    sceance: ["Td"],
   },
   {
     id: "qjhei23yd2",
@@ -205,7 +205,7 @@ const teacher = [
     status: "Chelf Department",
     groups: ["G1", "G2", "G3", "G4"],
     level: "Licence 1",
-    sceance: "Tp",
+    sceance: ["Tp"],
   },
   {
     id: "kqjd922jdx92",
@@ -221,7 +221,7 @@ const teacher = [
     status: "Chelf Department",
     groups: ["G1", "G2", "G3", "G4"],
     level: "Licence 1",
-    sceance: "Tp",
+    sceance: ["Tp"],
   },
   {
     id: "n23872dj23",
@@ -237,7 +237,7 @@ const teacher = [
     status: "Chelf Department",
     groups: ["G1", "G2", "G3", "G4"],
     level: "Licence 1",
-    sceance: "Td",
+    sceance: ["Td"],
   },
   {
     id: "kljqow9232",
@@ -253,7 +253,7 @@ const teacher = [
     status: "Chelf Department",
     groups: ["G1", "G2", "G3", "G4"],
     level: "Licence 1",
-    sceance: "Td",
+    sceance: ["Td"],
   },
   {
     id: "kn28329d2d",
@@ -269,7 +269,7 @@ const teacher = [
     status: "Chelf Department",
     groups: ["G1", "G2", "G3", "G4"],
     level: "Licence 1",
-    sceance: "Tp",
+    sceance: ["Tp"],
   },
   {
     id: "sn2i3yr2d2",
@@ -285,7 +285,7 @@ const teacher = [
     status: "Chelf Department",
     groups: ["G1", "G2", "G3", "G4"],
     level: "Licence 1",
-    sceance: "Tp",
+    sceance: ["Tp"],
   },
   {
     id: "kjh92e2oi2u2",
@@ -301,7 +301,7 @@ const teacher = [
     status: "Chelf Department",
     groups: ["G1", "G2", "G3", "G4"],
     level: "Licence 1",
-    sceance: "Td",
+    sceance: ["Td"],
   },
   {
     id: " qwidu2dod2",
@@ -317,7 +317,7 @@ const teacher = [
     status: "Chelf Department",
     groups: ["G1", "G2", "G3", "G4"],
     level: "Licence 1",
-    sceance: "Td",
+    sceance: ["Td"],
   },
   {
     id: "xiuf3odd",
@@ -333,7 +333,7 @@ const teacher = [
     status: "Chelf Department",
     groups: ["G1", "G2", "G3", "G4"],
     level: "Licence 1",
-    sceance: "Tp",
+    sceance: ["Tp"],
   },
 ];
 

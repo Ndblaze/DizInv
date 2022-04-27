@@ -7,9 +7,9 @@ import PresenceListTeacher from "../../ComponentsTeacher/PresenceListTeacher";
 
 const TeacherPresenceList = () => {
   const navigation = useNavigate();
-  const {group, module, sceance} = useParams();
+  const {group, module} = useParams();
 
-  console.log(group, module, sceance)
+  console.log(group, module)
 
 
   return (
