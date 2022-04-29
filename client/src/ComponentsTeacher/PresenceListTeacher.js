@@ -17,6 +17,37 @@ const PresenceListTeacher = () => {
   const [allList, setAllList] = useState([]);
   const [filtered, setFiltered] = useState([]);
 
+  useEffect(() => {
+    getListOfPresence();
+  }, []);
+
+  //runs on the change of dateQuery value
+  useEffect(() => {
+    getListOfPresence();
+  }, [dateQuery]);
+
+  //get list of present and absenct of the date
+  const getListOfPresence = async () => {
+    await axios
+      .post(`http://localhost:5000/api/managePresence/get-list-presence`, {
+        date: dateQuery,
+      })
+      .then((res) => {
+        //console.log(res);
+        if (res.data.status === "SUCCESS") {
+          setAllList(res.data.results);
+          setFiltered(res.data.results);
+        }
+        if (res.data.status === "FAILED") {
+          //this error message should be prompted to show in the toast
+          console.log(res.data.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <Wrapper>
       <Content>

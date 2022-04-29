@@ -5,6 +5,8 @@ import { BiMessageSquareAdd, BiMessageSquareEdit } from "react-icons/bi";
 import { CgFileRemove } from "react-icons/cg";
 
 import Select from "react-select";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 
 const customStyles = {
   menuList: () => ({
@@ -22,98 +24,29 @@ const customStyles = {
 };
 
 const ListNavPresence = ({ getQuery, setDateQuery }) => {
+  const { group, module, sceance } = useParams();
+
   const [dateList, setDateList] = useState([]);
 
   useEffect(() => {
-    setDateList(dateOptions);
+    getAllDate()
   }, []);
 
-  const dateOptions = [
-    {
-      value: "01/01/2022",
-      label: "01/01/2022",
-    },
-    {
-      value: "02/01/2022",
-      label: "02/01/2022",
-    },
-    {
-      value: "03/01/2022",
-      label: "03/01/2022",
-    },
-    {
-      value: "04/01/2022",
-      label: "04/01/2022",
-    },
-    {
-      value: "05/01/2022",
-      label: "05/01/2022",
-    },
-    {
-      value: "06/01/2022",
-      label: "06/01/2022",
-    },
-    {
-      value: "07/01/2022",
-      label: "07/01/2022",
-    },
-    {
-      value: "08/01/2022",
-      label: "08/01/2022",
-    },
-    {
-      value: "09/01/2022",
-      label: "09/01/2022",
-    },
-    {
-      value: "10/01/2022",
-      label: "10/01/2022",
-    },
-    {
-      value: "11/01/2022",
-      label: "11/01/2022",
-    },
-    {
-      value: "12/01/2022",
-      label: "12/01/2022",
-    },
-    {
-      value: "13/01/2022",
-      label: "13/01/2022",
-    },
-    {
-      value: "14/01/2022",
-      label: "14/01/2022",
-    },
-    {
-      value: "15/01/2022",
-      label: "15/01/2022",
-    },
-    {
-      value: "16/01/2022",
-      label: "16/01/2022",
-    },
-    {
-      value: "17/01/2022",
-      label: "17/01/2022",
-    },
-    {
-      value: "18/01/2022",
-      label: "18/01/2022",
-    },
-    {
-      value: "19/01/2022",
-      label: "19/01/2022",
-    },
-    {
-      value: "20/01/2022",
-      label: "20/01/2022",
-    },
-    {
-      value: "21/01/2022",
-      label: "21/01/2022",
-    },
-  ];
+  const getAllDate = async () => {
+    await axios.get(
+      `http://localhost:5000/api/managePresence/get-dates/${module}/${sceance}/${group}`
+    ).then((res) => {
+      if(res.data.status === "SUCCESS"){
+         setDateList(res.data.results)
+      }
+      if(res.data.status === "FAILED"){
+        //this error message should be prompted to show in the toast
+        console.log(res.data.message);   
+      }
+    }).catch((err) => {
+        console.log(err)
+    })
+  };
 
   return (
     <Wrapper>
@@ -136,7 +69,7 @@ const ListNavPresence = ({ getQuery, setDateQuery }) => {
                 primary: "#bf7fff",
               },
             })}
-            onChange={(e) => setDateQuery(e)}
+            onChange={(e) => setDateQuery(e.value)}
           />
         </div>
         <AddDeleteSceance

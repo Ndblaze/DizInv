@@ -22,7 +22,7 @@ const PresenceTable = () => {
         DateTime.getDate()
     );
   };
-
+ 
   useEffect(() => {
     getTodayDate();
   }, []);

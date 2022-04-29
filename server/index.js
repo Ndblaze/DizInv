@@ -8,6 +8,7 @@ const teacher = require("./routes/teacher");
 const chelf = require("./routes/chelf");
 const auth = require("./routes/auth");
 const forgot = require("./routes/forgot");
+const managePresence = require("./routes/managePresence")
 
 app.use(cors());
 //parse json
@@ -22,6 +23,7 @@ app.use("/", forgot);
 app.use("/api/admin", admin);
 app.use("/api/teacher", teacher);
 app.use("/api/chelf", chelf);
+app.use("/api/managePresence", managePresence);
 
 app.listen(5000, () => {
   console.log("server running on port 5000 ....");
