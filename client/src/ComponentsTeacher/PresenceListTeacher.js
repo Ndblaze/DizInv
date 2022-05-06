@@ -4,7 +4,11 @@ import axios from "axios";
 import ListNavPresence from "../miniPages/teachers/ListNavPresence";
 import PresenceTable from "./PresenceTable";
 
+import { useParams } from "react-router-dom";
+
 const PresenceListTeacher = () => {
+  const { group, module, sceance } = useParams();
+
   const [query, setQuery] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
   console.log(query);
@@ -18,7 +22,7 @@ const PresenceListTeacher = () => {
   const [filtered, setFiltered] = useState([]);
 
   useEffect(() => {
-    getListOfPresence();
+   // getListOfPresence();
   }, []);
 
   //runs on the change of dateQuery value
@@ -31,6 +35,10 @@ const PresenceListTeacher = () => {
     await axios
       .post(`http://localhost:5000/api/managePresence/get-list-presence`, {
         date: dateQuery,
+        group: group,
+        sceance: sceance,
+        module: module,
+        level: sessionStorage.getItem("level")
       })
       .then((res) => {
         //console.log(res);
