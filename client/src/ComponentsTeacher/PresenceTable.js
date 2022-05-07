@@ -3,60 +3,10 @@ import styled from "styled-components";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
-
 import { CgClose } from "react-icons/cg";
 import { BsCheck2All } from "react-icons/bs";
 
-const PresenceTable = () => {
-  const { group, module, sceance } = useParams();
-
-  const [todayDate, setTodayDate] = useState();
-
-  const getTodayDate = () => {
-    const DateTime = new Date();
-    setTodayDate(
-      DateTime.getFullYear() + 
-        "-" +
-        (DateTime.getMonth() + 1) +
-        "-" +
-        DateTime.getDate()
-    );
-  };
- 
-  useEffect(() => {
-    getTodayDate();
-  }, []);
-
-  const tempData = [
-    {
-      name: "Ndubuisi James Eze",
-      group: "G2",
-      sceance: "TP",
-      date: todayDate,
-      present: true,
-    },
-    {
-      name: "Michael Njoku",
-      group: "G2",
-      sceance: "TP",
-      date: todayDate,
-      present: true,
-    },
-    {
-      name: "Pius Sunday",
-      group: "G2",
-      sceance: "TP",
-      date: todayDate,
-      present: true,
-    },
-    {
-      name: "Alpha Wuyep",
-      group: "G2",
-      sceance: "TP",
-      date: todayDate,
-      present: false,
-    },
-  ];
+const PresenceTable = ({ listPresence }) => {
   return (
     <Wrapper>
       <Content>
@@ -72,25 +22,27 @@ const PresenceTable = () => {
             </TrHead>
           </TableHeader>
           <TableBody>
-            {tempData.map((item, index) => (
+            {listPresence.map((item, index) => (
               <TrBody key={index}>
                 <NumberIDBody>{index}</NumberIDBody>
-                <NameBody>{item.name}</NameBody>
-                <GroupBody>{group}</GroupBody>
-                <SceanceBody>{sceance}</SceanceBody>
+                <NameBody>
+                  {item.firstName} {item.lastName}
+                </NameBody>
+                <GroupBody>{item.student_group}</GroupBody>
+                <SceanceBody>{item.sceance}</SceanceBody>
                 <TodayCurrentDateBody>{item.date}</TodayCurrentDateBody>
                 <ActionBody>
-                  {item.present ? (
-                    <IconContainer
-                      style={{ color: "#00cf00", backgroundColor: "#e2ffe2" }}
-                    >
-                      <BsCheck2All />
-                    </IconContainer>
-                  ) : (
+                  {item.id_absence ? (
                     <IconContainer
                       style={{ color: "#ff4a4a", backgroundColor: "#ffe7e7" }}
                     >
                       <CgClose />
+                    </IconContainer>
+                  ) : (
+                    <IconContainer
+                      style={{ color: "#00cf00", backgroundColor: "#e2ffe2" }}
+                    >
+                      <BsCheck2All />
                     </IconContainer>
                   )}
                 </ActionBody>

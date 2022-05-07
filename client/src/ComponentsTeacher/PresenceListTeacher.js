@@ -45,6 +45,7 @@ const PresenceListTeacher = () => {
         if (res.data.status === "SUCCESS") {
           setAllList(res.data.results);
           setFiltered(res.data.results);
+         // console.log(res.data.results)
         }
         if (res.data.status === "FAILED") {
           //this error message should be prompted to show in the toast
@@ -67,7 +68,7 @@ const PresenceListTeacher = () => {
             }}
           />
 
-          <PresenceTable />
+          <PresenceTable listPresence={filtered}/>
         </List>
       </Content>
     </Wrapper>
