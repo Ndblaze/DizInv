@@ -1,12 +1,35 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
 import { useParams } from "react-router-dom";
 
 import { CgClose } from "react-icons/cg";
 import { BsCheck2All } from "react-icons/bs";
 
-const PresenceTable = ({ listPresence }) => {
+const PresenceTable = ({ listPresence, refresh, getListOfPresence }) => {
+  //refresh the table
+  useEffect(() => {}, [refresh]);
+
+  //make presence to the database
+  const registerPresence = async (values) => {
+    await axios
+      .post(`http://localhost:5000/api/managePresence/update-presentiel`, {
+        values: { ...values, newID: uuidv4() },
+      })
+      .then((res) => {
+        if (res.data.status === "SUCCESS") {
+          getListOfPresence();
+        }
+        if (res.data.status === "FAILED") {
+          console.log(res.data.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <Wrapper>
       <Content>
@@ -21,34 +44,42 @@ const PresenceTable = ({ listPresence }) => {
               <Action>Present</Action>
             </TrHead>
           </TableHeader>
-          <TableBody>
-            {listPresence.map((item, index) => (
-              <TrBody key={index}>
-                <NumberIDBody>{index}</NumberIDBody>
-                <NameBody>
-                  {item.firstName} {item.lastName}
-                </NameBody>
-                <GroupBody>{item.student_group}</GroupBody>
-                <SceanceBody>{item.sceance}</SceanceBody>
-                <TodayCurrentDateBody>{item.date}</TodayCurrentDateBody>
-                <ActionBody>
-                  {item.id_absence ? (
-                    <IconContainer
-                      style={{ color: "#ff4a4a", backgroundColor: "#ffe7e7" }}
-                    >
-                      <CgClose />
-                    </IconContainer>
-                  ) : (
-                    <IconContainer
-                      style={{ color: "#00cf00", backgroundColor: "#e2ffe2" }}
-                    >
-                      <BsCheck2All />
-                    </IconContainer>
-                  )}
-                </ActionBody>
-              </TrBody>
-            ))}
-          </TableBody>
+          {listPresence.length > 0 ? (
+            <TableBody>
+              {listPresence.map((item, index) => (
+                <TrBody key={index}>
+                  <NumberIDBody>{index}</NumberIDBody>
+                  <NameBody>
+                    {item.firstName} {item.lastName}
+                  </NameBody>
+                  <GroupBody>{item.student_group}</GroupBody>
+                  <SceanceBody>{item.sceance}</SceanceBody>
+                  <TodayCurrentDateBody>{item.date}</TodayCurrentDateBody>
+                  <ActionBody>
+                    {item.id_absence ? (
+                      <IconContainer
+                        onClick={() => registerPresence(item)}
+                        style={{ color: "#ff4a4a", backgroundColor: "#ffe7e7" }}
+                      >
+                        <CgClose />
+                      </IconContainer>
+                    ) : (
+                      <IconContainer
+                        onClick={() => registerPresence(item)}
+                        style={{ color: "#00cf00", backgroundColor: "#e2ffe2" }}
+                      >
+                        <BsCheck2All />
+                      </IconContainer>
+                    )}
+                  </ActionBody>
+                </TrBody>
+              ))}
+            </TableBody>
+          ) : (
+            <ListEmpty>
+              <h1>You need to pick a DATE to view list of presence</h1>
+            </ListEmpty>
+          )}
         </table>
       </Content>
     </Wrapper>
@@ -82,6 +113,19 @@ const Content = styled.div`
     width: 100%;
   }
 `;
+
+const ListEmpty = styled.div`
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  & > h1 {
+    font-size: 18px;
+    color: #adb1c0;
+  }
+`;
+
 const TableHeader = styled.thead`
   background-color: #f1f3f7;
   position: sticky;

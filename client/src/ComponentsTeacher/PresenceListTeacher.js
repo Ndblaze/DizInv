@@ -7,6 +7,7 @@ import PresenceTable from "./PresenceTable";
 import { useParams } from "react-router-dom";
 
 const PresenceListTeacher = () => {
+  //parameters from URL link
   const { group, module, sceance } = useParams();
 
   const [query, setQuery] = useState("");
@@ -14,6 +15,7 @@ const PresenceListTeacher = () => {
   console.log(query);
 
   //get list of a certain date
+  const [refresh, setRefresh] = useState(false);
   const [dateQuery, setDateQuery] = useState();
   console.log(dateQuery);
 
@@ -22,8 +24,19 @@ const PresenceListTeacher = () => {
   const [filtered, setFiltered] = useState([]);
 
   useEffect(() => {
-   // getListOfPresence();
-  }, []);
+    let newData = allList;
+
+    if (query !== "") {
+      newData = newData.filter((item) => {
+        return (
+          item.firstName.toUpperCase().includes(query.toUpperCase()) ||
+          item.lastName.toUpperCase().includes(query.toUpperCase())
+        );
+      });
+    }
+
+    setFiltered(newData);
+  }, [query]);
 
   //runs on the change of dateQuery value
   useEffect(() => {
@@ -38,14 +51,15 @@ const PresenceListTeacher = () => {
         group: group,
         sceance: sceance,
         module: module,
-        level: sessionStorage.getItem("level")
+        level: sessionStorage.getItem("level"),
       })
       .then((res) => {
         //console.log(res);
         if (res.data.status === "SUCCESS") {
           setAllList(res.data.results);
           setFiltered(res.data.results);
-         // console.log(res.data.results)
+          setRefresh(!refresh);
+          // console.log(res.data.results)
         }
         if (res.data.status === "FAILED") {
           //this error message should be prompted to show in the toast
@@ -68,7 +82,11 @@ const PresenceListTeacher = () => {
             }}
           />
 
-          <PresenceTable listPresence={filtered}/>
+          <PresenceTable
+            listPresence={filtered}
+            refresh={refresh}
+            getListOfPresence={getListOfPresence}
+          />
         </List>
       </Content>
     </Wrapper>

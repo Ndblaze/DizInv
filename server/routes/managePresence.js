@@ -33,7 +33,7 @@ router.get("/get-dates/:module/:sceance/:group", (req, res) => {
   });
 });
 
-//get the list of presence with the chosen date
+//get the list of presence with the chosen date  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 router.post("/get-list-presence", (req, res) => {
   const { date, group, module, sceance, level } = req.body;
   // console.log(date, group, module, sceance);
@@ -41,11 +41,16 @@ router.post("/get-list-presence", (req, res) => {
   if (date) {
     const dateSplit = date.split("/");
     const converted = dateSplit[2] + "-" + dateSplit[1] + "-" + dateSplit[0];
-   // console.log(converted);
+    //console.log(converted);
 
-    let mainSql = `SELECT distinct firstName, lastName, id_user, student_group, level,  null as id_absence
-    FROM dizinv.absence, dizinv.students, dizinv.user
+    let mainSql = `SELECT distinct firstName, lastName, id_user, students.student_group, students.level, null as id_absence, sessions.id_session 
+    FROM dizinv.students, dizinv.user, dizinv.sessions 
     where user.id_user = students.inscription
+    And sessions.date = '${converted}'
+    AND sessions.student_group = '${group}'
+    AND sessions.sceance = '${sceance}'
+    And sessions.level = '${level}'
+    And sessions.moduleName = '${module}'
     And students.student_group = '${group}'
     And students.level = '${level}'
     And students.inscription NOT IN (select inscription_no from dizinv.absence, dizinv.sessions 
@@ -56,7 +61,7 @@ router.post("/get-list-presence", (req, res) => {
                                       And sessions.level = '${level}'
                                       And sessions.moduleName = '${module}')
     UNION
-    select distinct firstName, lastName, inscription_no, student_group, level, absence.id_absence
+    select distinct firstName, lastName, inscription_no, student_group, level, absence.id_absence, absence.id_session
     from dizinv.absence, dizinv.sessions, dizinv.user
     where sessions.id_session = absence.id_session 
     And user.id_user = absence.inscription_no  
@@ -71,7 +76,7 @@ router.post("/get-list-presence", (req, res) => {
       if (err) {
         res.send({
           status: "FAILED",
-          message: "Error something went wrong, try again !!",
+          message: "Something went wrong while fetching data, try again!!",
         });
         return;
       }
@@ -80,11 +85,63 @@ router.post("/get-list-presence", (req, res) => {
         const main = result.map((data) => {
           return { ...data, date: date, sceance: sceance };
         });
-        // console.log(main);
+        //  console.log(main);
         res.send({ status: "SUCCESS", results: main });
         return;
       } else {
         res.send({ status: "SUCCESS", results: result });
+        return;
+      }
+    });
+  }
+});
+
+//Update a presentiel status >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+router.post("/update-presentiel", (req, res) => {
+  const { id_absence, id_session, id_user, newID } = req.body.values;
+
+  //console.log(id_absence, id_session, id_user, newID);
+
+  let AbsentSQL = `INSERT INTO dizinv.absence (id_absence, id_session, inscription_no) VALUES (?, ?, ?); `;
+  let PresentSQL = `DELETE FROM dizinv.absence WHERE (id_absence = '${id_absence}');`;
+
+  if (id_absence === null) {
+    // add to absence table
+    db.query(
+      AbsentSQL,
+      [`${newID}`, `${id_session}`, `${id_user}`],
+      (err, result) => {
+        if (err) {
+          res.send({
+            status: "FAILED",
+            message: "Something went wrong, try again!!",
+          });
+          //console.log({ status: "FAILED", message: err.sqlMessage });
+        }
+        if (result) {
+          // console.log(result);
+          res.send({
+            status: "SUCCESS",
+          });
+          return;
+        }
+      }
+    );
+  } else {
+    //delet from absence table
+    db.query(PresentSQL, (err, result) => {
+      if (err) {
+        res.send({
+          status: "FAILED",
+          message: "Something went wrong, try again!!",
+        });
+        //console.log({ status: "FAILED", message: err.sqlMessage });
+      }
+      if (result) {
+        // console.log(result);
+        res.send({
+          status: "SUCCESS",
+        });
         return;
       }
     });
