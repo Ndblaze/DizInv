@@ -6,18 +6,17 @@ import PresenceTable from "./PresenceTable";
 
 import { useParams } from "react-router-dom";
 
-const PresenceListTeacher = () => {
+const PresenceListTeacher = ({ newReq, dateList }) => {
   //parameters from URL link
   const { group, module, sceance } = useParams();
 
   const [query, setQuery] = useState("");
-  const [modalIsOpen, setModalIsOpen] = useState(false);
   console.log(query);
 
   //get list of a certain date
   const [refresh, setRefresh] = useState(false);
   const [dateQuery, setDateQuery] = useState();
-  console.log(dateQuery);
+  //console.log(dateQuery);
 
   //data been pushed to Table
   const [allList, setAllList] = useState([]);
@@ -42,6 +41,12 @@ const PresenceListTeacher = () => {
   useEffect(() => {
     getListOfPresence();
   }, [dateQuery]);
+
+  //on change or newReq
+  useEffect(() => {
+    setDateQuery(newReq);
+    getListOfPresence();
+  }, [newReq]);
 
   //get list of present and absenct of the date
   const getListOfPresence = async () => {
@@ -76,6 +81,7 @@ const PresenceListTeacher = () => {
       <Content>
         <List>
           <ListNavPresence
+            dateList={dateList}
             setDateQuery={setDateQuery}
             getQuery={(e) => {
               setQuery(e.target.value);

@@ -1,12 +1,36 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Search from "../../components/Search";
+import axios from "axios";
+import Modal from "react-modal";
 import { BiMessageSquareEdit } from "react-icons/bi";
 import { CgFileRemove } from "react-icons/cg";
 
+import toast, { Toaster } from "react-hot-toast";
+import { TiUserDelete } from "react-icons/ti";
+
 import Select from "react-select";
-import axios from "axios";
 import { useParams } from "react-router-dom";
+
+const customStylesModal = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    transform: "translate(-50%, -50%)",
+    backgroundColor: "#0a0b0d",
+    padding: 0,
+    border: "none",
+    borderRadius: "20px",
+    overflow: "hidden",
+    width: "450px",
+    height: "250px",
+  },
+  overlay: {
+    backgroundColor: "rgba(10, 11, 13, 0.75)",
+  },
+};
 
 const customStyles = {
   menuList: () => ({
@@ -23,36 +47,72 @@ const customStyles = {
   }),
 };
 
-const ListNavPresence = ({ getQuery, setDateQuery }) => {
-  const { group, module, sceance } = useParams();
+//toast messages
+const deletUnsuccessfull = (message) => {
+  toast.error(message, {
+    style: {
+      background: "rgba(255,51,51, 0.7)",
+      color: "#fff",
+    },
+  });
+};
 
-  const [dateList, setDateList] = useState([]);
+//this function is called from the addNew forms components
+const deleteSuccessfull = (message) => {
+  toast.success(message, {
+    style: {
+      background: "#25ab42",
+      color: "#fff",
+    },
+  });
+};
 
-  useEffect(() => {
-    getAllDate();
-  }, []);
+const ListNavPresence = ({ getQuery, setDateQuery, dateList }) => {
+  const [currentDate, setCurrentDate] = useState("");
 
-  const getAllDate = async () => {
-    await axios
-      .get(
-        `http://localhost:5000/api/managePresence/get-dates/${module}/${sceance}/${group}`
-      )
-      .then((res) => {
-        if (res.data.status === "SUCCESS") {
-          setDateList(res.data.results);
-        }
-        if (res.data.status === "FAILED") {
-          //this error message should be prompted to show in the toast
-          console.log(res.data.message);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const setNewDate = (date) => {
+    setCurrentDate(date);
+    setDateQuery(date);
+  };
+
+  const deleteSession = async () => {
+    let id = "";
+
+    dateList.map((date) => {
+      if (date.value === currentDate) {
+        id = date.id_session;
+      }
+    });
+    console.log(id);
+
+    if (id) {
+      await axios
+        .get(`http://localhost:5000/api/managePresence/delete-session/${id}`)
+        .then((res) => {
+          if (res.data.status === "SUCCESS") {
+            deleteSuccessfull(res.data.message);
+            setModalIsOpen(false)
+            console.log(res.data.message);
+          }
+          if (res.data.status === "FAILED") {
+            //this error message should be prompted to show in the toast
+            deletUnsuccessfull(res.data.message);
+            setModalIsOpen(false)
+            console.log(res.data.message);
+          }
+        })
+        .catch((err) => {
+          setModalIsOpen(false)
+          console.log(err);
+        });
+    }
   };
 
   return (
     <Wrapper>
+      <Toaster />
       <SearchContainer>
         <Search onChange={getQuery} />
       </SearchContainer>
@@ -72,20 +132,45 @@ const ListNavPresence = ({ getQuery, setDateQuery }) => {
                 primary: "#bf7fff",
               },
             })}
-            onChange={(e) => setDateQuery(e.value)}
+            onChange={(e) => setNewDate(e.value)}
           />
         </div>
-        <AddDeleteSceance
-          style={{ backgroundColor: "#d8ffd8", color: "#3bff3b" }}
-        >
+        <EditSession>
+          Edit
           <BiMessageSquareEdit />
-        </AddDeleteSceance>
-        <AddDeleteSceance
-          style={{ backgroundColor: "#ffcbe5", color: "#ff7fbf" }}
-        >
+        </EditSession>
+        <DeleteSession onClick={() => setModalIsOpen(true)}>
+          Delete
           <CgFileRemove />
-        </AddDeleteSceance>
+        </DeleteSession>
       </Operation>
+      <Modal
+        isOpen={modalIsOpen}
+        style={customStylesModal}
+        onRequestClose={() => setModalIsOpen(false)}
+        onClick={() => setModalIsOpen(false)}
+        ariaHideApp={false}
+      >
+        <DeletStudent>
+          <DeletStudentUp>
+            <DeletStudentIcon />
+            <DeletStudentHeader>Delete Session</DeletStudentHeader>
+          </DeletStudentUp>
+          <DeletStudentButtonContainer>
+            <DeletStudentWarning>
+              Session will be permanently remove <br /> from your database !!
+            </DeletStudentWarning>
+            <div>
+              <DeletStudentButtonCancel onClick={() => setModalIsOpen(false)}>
+                Cancel
+              </DeletStudentButtonCancel>
+              <DeletStudentButtonDelete onClick={() => deleteSession()}>
+                Delete Session
+              </DeletStudentButtonDelete>
+            </div>
+          </DeletStudentButtonContainer>
+        </DeletStudent>
+      </Modal>
     </Wrapper>
   );
 };
@@ -130,4 +215,128 @@ const AddDeleteSceance = styled.div`
 
 const SelectDate = styled(Select)`
   width: 230px;
+`;
+
+const DeleteSession = styled.div`
+  width: 80px;
+  height: 40px;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  background-color: #ffcbe5;
+  color: #ff7fbf;
+
+  &:hover {
+    background-color: #ffe6f2;
+  }
+`;
+const EditSession = styled.div`
+  width: 60px;
+  height: 40px;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  background-color: #d8ffd8;
+  color: #3bff3b;
+
+  &:hover {
+    background-color: #efffef;
+  }
+`;
+
+// work on modal delet session
+
+const DeletStudent = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+const DeletStudentUp = styled.div`
+  height: 35%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+`;
+
+const DeletStudentIcon = styled(TiUserDelete)`
+  font-size: 30px;
+  color: #f56396;
+`;
+const DeletStudentHeader = styled.h1`
+  font-size: 30px;
+  color: #f56396;
+`;
+const DeletStudentWarning = styled.p`
+  color: #8f8f8f;
+  text-align: center;
+`;
+const DeletStudentButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 20px;
+  background-color: #f1f3f7;
+  width: 100%;
+  flex: 1;
+
+  & > div {
+    margin-top: 20px;
+  }
+`;
+const DeletStudentButtonDelete = styled.button`
+  cursor: pointer;
+  background-color: #f56396;
+  color: #fff;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  height: 35px;
+  margin: 0 5px;
+  padding: 5px;
+  width: 130px;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 4px 7px rgba(0, 0, 0, 0.05), 0 10px 10px rgba(0, 0, 0, 0.22);
+
+  &:hover {
+    background-color: #fff;
+    color: #8f8f8f;
+  }
+`;
+const DeletStudentButtonCancel = styled.button`
+  cursor: pointer;
+  background-color: #fff;
+  color: #8f8f8f;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  margin: 0 5px;
+  height: 35px;
+  padding: 5px;
+  width: 130px;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 4px 7px rgba(0, 0, 0, 0.05), 0 10px 10px rgba(0, 0, 0, 0.22);
+
+  &:hover {
+    background-color: #f56396;
+    color: #fff;
+  }
 `;

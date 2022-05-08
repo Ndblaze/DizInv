@@ -11,7 +11,7 @@ router.get("/get-dates/:module/:sceance/:group", (req, res) => {
 
   //console.log(module, sceance, group);
 
-  let sql = `SELECT date FROM sessions WHERE sceance = ? AND student_group = ? AND moduleName = ? `;
+  let sql = `SELECT date, id_session FROM sessions WHERE sceance = ? AND student_group = ? AND moduleName = ? `;
 
   db.query(sql, [`${sceance}`, `${group}`, `${module}`], (err, result) => {
     if (err) {
@@ -21,7 +21,7 @@ router.get("/get-dates/:module/:sceance/:group", (req, res) => {
       const results = result.map((date) => {
         // console.log(date)
         const convert = new Date(date.date).toLocaleDateString();
-        return { value: convert, label: convert };
+        return { value: convert, label: convert, id_session: date.id_session };
       });
       // console.log(results)
       res.send({ status: "SUCCESS", results: results });
@@ -146,6 +146,96 @@ router.post("/update-presentiel", (req, res) => {
       }
     });
   }
+});
+
+//Create a new session in the database  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+router.post("/create-session", (req, res) => {
+  const { SessionID, module, group, sceance, level } = req.body.values;
+  const { department, date, timeStamp } = req.body.values;
+
+  //console.log(SessionID, module, group, sceance, level);
+  // console.log(department, date, timeStamp);
+
+  const dateSplit = date.split("/");
+  const converted = dateSplit[2] + "-" + dateSplit[1] + "-" + dateSplit[0];
+  //console.log(converted);
+
+  let sessionSQL = `INSERT INTO dizinv.sessions 
+                   (id_session, moduleName, student_group, sceance, timestamp, date, level, department) 
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?);`;
+
+  // add to absence table
+  db.query(
+    sessionSQL,
+    [
+      `${SessionID}`,
+      `${module}`,
+      `${group}`,
+      `${sceance}`,
+      `${timeStamp}`,
+      `${converted}`,
+      `${level}`,
+      `${department}`,
+    ],
+    (err, result) => {
+      if (err) {
+        res.send({
+          status: "FAILED",
+          message: "Something went wrong, try again!!",
+        });
+        //console.log({ status: "FAILED", message: err.sqlMessage });
+      }
+      if (result) {
+        // console.log(result);
+        res.send({
+          status: "SUCCESS",
+          message: { date },
+        });
+        return;
+      }
+    }
+  );
+});
+
+//deleting session and all the absence of that session in the database  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+router.get("/delete-session/:id", (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+
+  let deleteAabsenceSql = `DELETE FROM dizinv.absence WHERE (id_session = '${id}')`;
+  let deleteSessionSql = `DELETE FROM dizinv.sessions WHERE (id_session = '${id}')`;
+
+  db.query(deleteAabsenceSql, (err, result) => {
+    if (err) {
+      // res.send({
+      //   status: "FAILED",
+      //   message: "Something went wrong, try again!!",
+      // });
+      console.log({ status: "FAILED", message: err.sqlMessage });
+      return
+    }
+    if (result) {
+      db.query(deleteSessionSql, (err, result) => {
+        if (err) {
+          // res.send({
+          //   status: "FAILED",
+          //   message: "Something went wrong, try again!!",
+          // });
+          console.log({ status: "FAILED", message: err.sqlMessage });
+          return
+        }
+
+        if (result) {
+          // console.log(result);
+          res.send({
+            status: "SUCCESS",
+            message: "session deleted successfully",
+          });
+          return;
+        }
+      });
+    }
+  });
 });
 
 module.exports = router;

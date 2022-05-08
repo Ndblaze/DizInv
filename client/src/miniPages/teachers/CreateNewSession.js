@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Modal from "react-modal";
+import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { useParams } from "react-router-dom";
 import QRGenerator from "./QRGenerator";
@@ -32,7 +33,7 @@ const customStyles = {
   },
 };
 
-const CreateNewSession = ({ modalIsOpen, setModalIsOpen }) => {
+const CreateNewSession = ({ modalIsOpen, setModalIsOpen, createNewSession }) => {
   //parameters from URL link
   const { group, module, sceance } = useParams();
 
@@ -61,6 +62,8 @@ const CreateNewSession = ({ modalIsOpen, setModalIsOpen }) => {
       timeStamp: getCurrentTimeStamp(),
     });
   }, []);
+
+
   return (
     <Modal
       isOpen={modalIsOpen}
@@ -107,7 +110,7 @@ const CreateNewSession = ({ modalIsOpen, setModalIsOpen }) => {
 
               <CreateButtonContainer>
                 <AddSceance
-                  onClick={() => console.log(sessionDetails)}
+                  onClick={() => createNewSession(sessionDetails)}
                   style={{ color: "#bf7fff", backgroundColor: "#e5cbff" }}
                 >
                   Manually

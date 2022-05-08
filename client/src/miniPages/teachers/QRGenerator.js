@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import QRCode from "qrcode";
 
-//c25df900-ce65-11ec-874b-154d4645bac2
 
 const QRGenerator = ({ text }) => {
   const [src, setSrc] = useState("");

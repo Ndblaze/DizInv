@@ -9,12 +9,66 @@ import CreateNewSession from "./CreateNewSession";
 
 const TeacherPresenceList = () => {
   const navigation = useNavigate();
-  const { group, module } = useParams();
+  const { group, module, sceance } = useParams();
+  //  console.log(group, module);
 
   //seting the add session modal
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  console.log(group, module);
+  //New req date
+  const [newReq, setNewReq] = useState("");
+
+  //date listings
+  const [dateList, setDateList] = useState([]);
+
+  useEffect(() => {
+    getAllDate();
+  }, []);
+
+  //get all date listing
+  const getAllDate = async () => {
+    await axios
+      .get(
+        `http://localhost:5000/api/managePresence/get-dates/${module}/${sceance}/${group}`
+      )
+      .then((res) => {
+        if (res.data.status === "SUCCESS") {
+          setDateList(res.data.results);
+        }
+        if (res.data.status === "FAILED") {
+          //this error message should be prompted to show in the toast
+          console.log(res.data.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  // craete new session request
+  const createNewSession = async (sessionDetails) => {
+    await axios
+      .post(`http://localhost:5000/api/managePresence/create-session`, {
+        values: sessionDetails,
+      })
+      .then((res) => {
+        console.log(res);
+        if (res.data.status === "SUCCESS") {
+          const { date } = res.data.message;
+          // console.log(date);
+          setNewReq(date);
+          getAllDate();
+          setModalIsOpen(false);
+        }
+        if (res.data.status === "FAILED") {
+          //this error message should be prompted to show in the toast
+          console.log(res.data.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <Wrapper>
@@ -29,9 +83,13 @@ const TeacherPresenceList = () => {
             <BiMessageSquareAdd />
           </AddSceance>
         </HeaderContainer>
-        <PresenceListTeacher />
+        <PresenceListTeacher newReq={newReq} dateList={dateList} />
       </Content>
-      <CreateNewSession modalIsOpen={modalIsOpen} setModalIsOpen={setModalIsOpen} />
+      <CreateNewSession
+        modalIsOpen={modalIsOpen}
+        setModalIsOpen={setModalIsOpen}
+        createNewSession={createNewSession}
+      />
     </Wrapper>
   );
 };
