@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Search from "../../components/Search";
-import { BiMessageSquareAdd, BiMessageSquareEdit } from "react-icons/bi";
+import { BiMessageSquareEdit } from "react-icons/bi";
 import { CgFileRemove } from "react-icons/cg";
 
 import Select from "react-select";
@@ -29,23 +29,26 @@ const ListNavPresence = ({ getQuery, setDateQuery }) => {
   const [dateList, setDateList] = useState([]);
 
   useEffect(() => {
-    getAllDate()
+    getAllDate();
   }, []);
 
   const getAllDate = async () => {
-    await axios.get(
-      `http://localhost:5000/api/managePresence/get-dates/${module}/${sceance}/${group}`
-    ).then((res) => {
-      if(res.data.status === "SUCCESS"){
-         setDateList(res.data.results)
-      }
-      if(res.data.status === "FAILED"){
-        //this error message should be prompted to show in the toast
-        console.log(res.data.message);   
-      }
-    }).catch((err) => {
-        console.log(err)
-    })
+    await axios
+      .get(
+        `http://localhost:5000/api/managePresence/get-dates/${module}/${sceance}/${group}`
+      )
+      .then((res) => {
+        if (res.data.status === "SUCCESS") {
+          setDateList(res.data.results);
+        }
+        if (res.data.status === "FAILED") {
+          //this error message should be prompted to show in the toast
+          console.log(res.data.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -72,11 +75,6 @@ const ListNavPresence = ({ getQuery, setDateQuery }) => {
             onChange={(e) => setDateQuery(e.value)}
           />
         </div>
-        <AddDeleteSceance
-          style={{ backgroundColor: "#e5cbff", color: "#bf7fff" }}
-        >
-          <BiMessageSquareAdd />
-        </AddDeleteSceance>
         <AddDeleteSceance
           style={{ backgroundColor: "#d8ffd8", color: "#3bff3b" }}
         >
