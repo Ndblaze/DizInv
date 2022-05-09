@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { BiMessageSquareAdd } from "react-icons/bi";
 import PresenceListTeacher from "../../ComponentsTeacher/PresenceListTeacher";
 import CreateNewSession from "./CreateNewSession";
+import QRCode from "qrcode";
 
 const TeacherPresenceList = () => {
   const navigation = useNavigate();
@@ -14,16 +15,23 @@ const TeacherPresenceList = () => {
 
   //seting the add session modal
   const [modalIsOpen, setModalIsOpen] = useState(false);
-
   //New req date
   const [newReq, setNewReq] = useState("");
-
   //date listings
   const [dateList, setDateList] = useState([]);
+  //qrcode data
+  const [QRsrc, setQRSRC] = useState();
 
   useEffect(() => {
     getAllDate();
   }, []);
+
+  //  crating a qrcode
+  const crearQR = (payload) => {
+    QRCode.toDataURL(payload).then((data) => {
+      setQRSRC(data);
+    });
+  };
 
   //get all date listing
   const getAllDate = async () => {
@@ -33,6 +41,7 @@ const TeacherPresenceList = () => {
       )
       .then((res) => {
         if (res.data.status === "SUCCESS") {
+          console.log('dates')
           setDateList(res.data.results);
         }
         if (res.data.status === "FAILED") {
@@ -46,19 +55,26 @@ const TeacherPresenceList = () => {
   };
 
   // craete new session request
-  const createNewSession = async (sessionDetails) => {
+  const createNewSession = async (sessionDetails, type) => {
     await axios
       .post(`http://localhost:5000/api/managePresence/create-session`, {
-        values: sessionDetails,
+        values: { ...sessionDetails, type: type },
       })
       .then((res) => {
         console.log(res);
-        if (res.data.status === "SUCCESS") {
+        if (res.data.status === "SUCCESS" && type === "manual") {
           const { date } = res.data.message;
           // console.log(date);
           setNewReq(date);
           getAllDate();
           setModalIsOpen(false);
+        }
+        if (res.data.status === "SUCCESS" && type === "IOT") {
+          const { date } = res.data.message;
+          // console.log(date);
+          setNewReq(date);
+          getAllDate();
+          crearQR(JSON.stringify(res.data.message));
         }
         if (res.data.status === "FAILED") {
           //this error message should be prompted to show in the toast
@@ -83,12 +99,17 @@ const TeacherPresenceList = () => {
             <BiMessageSquareAdd />
           </AddSceance>
         </HeaderContainer>
-        <PresenceListTeacher newReq={newReq} dateList={dateList} />
+        <PresenceListTeacher
+          newReq={newReq}
+          dateList={dateList}
+          getAllDate={getAllDate}
+        />
       </Content>
       <CreateNewSession
         modalIsOpen={modalIsOpen}
         setModalIsOpen={setModalIsOpen}
         createNewSession={createNewSession}
+        QRsrc={QRsrc}
       />
     </Wrapper>
   );

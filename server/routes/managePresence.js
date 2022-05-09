@@ -8,25 +8,28 @@ const db = require("../ConnectDB");
 //get the list of dates in the database
 router.get("/get-dates/:module/:sceance/:group", (req, res) => {
   const { module, sceance, group } = req.params;
-
+  console.log("working");
   //console.log(module, sceance, group);
 
   let sql = `SELECT date, id_session FROM sessions WHERE sceance = ? AND student_group = ? AND moduleName = ? `;
 
   db.query(sql, [`${sceance}`, `${group}`, `${module}`], (err, result) => {
     if (err) {
+      console.log("Failed");
       res.send({ status: "FAILED", message: err.sqlMessage });
     }
     if (result.length > 0) {
       const results = result.map((date) => {
         // console.log(date)
         const convert = new Date(date.date).toLocaleDateString();
+        console.log("getsdata");
         return { value: convert, label: convert, id_session: date.id_session };
       });
       // console.log(results)
       res.send({ status: "SUCCESS", results: results });
       return;
     } else {
+      console.log("worked but no data");
       res.send({ status: "SUCCESS", results: result });
       return;
     }
@@ -36,7 +39,8 @@ router.get("/get-dates/:module/:sceance/:group", (req, res) => {
 //get the list of presence with the chosen date  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 router.post("/get-list-presence", (req, res) => {
   const { date, group, module, sceance, level } = req.body;
-  // console.log(date, group, module, sceance);
+  console.log(date, group, module, sceance);
+  console.log("kkk");
 
   if (date) {
     const dateSplit = date.split("/");
@@ -44,7 +48,7 @@ router.post("/get-list-presence", (req, res) => {
     //console.log(converted);
 
     let mainSql = `SELECT distinct firstName, lastName, id_user, students.student_group, students.level, null as id_absence, sessions.id_session 
-    FROM dizinv.students, dizinv.user, dizinv.sessions 
+    FROM dizinv.students, dizinv.user, dizinv.sessions  
     where user.id_user = students.inscription
     And sessions.date = '${converted}'
     AND sessions.student_group = '${group}'
@@ -154,7 +158,7 @@ router.post("/create-session", (req, res) => {
   const { department, date, timeStamp } = req.body.values;
 
   //console.log(SessionID, module, group, sceance, level);
-  // console.log(department, date, timeStamp);
+  //console.log(department, date, timeStamp);
 
   const dateSplit = date.split("/");
   const converted = dateSplit[2] + "-" + dateSplit[1] + "-" + dateSplit[0];
@@ -189,7 +193,7 @@ router.post("/create-session", (req, res) => {
         // console.log(result);
         res.send({
           status: "SUCCESS",
-          message: { date },
+          message: { date, SessionID, group, sceance, level },
         });
         return;
       }
@@ -212,7 +216,7 @@ router.get("/delete-session/:id", (req, res) => {
       //   message: "Something went wrong, try again!!",
       // });
       console.log({ status: "FAILED", message: err.sqlMessage });
-      return
+      return;
     }
     if (result) {
       db.query(deleteSessionSql, (err, result) => {
@@ -222,7 +226,7 @@ router.get("/delete-session/:id", (req, res) => {
           //   message: "Something went wrong, try again!!",
           // });
           console.log({ status: "FAILED", message: err.sqlMessage });
-          return
+          return;
         }
 
         if (result) {

@@ -10,7 +10,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { TiUserDelete } from "react-icons/ti";
 
 import Select from "react-select";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 
 const customStylesModal = {
   content: {
@@ -67,7 +67,7 @@ const deleteSuccessfull = (message) => {
   });
 };
 
-const ListNavPresence = ({ getQuery, setDateQuery, dateList }) => {
+const ListNavPresence = ({ getQuery, setDateQuery, dateList, getAllDate }) => {
   const [currentDate, setCurrentDate] = useState("");
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -93,18 +93,18 @@ const ListNavPresence = ({ getQuery, setDateQuery, dateList }) => {
         .then((res) => {
           if (res.data.status === "SUCCESS") {
             deleteSuccessfull(res.data.message);
-            setModalIsOpen(false)
+            setModalIsOpen(false);
             console.log(res.data.message);
           }
           if (res.data.status === "FAILED") {
             //this error message should be prompted to show in the toast
             deletUnsuccessfull(res.data.message);
-            setModalIsOpen(false)
+            setModalIsOpen(false);
             console.log(res.data.message);
           }
         })
         .catch((err) => {
-          setModalIsOpen(false)
+          setModalIsOpen(false);
           console.log(err);
         });
     }
@@ -117,7 +117,12 @@ const ListNavPresence = ({ getQuery, setDateQuery, dateList }) => {
         <Search onChange={getQuery} />
       </SearchContainer>
       <Operation>
-        <div onClick={() => console.log()}>
+        <div
+          onClick={() => {
+            console.log("getting dates");
+            getAllDate();
+          }}
+        >
           <SelectDate
             placeholder="Pick date"
             styles={customStyles}

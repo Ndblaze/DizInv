@@ -33,14 +33,37 @@ const customStyles = {
   },
 };
 
-const CreateNewSession = ({ modalIsOpen, setModalIsOpen, createNewSession }) => {
+const CreateNewSession = ({
+  modalIsOpen,
+  setModalIsOpen,
+  createNewSession,
+  QRsrc,
+}) => {
   //parameters from URL link
   const { group, module, sceance } = useParams();
 
   //loading animation
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const [sessionDetails, setSessionDetails] = useState({});
+
+  console.log(QRsrc === undefined);
+
+  useEffect(() => {
+    if (QRsrc === undefined) {
+      setLoading(true);
+    } else {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (QRsrc === undefined) {
+      setLoading(true);
+    } else {
+      setLoading(false);
+    }
+  }, [QRsrc]);
 
   //get the time stamp
   const getCurrentTimeStamp = () => {
@@ -62,7 +85,6 @@ const CreateNewSession = ({ modalIsOpen, setModalIsOpen, createNewSession }) => 
       timeStamp: getCurrentTimeStamp(),
     });
   }, []);
-
 
   return (
     <Modal
@@ -110,13 +132,13 @@ const CreateNewSession = ({ modalIsOpen, setModalIsOpen, createNewSession }) => 
 
               <CreateButtonContainer>
                 <AddSceance
-                  onClick={() => createNewSession(sessionDetails)}
+                  onClick={() => createNewSession(sessionDetails, "manual")}
                   style={{ color: "#bf7fff", backgroundColor: "#e5cbff" }}
                 >
                   Manually
                 </AddSceance>
                 <AddSceance
-                  onClick={() => console.log(JSON.stringify(sessionDetails))}
+                  onClick={() => createNewSession(sessionDetails, "IOT")}
                   style={{
                     color: "#00cf00",
                     backgroundColor: "#e2ffe2",
@@ -134,10 +156,10 @@ const CreateNewSession = ({ modalIsOpen, setModalIsOpen, createNewSession }) => 
                 color={"#C278F8"}
                 css={override}
                 loading={loading}
-                size={100}
+                size={80}
               />
             ) : (
-              <QRGenerator text={JSON.stringify(sessionDetails)} />
+              <QRGenerator QRsrc={QRsrc} setModalIsOpen={setModalIsOpen} />
             )}
           </Right>
         </Content>
@@ -229,7 +251,7 @@ const Right = styled.div`
   align-items: center;
 `;
 
-const AddSceance = styled.div`
+const AddSceance = styled.div` 
   width: 120px;
   height: 40px;
   border-radius: 5px;

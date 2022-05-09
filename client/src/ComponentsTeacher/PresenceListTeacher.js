@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import ListNavPresence from "../miniPages/teachers/ListNavPresence";
@@ -6,7 +6,7 @@ import PresenceTable from "./PresenceTable";
 
 import { useParams } from "react-router-dom";
 
-const PresenceListTeacher = ({ newReq, dateList }) => {
+const PresenceListTeacher = ({ newReq, dateList, getAllDate }) => {
   //parameters from URL link
   const { group, module, sceance } = useParams();
 
@@ -14,42 +14,27 @@ const PresenceListTeacher = ({ newReq, dateList }) => {
   console.log(query);
 
   //get list of a certain date
-  const [refresh, setRefresh] = useState(false);
   const [dateQuery, setDateQuery] = useState();
-  //console.log(dateQuery);
+  // console.log(dateQuery);
 
   //data been pushed to Table
   const [allList, setAllList] = useState([]);
   const [filtered, setFiltered] = useState([]);
 
   useEffect(() => {
-    let newData = allList;
-
     if (query !== "") {
-      newData = newData.filter((item) => {
+      const newData = allList.filter((item) => {
         return (
           item.firstName.toUpperCase().includes(query.toUpperCase()) ||
           item.lastName.toUpperCase().includes(query.toUpperCase())
         );
       });
+      setFiltered(newData);
     }
-
-    setFiltered(newData);
-  }, [query]);
-
-  //runs on the change of dateQuery value
-  useEffect(() => {
-    getListOfPresence();
-  }, [dateQuery]);
-
-  //on change or newReq
-  useEffect(() => {
-    setDateQuery(newReq);
-    getListOfPresence();
-  }, [newReq]);
+  }, [query, allList]);
 
   //get list of present and absenct of the date
-  const getListOfPresence = async () => {
+  const getListOfPresence = useCallback(async () => {
     await axios
       .post(`http://localhost:5000/api/managePresence/get-list-presence`, {
         date: dateQuery,
@@ -63,7 +48,6 @@ const PresenceListTeacher = ({ newReq, dateList }) => {
         if (res.data.status === "SUCCESS") {
           setAllList(res.data.results);
           setFiltered(res.data.results);
-          setRefresh(!refresh);
           // console.log(res.data.results)
         }
         if (res.data.status === "FAILED") {
@@ -74,13 +58,29 @@ const PresenceListTeacher = ({ newReq, dateList }) => {
       .catch((err) => {
         console.log(err);
       });
-  };
+  }, [group, module, sceance, dateQuery]);
+
+  //on change or newReq
+  useEffect(() => {
+    if (newReq) {
+      setDateQuery(newReq);
+      getListOfPresence();
+    }
+  }, [newReq, getListOfPresence]);
+
+  //runs on the change of dateQuery value
+  useEffect(() => {
+    if (dateQuery) {
+      getListOfPresence();
+    }
+  }, [dateQuery, getListOfPresence]);
 
   return (
     <Wrapper>
       <Content>
         <List>
           <ListNavPresence
+            getAllDate={getAllDate}
             dateList={dateList}
             setDateQuery={setDateQuery}
             getQuery={(e) => {
@@ -90,7 +90,6 @@ const PresenceListTeacher = ({ newReq, dateList }) => {
 
           <PresenceTable
             listPresence={filtered}
-            refresh={refresh}
             getListOfPresence={getListOfPresence}
           />
         </List>
