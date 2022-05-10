@@ -33,7 +33,7 @@ router.get("/get-dates/:module/:sceance/:group", (req, res) => {
 });
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-///serious note: you need to find a way to route the session to the get list of presence
+//serious note: you need to find a way to route the session to the get list of presence
 
 //get the list of presence with the chosen date  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 router.post("/get-list-presence", (req, res) => {

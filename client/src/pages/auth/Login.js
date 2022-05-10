@@ -40,6 +40,9 @@ const Login = () => {
         } else if (res.data.type === "ChelfDepartment") {
           window.location.href =
             "http://localhost:3000/teacher/chelf/dashboard";
+        } else if (res.data.type === "student") {
+          window.location.href =
+            "http://localhost:3000/student/home";
         } else {
           console.log(res);
         }
