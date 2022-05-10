@@ -4,8 +4,11 @@ import { IconContext } from "react-icons/lib";
 import { animateScroll as scroll } from "react-scroll";
 import styled from "styled-components";
 import { Link as LinkR } from "react-router-dom";
-import { Link as LinkS } from "react-scroll"
-import logoImage from '../asserts/images/logo.png'
+import { Link as LinkS } from "react-scroll";
+import logoImage from "../asserts/images/logo.png";
+import ProfileLogo from "../components/ProfileLogo";
+import { RiArrowDownSLine } from "react-icons/ri";
+import { FiLogOut } from "react-icons/fi";
 
 const StudentNavBar = ({ toggle }) => {
   const [scrollNav, setScrollNav] = useState(false);
@@ -25,6 +28,15 @@ const StudentNavBar = ({ toggle }) => {
   const toggleHome = () => {
     scroll.scrollToTop();
   };
+
+  const logoutButton = () => {
+    sessionStorage.clear();
+    setTimeout(
+      () => (window.location.href = "http://localhost:3000/login"),
+      500
+    );
+  };
+
   return (
     <>
       <IconContext.Provider value={{ color: "#fff" }}>
@@ -39,7 +51,7 @@ const StudentNavBar = ({ toggle }) => {
             <NavMenu>
               <NavItem>
                 <NavLinks
-                  to="about"
+                  to="time-table"
                   smooth={true}
                   duration={500}
                   spy={true}
@@ -51,7 +63,7 @@ const StudentNavBar = ({ toggle }) => {
               </NavItem>
               <NavItem>
                 <NavLinks
-                  to="discover"
+                  to="absence"
                   smooth={true}
                   duration={500}
                   spy={true}
@@ -63,7 +75,7 @@ const StudentNavBar = ({ toggle }) => {
               </NavItem>
               <NavItem>
                 <NavLinks
-                  to="services"
+                  to="statistics"
                   smooth={true}
                   duration={500}
                   spy={true}
@@ -75,7 +87,7 @@ const StudentNavBar = ({ toggle }) => {
               </NavItem>
               <NavItem>
                 <NavLinks
-                  to="enterprice"
+                  to="rules"
                   smooth={true}
                   duration={500}
                   spy={true}
@@ -86,9 +98,21 @@ const StudentNavBar = ({ toggle }) => {
                 </NavLinks>
               </NavItem>
             </NavMenu>
-            <NavBtn>
-              <NavBtnLink to="/signin">Generate QR</NavBtnLink>
-            </NavBtn>
+            <NavBtnContainer>
+              <NavBtnLink
+                to="/login"
+                onClick={() => {
+                  logoutButton();
+                }}
+              >
+                Log out
+                <FiLogOut style={{ marginLeft: "5px" }} />
+              </NavBtnLink>
+              <NavBtn title="profile">
+                <ProfileLogo Text="B" Name="Blaze" style={{ color: "#fff" }} />
+                <RiArrowDownSLine style={{ marginLeft: "5px" }} />
+              </NavBtn>
+            </NavBtnContainer>
           </NavbarContainer>
         </Nav>
       </IconContext.Provider>
@@ -99,14 +123,18 @@ const StudentNavBar = ({ toggle }) => {
 export default StudentNavBar;
 
 const Nav = styled.nav`
-  background: ${({ scrollNav }) => (scrollNav ? "#000" : "transparent")};
-  margin-top: -80px;
+  background-color: ${({ scrollNav }) => (scrollNav ? "#000" : "transparent")};
+  border-bottom: ${({ scrollNav }) =>
+    scrollNav ? "1px solid #fff" : "transparent"};
+  border-radius: 0 0 5px 5px;
   height: 80px;
+  width: 100%;
+
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 1rem;
-  position: sticky;
+  position: fixed;
   top: 0;
   z-index: 10;
 
@@ -178,11 +206,11 @@ const NavLinks = styled(LinkS)`
   cursor: pointer;
 
   /* thid is for whenever you scroll it highlist what ever link you are on */
-  &.active {
-    border-bottom: 3px solid #01bf71;
-  }
+  /* &.active {
+    border-bottom: 3px solid #bd62ff;
+  } */
 `;
-const NavBtn = styled.nav`
+const NavBtnContainer = styled.div`
   display: flex;
   align-items: center;
 
@@ -190,22 +218,35 @@ const NavBtn = styled.nav`
     display: none;
   }
 `;
+
+const NavBtn = styled.nav`
+  display: flex;
+  align-items: center;
+  //justify-content: center;
+
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
+`;
 const NavBtnLink = styled(LinkR)`
-  border-radius: 50px;
-  background: #bd62ff;
+  border-radius: 5px;
+  background: #ff6262;
   white-space: nowrap;
-  padding: 10px 22px;
+  padding: 8px 15px;
   color: #fff;
-  font-size: 16px;
+  font-size: 14px;
   outline: none;
   border: none;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   &:hover {
     transition: all 0.2s ease-in-out;
     background: #fff;
-    color: #bd62ff;
+    color: #ff6262;
   }
 `;

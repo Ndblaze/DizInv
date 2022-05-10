@@ -1,11 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 
-const ProfileLogo = ({ Text, Name }) => {
+const ProfileLogo = ({ Text, Name, style }) => {
   return (
     <Wrapper>
       <Logo>{Text}</Logo>
-      <User>{Name}</User>
+      <User style={style && style}>{Name}</User>
     </Wrapper>
   );
 };

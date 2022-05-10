@@ -51,7 +51,7 @@ const StudentFooter = () => {
               </SocialLogo>
               <WebsitRights>
                 {" "}
-                Robot-Man @ {new Date().getFullYear()}
+                Dizinv-Blaze @ {new Date().getFullYear()} {' '}
                 All rights reserved.
               </WebsitRights>
                
