@@ -1,16 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 
-
 import { CgClose } from "react-icons/cg";
 import { BsCheck2All } from "react-icons/bs";
 
-const PresenceTable = ({ listPresence, refresh, getListOfPresence }) => {
-  //refresh the table
-  useEffect(() => {}, [refresh]);
-
+const PresenceTable = ({ listPresence, getListOfPresence }) => {
   //make presence to the database
   const registerPresence = async (values) => {
     await axios
@@ -29,6 +25,7 @@ const PresenceTable = ({ listPresence, refresh, getListOfPresence }) => {
         console.log(err);
       });
   };
+
 
   return (
     <Wrapper>

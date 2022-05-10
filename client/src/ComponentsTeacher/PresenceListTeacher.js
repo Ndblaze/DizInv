@@ -6,16 +6,20 @@ import PresenceTable from "./PresenceTable";
 
 import { useParams } from "react-router-dom";
 
-const PresenceListTeacher = ({ newReq, dateList, getAllDate }) => {
+const PresenceListTeacher = ({
+  dateList,
+  getAllDate,
+  dateQuery,
+  setDateQuery,
+}) => {
   //parameters from URL link
   const { group, module, sceance } = useParams();
 
   const [query, setQuery] = useState("");
-  console.log(query);
+  //console.log(query);
 
-  //get list of a certain date
-  const [dateQuery, setDateQuery] = useState();
-  // console.log(dateQuery);
+  //date value
+  const [currentDate, setCurrentDate] = useState({value: null, label: null });
 
   //data been pushed to Table
   const [allList, setAllList] = useState([]);
@@ -46,9 +50,11 @@ const PresenceListTeacher = ({ newReq, dateList, getAllDate }) => {
       .then((res) => {
         //console.log(res);
         if (res.data.status === "SUCCESS") {
+          let { date } = res.data.results[0];
           setAllList(res.data.results);
           setFiltered(res.data.results);
-          // console.log(res.data.results)
+          setCurrentDate({ value: date, label: date });
+         // console.log(res.data.results);
         }
         if (res.data.status === "FAILED") {
           //this error message should be prompted to show in the toast
@@ -62,16 +68,10 @@ const PresenceListTeacher = ({ newReq, dateList, getAllDate }) => {
 
   //on change or newReq
   useEffect(() => {
-    if (newReq) {
-      setDateQuery(newReq);
-      getListOfPresence();
-    }
-  }, [newReq, getListOfPresence]);
-
-  //runs on the change of dateQuery value
-  useEffect(() => {
     if (dateQuery) {
       getListOfPresence();
+      console.log("function 2");
+    } else {
     }
   }, [dateQuery, getListOfPresence]);
 
@@ -80,6 +80,8 @@ const PresenceListTeacher = ({ newReq, dateList, getAllDate }) => {
       <Content>
         <List>
           <ListNavPresence
+            setCurrentDate={setCurrentDate}
+            currentDate={currentDate}
             getAllDate={getAllDate}
             dateList={dateList}
             setDateQuery={setDateQuery}

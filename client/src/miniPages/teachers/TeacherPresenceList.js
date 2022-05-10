@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { FaArrowLeft } from "react-icons/fa";
@@ -7,6 +7,7 @@ import { BiMessageSquareAdd } from "react-icons/bi";
 import PresenceListTeacher from "../../ComponentsTeacher/PresenceListTeacher";
 import CreateNewSession from "./CreateNewSession";
 import QRCode from "qrcode";
+import toast, { Toaster } from "react-hot-toast";
 
 const TeacherPresenceList = () => {
   const navigation = useNavigate();
@@ -15,21 +16,29 @@ const TeacherPresenceList = () => {
 
   //seting the add session modal
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  //New req date
-  const [newReq, setNewReq] = useState("");
+
   //date listings
   const [dateList, setDateList] = useState([]);
+  //get list of a certain date
+  const [dateQuery, setDateQuery] = useState();
+  // console.log(dateQuery);
   //qrcode data
   const [QRsrc, setQRSRC] = useState();
-
-  useEffect(() => {
-    getAllDate();
-  }, []);
 
   //  crating a qrcode
   const crearQR = (payload) => {
     QRCode.toDataURL(payload).then((data) => {
       setQRSRC(data);
+    });
+  };
+
+  //toast messages
+  const errorMessage = (message) => {
+    toast.error(message, {
+      style: {
+        background: "rgba(255,51,51, 0.7)",
+        color: "#fff",
+      },
     });
   };
 
@@ -41,7 +50,6 @@ const TeacherPresenceList = () => {
       )
       .then((res) => {
         if (res.data.status === "SUCCESS") {
-          console.log('dates')
           setDateList(res.data.results);
         }
         if (res.data.status === "FAILED") {
@@ -54,6 +62,10 @@ const TeacherPresenceList = () => {
       });
   };
 
+  useEffect(() => {
+    getAllDate();
+  }, []);
+
   // craete new session request
   const createNewSession = async (sessionDetails, type) => {
     await axios
@@ -65,19 +77,20 @@ const TeacherPresenceList = () => {
         if (res.data.status === "SUCCESS" && type === "manual") {
           const { date } = res.data.message;
           // console.log(date);
-          setNewReq(date);
+          setDateQuery(date);
           getAllDate();
           setModalIsOpen(false);
         }
         if (res.data.status === "SUCCESS" && type === "IOT") {
           const { date } = res.data.message;
           // console.log(date);
-          setNewReq(date);
+          setDateQuery(date);
           getAllDate();
           crearQR(JSON.stringify(res.data.message));
         }
         if (res.data.status === "FAILED") {
           //this error message should be prompted to show in the toast
+          errorMessage(res.data.message);
           console.log(res.data.message);
         }
       })
@@ -89,6 +102,7 @@ const TeacherPresenceList = () => {
   return (
     <Wrapper>
       <Content>
+        <Toaster />
         <HeaderContainer>
           <Title>
             <BackIcon onClick={() => navigation(-1)} />
@@ -100,7 +114,8 @@ const TeacherPresenceList = () => {
           </AddSceance>
         </HeaderContainer>
         <PresenceListTeacher
-          newReq={newReq}
+          setDateQuery={setDateQuery}
+          dateQuery={dateQuery}
           dateList={dateList}
           getAllDate={getAllDate}
         />

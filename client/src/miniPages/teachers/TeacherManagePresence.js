@@ -80,8 +80,8 @@ const TeacherManagePresence = () => {
             {sessionStorage.getItem("module")}
           </Hearder>
           <Groups>
-            {manageGroup.map((group) => (
-              <Folder
+            {manageGroup.map((group, index) => (
+              <Folder key={index}
                 to={`/teacher/${sessionStorage.getItem(
                   "module"
                 )}/${currentSceance}/${group}`}

@@ -67,26 +67,28 @@ const deleteSuccessfull = (message) => {
   });
 };
 
-const ListNavPresence = ({ getQuery, setDateQuery, dateList, getAllDate }) => {
-  const [currentDate, setCurrentDate] = useState("");
-
+const ListNavPresence = ({
+  getQuery,
+  setDateQuery,
+  dateList,
+  getAllDate,
+  currentDate,
+  setCurrentDate,
+}) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  const setNewDate = (date) => {
-    setCurrentDate(date);
-    setDateQuery(date);
-  };
+  //refresh state management after every delete
+  const [refresh, setRefresh] = useState(false);
 
   const deleteSession = async () => {
     let id = "";
-
     dateList.map((date) => {
-      if (date.value === currentDate) {
+      if (date.value === currentDate.value) {
         id = date.id_session;
+        return;
       }
     });
-    console.log(id);
-
+    //  console.log("id");
     if (id) {
       await axios
         .get(`http://localhost:5000/api/managePresence/delete-session/${id}`)
@@ -94,13 +96,16 @@ const ListNavPresence = ({ getQuery, setDateQuery, dateList, getAllDate }) => {
           if (res.data.status === "SUCCESS") {
             deleteSuccessfull(res.data.message);
             setModalIsOpen(false);
-            console.log(res.data.message);
+            setDateQuery("");
+            setCurrentDate({ value: null, label: null });
+            setRefresh(!refresh);
+            //console.log(res.data.message);
           }
           if (res.data.status === "FAILED") {
             //this error message should be prompted to show in the toast
             deletUnsuccessfull(res.data.message);
             setModalIsOpen(false);
-            console.log(res.data.message);
+            //  console.log(res.data.message);
           }
         })
         .catch((err) => {
@@ -109,6 +114,15 @@ const ListNavPresence = ({ getQuery, setDateQuery, dateList, getAllDate }) => {
         });
     }
   };
+
+  const setNewDate = (date) => {
+    //setCurrentDate(date);
+    setDateQuery(date.value);
+  };
+  console.log(currentDate);
+
+  // refresh after delete
+  useEffect(() => {}, [refresh]);
 
   return (
     <Wrapper>
@@ -119,25 +133,25 @@ const ListNavPresence = ({ getQuery, setDateQuery, dateList, getAllDate }) => {
       <Operation>
         <div
           onClick={() => {
-            console.log("getting dates");
             getAllDate();
           }}
         >
           <SelectDate
             placeholder="Pick date"
+            value={currentDate.value === null ? null : currentDate}
             styles={customStyles}
             name="date"
             options={dateList}
             theme={(theme) => ({
               ...theme,
-              borderRadius: 0,
+              borderRadius: 5,
               colors: {
                 ...theme.colors,
                 primary25: "#e5cbff",
                 primary: "#bf7fff",
               },
             })}
-            onChange={(e) => setNewDate(e.value)}
+            onChange={(e) => setNewDate(e)}
           />
         </div>
         <EditSession>
@@ -206,16 +220,6 @@ const Operation = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
-`;
-
-const AddDeleteSceance = styled.div`
-  width: 40px;
-  height: 40px;
-  border-radius: 5px;
-  font-size: 23px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 `;
 
 const SelectDate = styled(Select)`

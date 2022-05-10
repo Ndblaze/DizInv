@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Modal from "react-modal";
-import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { useParams } from "react-router-dom";
 import QRGenerator from "./QRGenerator";
 import HashLoader from "react-spinners/HashLoader";
 import { css } from "@emotion/react";
+import Select from "react-select";
 
 const override = css`
   position: absolute;
@@ -33,6 +33,21 @@ const customStyles = {
   },
 };
 
+const customStylesSelect = {
+  menuList: () => ({
+    height: 10,
+  }),
+  menu: (provided, state) => ({
+    ...provided,
+    height: "100px",
+    overflowY: "scroll",
+  }),
+  option: (provided, state) => ({
+    ...provided,
+    fontSize: "10px",
+  }),
+};
+
 const CreateNewSession = ({
   modalIsOpen,
   setModalIsOpen,
@@ -47,8 +62,35 @@ const CreateNewSession = ({
 
   const [sessionDetails, setSessionDetails] = useState({});
 
-  console.log(QRsrc === undefined);
+  //section_speciality options
+  const [sectionSpecialityOptions, setSectionSpecialityOptions] = useState([]);
 
+  const [sectionSpeciality, setSectionSpeciality] = useState();
+
+  const section_specialityOptions = () => {
+    const level = sessionStorage.getItem("level");
+    if (level === "Licence 1" || level === "Licence 2") {
+      let arr = [
+        { value: "Section 1", label: "Section 1" },
+        { value: "Section 2", label: "Section 2" },
+        { value: "Section 3", label: "Section 3" },
+        { value: "Section 4", label: "Section 4" },
+      ];
+      setSectionSpecialityOptions(arr);
+    }
+
+    if (level === "Licence 3" || level === "Master 1" || level === "Master 2") {
+      let arr = [
+        { value: "GL", label: "GL" },
+        { value: "TI", label: "TI" },
+        { value: "SCI", label: "SCI" },
+        { value: "SI", label: "SI" },
+      ];
+      setSectionSpecialityOptions(arr);
+    }
+  };
+
+  // setting QRsrc
   useEffect(() => {
     if (QRsrc === undefined) {
       setLoading(true);
@@ -74,17 +116,24 @@ const CreateNewSession = ({
   };
 
   useEffect(() => {
-    setSessionDetails({
-      SessionID: uuidv4(),
-      module: module,
-      group: group,
-      sceance: sceance,
-      level: sessionStorage.getItem("level"),
-      department: sessionStorage.getItem("department"),
-      date: new Date().toLocaleDateString(),
-      timeStamp: getCurrentTimeStamp(),
-    });
-  }, []);
+    if (module && sceance && group) {
+      setSessionDetails({
+        SessionID: uuidv4(),
+        module: module,
+        group: group,
+        sceance: sceance,
+        level: sessionStorage.getItem("level"),
+        department: sessionStorage.getItem("department"),
+        date: new Date().toLocaleDateString(),
+        timeStamp: getCurrentTimeStamp(),
+      });
+    }
+  }, [module, sceance, group]);
+
+  const ValidateAndCreateSesssion = (type) => {
+    let values = { ...sessionDetails, sectionSpeciality: sectionSpeciality };
+    createNewSession(values, type);
+  };
 
   return (
     <Modal
@@ -124,21 +173,38 @@ const CreateNewSession = ({
                   <Label>Level</Label>
                   <InputShared defaultValue={sessionDetails.level} readOnly />
                 </div>
-                <div>
-                  <Label>Date</Label>
-                  <InputShared defaultValue={sessionDetails.date} readOnly />
+                <div onClick={() => section_specialityOptions()}>
+                  <Label style={{ fontSize: "12px", color: "#bf7fff" }}>
+                    Choose section / speciality*
+                  </Label>
+                  <SelectDate
+                    placeholder="choose..."
+                    styles={customStylesSelect}
+                    options={sectionSpecialityOptions}
+                    theme={(theme) => ({
+                      ...theme,
+                      borderRadius: 5,
+                      colors: {
+                        ...theme.colors,
+                        primary25: "#e5cbff",
+                        primary: "#bf7fff",
+                        neutral20: "#bf7fff",
+                      },
+                    })}
+                    onChange={(e) => setSectionSpeciality(e.value)}
+                  />
                 </div>
               </SharedForm>
 
               <CreateButtonContainer>
                 <AddSceance
-                  onClick={() => createNewSession(sessionDetails, "manual")}
+                  onClick={() => ValidateAndCreateSesssion("manual")}
                   style={{ color: "#bf7fff", backgroundColor: "#e5cbff" }}
                 >
                   Manually
                 </AddSceance>
                 <AddSceance
-                  onClick={() => createNewSession(sessionDetails, "IOT")}
+                  onClick={() => ValidateAndCreateSesssion("IOT")}
                   style={{
                     color: "#00cf00",
                     backgroundColor: "#e2ffe2",
@@ -234,6 +300,11 @@ const InputShared = styled.input`
   padding-left: 5px;
 `;
 
+const SelectDate = styled(Select)`
+  width: 200px;
+  border-radius: 5px;
+`;
+
 const CreateButtonContainer = styled.div`
   margin-top: 15px;
   width: 100%;
@@ -251,7 +322,7 @@ const Right = styled.div`
   align-items: center;
 `;
 
-const AddSceance = styled.div` 
+const AddSceance = styled.div`
   width: 120px;
   height: 40px;
   border-radius: 5px;
