@@ -30,8 +30,8 @@ const users = [
     type: "ChelfDepartment",
   },
   {
-    email: "moses.oko@univ-constantine2.dz",
-    password: "Moses3000",
+    email: "David.Osuuu@univ-constantine2.dz",
+    password: "David@500",
     type: "student",
   },
 ];

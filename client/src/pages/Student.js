@@ -8,7 +8,7 @@ const Student = () => {
       <Content>
         <Outlet />
       </Content>
-    </Wrapper>
+    </Wrapper> 
   );
 };
 
@@ -22,6 +22,4 @@ const Wrapper = styled.div`
 
 const Content = styled.div`
   width: 100%;
-  //background-color: #f1f3f7;
-  //  border:1px solid red ;
 `;

@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post("/login", (req, res) => {
   const { email, password } = req.body;
-  // console.log(email, password);
+  //  console.log(email, password);
   if (email && password) {
     const user = users.filter((user) => {
       if (user.email === email && user.password === password) {
@@ -20,15 +20,15 @@ router.post("/login", (req, res) => {
         type: user[0].type,
         success: true,
       });
-    } else {
-      res.status(200).send({
-        message: "no user with this email and password",
-        success: false,
-      });
+      return;
     }
   }
+
+  res.status(200).send({
+    message: "no user with this email and password",
+    success: false,
+  });
+  return;
 });
-
-
 
 module.exports = router;

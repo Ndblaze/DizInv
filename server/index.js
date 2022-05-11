@@ -6,6 +6,7 @@ const path = require("path");
 const admin = require("./routes/admin");
 const teacher = require("./routes/teacher");
 const chelf = require("./routes/chelf");
+const student = require("./routes/student");
 const auth = require("./routes/auth");
 const forgot = require("./routes/forgot");
 const managePresence = require("./routes/managePresence")
@@ -21,8 +22,9 @@ app.use(express.static(__dirname + "public"));
 app.use("/", auth);
 app.use("/", forgot);
 app.use("/api/admin", admin);
-app.use("/api/teacher", teacher);
+app.use("/api/teacher", teacher);  
 app.use("/api/chelf", chelf);
+app.use("/api/student", student);
 app.use("/api/managePresence", managePresence);
 
 app.listen(5000, () => {
