@@ -136,7 +136,7 @@ router.post("/add-new-student", (req, res) => {
 });
 
 router.get("/schedule/:level", (req, res) => {
-  const { level } = req.params;
+  const { level } = req.params
   if (level === "Licence 1") {
     res.send(schedule.licence1);
   }

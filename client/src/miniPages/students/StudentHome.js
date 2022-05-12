@@ -15,6 +15,8 @@ import StudentFooter from "../../componentStudent/StudentFooter";
 const StudentHome = () => {
   const [isOpen, setIsOpen] = useState(false);
 
+  const [firstName, setFirstName] = useState("");
+
   useEffect(() => {
     getStudentData();
   }, []);
@@ -38,6 +40,8 @@ const StudentHome = () => {
           sessionStorage.setItem("student_group", student_group);
           sessionStorage.setItem("level", level);
           sessionStorage.setItem("section_speciality", section_speciality);
+
+          setFirstName(firstName);
         }
         if (res.data.status === "FAILED") {
           console.log(res.data.messsage);
@@ -53,7 +57,7 @@ const StudentHome = () => {
   };
   return (
     <>
-      <StudentNavBar toggle={toggle} />
+      <StudentNavBar toggle={toggle} firstName={firstName} />
       <StudentHero />
       <InfoSection {...homeObjOne} />
       <InfoSection {...homeObjTwo} />

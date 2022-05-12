@@ -10,9 +10,8 @@ import ProfileLogo from "../components/ProfileLogo";
 import { RiArrowDownSLine } from "react-icons/ri";
 import { FiLogOut } from "react-icons/fi";
 
-const StudentNavBar = ({ toggle }) => {
+const StudentNavBar = ({ toggle, firstName }) => {
   const [scrollNav, setScrollNav] = useState(false);
-  const [firstName, setFirstName] = useState("");
 
   const changNav = () => {
     if (window.scrollY >= 80) {
@@ -23,9 +22,9 @@ const StudentNavBar = ({ toggle }) => {
   };
 
   //geting this last so its already set before getting it 
-  setTimeout(() => {
-    setFirstName(sessionStorage.getItem("firstName"));
-  }, 0)
+  // setTimeout(() => {
+  //   setFirstName(sessionStorage.getItem("firstName"));
+  // }, 0)
 
   useEffect(() => {
     window.addEventListener("scroll", changNav);
@@ -56,16 +55,16 @@ const StudentNavBar = ({ toggle }) => {
             </MobileIcon>
             <NavMenu>
               <NavItem>
-                <NavLinks
-                  to="time-table"
+                <NavLinksTimeTable
+                  to="/student/time-table"
                   smooth={true}
                   duration={500}
                   spy={true}
                   exact="true"
-                  offset={-80}
+                  offset={-80} 
                 >
                   Time-table
-                </NavLinks>
+                </NavLinksTimeTable>
               </NavItem>
               <NavItem>
                 <NavLinks
@@ -219,6 +218,16 @@ const NavLinks = styled(LinkS)`
   /* &.active {
     border-bottom: 3px solid #bd62ff;
   } */
+`;
+
+const NavLinksTimeTable = styled(LinkR)`
+  color: #fff;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  padding: 0 1rem;
+  height: 100%;
+  cursor: pointer;
 `;
 const NavBtnContainer = styled.div`
   display: flex;

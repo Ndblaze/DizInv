@@ -1,98 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import AssignTeacherModal from "./AssignTeacherModal";
 
-const SessionChelf = ({ scheduleData, setScheduleData }) => {
-  const [refresh, setRefresh] = useState(true);
-
-  const [editLocation, setEditLocation] = useState({});
-
-  //initialValues
-  const [initial, setInitial] = useState({
-    valueID: "",
-    module: "",
-    teacher: { name: "", email: "" },
-    room: "",
-  });
-
-  //open and close the add teacher modal
-  const [addTeacher, setAddTeacher] = useState(false);
-
-  //refresh the state when a value is updated
-  useEffect(() => {}, [refresh]);
-
-  const formEditLocationClick = (td) => {
-    setEditLocation({ indexDay: td.indexDay, day: td.day });
-    setAddTeacher(true);
-  };
-
-  const clearState = () => {
-    setRefresh(!refresh);
-    setAddTeacher(false);
-    setEditLocation({});
-    setInitial({
-      valueID: "",
-      module: "",
-      teacher: { name: "", email: "" },
-      room: "",
-    });
-  };
-
-
-  //you need to verify teacher email before adding ,,,,,,,,,,,,,
-
-  const editTeacher = (e) => {
-    e.preventDefault();
-
-    let newSchedule = scheduleData;
-    const { day, indexDay } = editLocation;
-    const { valueID, module, room, teacher } = initial;
-    const row = newSchedule[day][indexDay].value.findIndex((value) => {
-      if (value === undefined) {
-        //find ad way to manage the error of not having an initial value here
-        return console.log("non");
-      } else {
-        return value.valueID === valueID;
-      }
-    });
-
-    newSchedule[day][indexDay].value[row] = {
-      valueID: valueID,
-      module: module, 
-      room: room,
-      teacher: teacher,
-    };
- 
-    setScheduleData(newSchedule);
-    clearState();
-  };
-
-  const deletTeacher = (e) => {
-    e.preventDefault();
-
-    let newSchedule = scheduleData;
-    const { day, indexDay } = editLocation;
-    const { valueID, module, room, teacher } = initial;
-    const row = newSchedule[day][indexDay].value.findIndex((value) => {
-      if (value === undefined) {
-        //find ad way to manage the error of not having an initial value here
-        return console.log("non");
-      } else {
-        return value.valueID === valueID;
-      }
-    });
-
-    newSchedule[day][indexDay].value[row] = {
-      valueID: valueID,
-      module: module,
-      room: room,
-      teacher: { name: "", email: "" },
-    };
-
-    setScheduleData(newSchedule);
-    clearState();
-  };
-
+const MyTimeTable = ({ scheduleData }) => {
   return (
     <Wrapper>
       {scheduleData.hasOwnProperty("level") ? (
@@ -111,10 +20,7 @@ const SessionChelf = ({ scheduleData, setScheduleData }) => {
               <Tr>
                 <Days>Sunday</Days>
                 {scheduleData.sunday.map((td) => (
-                  <DaysValues
-                    key={td.indexDay}
-                    onClick={() => formEditLocationClick(td)}
-                  >
+                  <DaysValues key={td.indexDay}>
                     <InnerTable>
                       <InnerTablbeThead>
                         <InnerTableTr>
@@ -125,13 +31,10 @@ const SessionChelf = ({ scheduleData, setScheduleData }) => {
                       </InnerTablbeThead>
                       <InnerTablbeTbody>
                         {td.value.map((value) => (
-                          <InnerTableTr
-                            key={value.valueID}
-                            onClick={() => setInitial(value)}
-                          >
+                          <InnerTableTr key={value.valueID}>
                             <td>{value.module}</td>
                             <td>{value.teacher.name}</td>
-                            <td>{value.room}</td>
+                            <td>{value.room}</td>{" "}
                           </InnerTableTr>
                         ))}
                       </InnerTablbeTbody>
@@ -142,10 +45,7 @@ const SessionChelf = ({ scheduleData, setScheduleData }) => {
               <Tr>
                 <Days>Monday</Days>
                 {scheduleData.monday.map((td) => (
-                  <DaysValues
-                    key={td.indexDay}
-                    onClick={() => formEditLocationClick(td)}
-                  >
+                  <DaysValues key={td.indexDay}>
                     <InnerTable>
                       <InnerTablbeThead style={{ display: "none" }}>
                         <InnerTableTr>
@@ -156,13 +56,10 @@ const SessionChelf = ({ scheduleData, setScheduleData }) => {
                       </InnerTablbeThead>
                       <InnerTablbeTbody>
                         {td.value.map((value) => (
-                          <InnerTableTr
-                            key={value.valueID}
-                            onClick={() => setInitial(value)}
-                          >
+                          <InnerTableTr key={value.valueID}>
                             <td>{value.module}</td>
                             <td>{value.teacher.name}</td>
-                            <td>{value.room}</td>
+                            <td>{value.room}</td>{" "}
                           </InnerTableTr>
                         ))}
                       </InnerTablbeTbody>
@@ -173,10 +70,7 @@ const SessionChelf = ({ scheduleData, setScheduleData }) => {
               <Tr>
                 <Days>Tuesday</Days>
                 {scheduleData.tuesday.map((td) => (
-                  <DaysValues
-                    key={td.indexDay}
-                    onClick={() => formEditLocationClick(td)}
-                  >
+                  <DaysValues key={td.indexDay}>
                     <InnerTable>
                       <InnerTablbeThead style={{ display: "none" }}>
                         <InnerTableTr>
@@ -187,13 +81,10 @@ const SessionChelf = ({ scheduleData, setScheduleData }) => {
                       </InnerTablbeThead>
                       <InnerTablbeTbody>
                         {td.value.map((value) => (
-                          <InnerTableTr
-                            key={value.valueID}
-                            onClick={() => setInitial(value)}
-                          >
+                          <InnerTableTr key={value.valueID}>
                             <td>{value.module}</td>
                             <td>{value.teacher.name}</td>
-                            <td>{value.room}</td>
+                            <td>{value.room}</td>{" "}
                           </InnerTableTr>
                         ))}
                       </InnerTablbeTbody>
@@ -204,10 +95,7 @@ const SessionChelf = ({ scheduleData, setScheduleData }) => {
               <Tr>
                 <Days>Wednesday</Days>
                 {scheduleData.wednesday.map((td) => (
-                  <DaysValues
-                    key={td.indexDay}
-                    onClick={() => formEditLocationClick(td)}
-                  >
+                  <DaysValues key={td.indexDay}>
                     <InnerTable>
                       <InnerTablbeThead style={{ display: "none" }}>
                         <InnerTableTr>
@@ -218,13 +106,10 @@ const SessionChelf = ({ scheduleData, setScheduleData }) => {
                       </InnerTablbeThead>
                       <InnerTablbeTbody>
                         {td.value.map((value) => (
-                          <InnerTableTr
-                            key={value.valueID}
-                            onClick={() => setInitial(value)}
-                          >
+                          <InnerTableTr key={value.valueID}>
                             <td>{value.module}</td>
                             <td>{value.teacher.name}</td>
-                            <td>{value.room}</td>
+                            <td>{value.room}</td>{" "}
                           </InnerTableTr>
                         ))}
                       </InnerTablbeTbody>
@@ -235,10 +120,7 @@ const SessionChelf = ({ scheduleData, setScheduleData }) => {
               <Tr>
                 <Days>Thursday</Days>
                 {scheduleData.thursday.map((td) => (
-                  <DaysValues
-                    key={td.indexDay}
-                    onClick={() => formEditLocationClick(td)}
-                  >
+                  <DaysValues key={td.indexDay}>
                     <InnerTable>
                       <InnerTablbeThead style={{ display: "none" }}>
                         <InnerTableTr>
@@ -249,13 +131,10 @@ const SessionChelf = ({ scheduleData, setScheduleData }) => {
                       </InnerTablbeThead>
                       <InnerTablbeTbody>
                         {td.value.map((value) => (
-                          <InnerTableTr
-                            key={value.valueID}
-                            onClick={() => setInitial(value)}
-                          >
+                          <InnerTableTr key={value.valueID}>
                             <td>{value.module}</td>
                             <td>{value.teacher.name}</td>
-                            <td>{value.room}</td>
+                            <td>{value.room}</td>{" "}
                           </InnerTableTr>
                         ))}
                       </InnerTablbeTbody>
@@ -268,23 +147,14 @@ const SessionChelf = ({ scheduleData, setScheduleData }) => {
         </Content>
       ) : (
         <NoSChedule>
-          There is no schedule for this level, create a new schedule!!
+          There is no schedule for this level yet, contact your department !!
         </NoSChedule>
       )}
-      <AssignTeacherModal
-        isOpen={addTeacher}
-        close={() => setAddTeacher(false)}
-        editTeacher={editTeacher}
-        deletTeacher={deletTeacher}
-        initial={initial}
-        setInitial={setInitial}
-        clearState={clearState}
-      />
     </Wrapper>
   );
 };
 
-export default SessionChelf;
+export default MyTimeTable;
 
 const Wrapper = styled.div`
   width: 100%;
@@ -388,9 +258,6 @@ const InnerTableTr = styled.tr`
     font-size: 9px;
     border-bottom: 1px solid #adb1c0;
     border-right: 1px solid #adb1c0;
-  }
-
-  &:hover {
     background-color: rgba(255, 255, 255, 0.9);
   }
 `;

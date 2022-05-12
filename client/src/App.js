@@ -36,6 +36,7 @@ import TeacherPresenceList from "./miniPages/teachers/TeacherPresenceList";
 // student pages import
 import Student from "./pages/Student";
 import StudentHome from "./miniPages/students/StudentHome";
+import StudentTimeTable from "./miniPages/students/StudentTimeTable";
 
 function App() {
   const [user, setUser] = useState({});
@@ -146,6 +147,7 @@ function App() {
           {user.type === "student" && (
             <Route exact path="/student" element={<Student />} >
                <Route exact path="home" element={<StudentHome />} />
+               <Route exact path="time-table" element={<StudentTimeTable />} />
             </Route>
           )}
         </Routes>
