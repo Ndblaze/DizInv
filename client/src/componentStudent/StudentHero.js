@@ -3,44 +3,110 @@ import StudentImage from "../asserts/images/Student-Image.jpg";
 import styled from "styled-components";
 import { MdOutlineQrCode } from "react-icons/md";
 import { Button } from "../componentStudent/ButtonElement";
+import Modal from "react-modal";
+import QRCode from "qrcode";
+import QRGenerator from "../miniPages/teachers/QRGenerator";
 
 const StudentHero = () => {
   const [hover, setHover] = useState(false);
 
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  //qrcode data
+  const [QRsrc, setQRSRC] = useState();
+
+  //  crating a qrcode
+  const crearQR = () => {
+    setModalIsOpen(true);
+    let today = new Date();
+
+    const values = {
+      inscription: sessionStorage.getItem("inscription"),
+      group: sessionStorage.getItem("student_group"),
+      level: sessionStorage.getItem("level"),
+      sectionSpeciality: sessionStorage.getItem("section_speciality"),
+      date: today.toLocaleDateString(),
+    };
+
+    const payload = JSON.stringify(values);
+
+    QRCode.toDataURL(payload).then((data) => {
+      setQRSRC(data);
+    });
+  };
+
   const onHover = () => {
     setHover(!hover);
   };
+
+  const customStyles = {
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      transform: "translate(-50%, -50%)",
+      backgroundColor: "#fff",
+      padding: 0,
+      border: "none",
+      borderRadius: "20px",
+      overflow: "hidden",
+      width: "350px",
+      height: "350px",
+    },
+    overlay: {
+      backgroundColor: "rgba(10, 11, 13, 0.75)",
+    },
+  };
+
   return (
-    <HeroContainer id="home">
-      <HeroBg>
-        <VideoBg src={StudentImage} />
-      </HeroBg>
-      <HeroContent>
-        <HeroH1>Investing in Knowledge & Your Future</HeroH1>
-        <HeroP>
-          {" "}
-          With the help of this app, manage your presence record in classrooms.
-          Also make justifications for sessions previously missed.{" "}
-        </HeroP>
-        <HeroBtnWrapper>
-          <Button
-            to="signup"
-            style={{ fontWeight: "bold" }}
-            onMouseLeave={onHover}
-            onMouseEnter={onHover}
-            primary="true"
-            dark="true"
-            smooth={true}
-            duration={500}
-            spy={true}
-            exact="true"
-            offset={-80}
+    <>
+      {!modalIsOpen ? (
+        <HeroContainer id="home">
+          <HeroBg>
+            <VideoBg src={StudentImage} />
+          </HeroBg>
+          <HeroContent>
+            <HeroH1>Investing in Knowledge & Your Future</HeroH1>
+            <HeroP>
+              {" "}
+              With the help of this app, manage your presence record in
+              classrooms. Also make justifications for sessions previously
+              missed.{" "}
+            </HeroP>
+            <HeroBtnWrapper>
+              <Button
+                onClick={() => crearQR()}
+                to="signup"
+                style={{ fontWeight: "bold" }}
+                onMouseLeave={onHover}
+                onMouseEnter={onHover}
+                primary="true"
+                dark="true"
+                smooth={true}
+                duration={500}
+                spy={true}
+                exact="true"
+                offset={-80}
+              >
+                Generate QR code <CodeIcon />
+              </Button>
+            </HeroBtnWrapper>
+          </HeroContent>
+        </HeroContainer>
+      ) : (
+        <ModalContainer>
+          <Modal
+            isOpen={modalIsOpen}
+            style={customStyles}
+            onRequestClose={() => setModalIsOpen(false)}
+            ariaHideApp={false}
           >
-            Generate QR code <CodeIcon />
-          </Button>
-        </HeroBtnWrapper>
-      </HeroContent>
-    </HeroContainer>
+            <QRGenerator QRsrc={QRsrc} setModalIsOpen={setModalIsOpen} />
+          </Modal>
+        </ModalContainer>
+      )}
+    </>
   );
 };
 
@@ -71,6 +137,8 @@ const HeroContainer = styled.div`
     z-index: 2;
   }
 `;
+
+const ModalContainer = styled.div``;
 
 const HeroBg = styled.div`
   position: absolute;

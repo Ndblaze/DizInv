@@ -131,7 +131,7 @@ const TableTeacher = ({ data, DeleteUser, updateUI }) => {
         </DeletStudent>
       </Modal>
     </Wrapper>
-  );
+  ); 
 };
 
 export default TableTeacher;

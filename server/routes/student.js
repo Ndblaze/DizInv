@@ -9,7 +9,7 @@ const db = require("../ConnectDB");
 
 router.get("/data/:email", (req, res) => {
   const { email } = req.params;
-  console.log(email);
+  //console.log(email);
 
   let UserDataSql = `SELECT * FROM dizinv.user, dizinv.students 
   WHERE user.id_user = students.inscription

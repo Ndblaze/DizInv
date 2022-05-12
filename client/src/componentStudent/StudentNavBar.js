@@ -12,6 +12,7 @@ import { FiLogOut } from "react-icons/fi";
 
 const StudentNavBar = ({ toggle }) => {
   const [scrollNav, setScrollNav] = useState(false);
+  const [firstName, setFirstName] = useState("");
 
   const changNav = () => {
     if (window.scrollY >= 80) {
@@ -20,6 +21,11 @@ const StudentNavBar = ({ toggle }) => {
       setScrollNav(false);
     }
   };
+
+  //geting this last so its already set before getting it 
+  setTimeout(() => {
+    setFirstName(sessionStorage.getItem("firstName"));
+  }, 0)
 
   useEffect(() => {
     window.addEventListener("scroll", changNav);
@@ -109,7 +115,11 @@ const StudentNavBar = ({ toggle }) => {
                 <FiLogOut style={{ marginLeft: "5px" }} />
               </NavBtnLink>
               <NavBtn title="profile">
-                <ProfileLogo Text="B" Name="Blaze" style={{ color: "#fff" }} />
+                <ProfileLogo
+                  Text={firstName ? firstName.slice(0, 1) : ""}
+                  Name={firstName ? firstName.slice(0, 7) + "..." : ""}
+                  style={{ color: "#fff" }}
+                />
                 <RiArrowDownSLine style={{ marginLeft: "5px" }} />
               </NavBtn>
             </NavBtnContainer>

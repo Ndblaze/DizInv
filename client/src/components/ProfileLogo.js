@@ -16,7 +16,7 @@ const Wrapper = styled.div`
      display: flex;
      justify-content: space-between;
      align-items: center;
-     width: 85px;
+     //width: 85px;
      margin-left: 30px;
      cursor: pointer;
      //border:1px solid red ;
@@ -25,6 +25,7 @@ const Wrapper = styled.div`
 const Logo = styled.div`
   height: 30px;
   width: 30px;
+  margin-right: 5px;
   border-radius: 8px;
   color: #ffffff;
   background-color: #C278F8;

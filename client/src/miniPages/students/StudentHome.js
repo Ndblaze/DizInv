@@ -19,7 +19,7 @@ const StudentHome = () => {
     getStudentData();
   }, []);
 
-  //get the necesarry data of the student
+  //get the necesarry data of the student and store in session storage
   const getStudentData = async () => {
     await axios
       .get(
@@ -29,17 +29,18 @@ const StudentHome = () => {
       )
       .then((res) => {
         if (res.data.status === "SUCCESS") {
-          let { department, inscription, firstName, level } = res.data.data;
-          let { student_group, section_speciality } = res.data.data;
+          let { department, inscription, firstName, level } = res.data.result;
+          let { student_group, section_speciality } = res.data.result;
 
-          // sessionStorage.setItem("department", department);
-          // sessionStorage.setItem("module", module);
-          // sessionStorage.setItem("status", status);
-          // sessionStorage.setItem("groups", groups);
-          // sessionStorage.setItem("level", level);
-          // sessionStorage.setItem("sceance", sceance);
+          sessionStorage.setItem("department", department);
+          sessionStorage.setItem("firstName", firstName);
+          sessionStorage.setItem("inscription", inscription);
+          sessionStorage.setItem("student_group", student_group);
+          sessionStorage.setItem("level", level);
+          sessionStorage.setItem("section_speciality", section_speciality);
         }
         if (res.data.status === "FAILED") {
+          console.log(res.data.messsage);
         }
       })
       .catch((err) => {
