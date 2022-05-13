@@ -71,7 +71,7 @@ router.post("/update-profile", (req, res) => {
   const { firstName, lastName, email, phone, address, city, inscription } =
     newValues;
 
-  //console.log(firstName, lastName, email, phone, address, city, inscription);
+  //console.log(firstName, lastName, email, phone, address, city, inscription); 
 
   let updateUserSQL = `UPDATE dizinv.user 
        SET firstName = '${firstName}', lastName = '${lastName}', email = '${email}', 
