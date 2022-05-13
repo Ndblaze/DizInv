@@ -10,18 +10,18 @@ import ProfileLogo from "../components/ProfileLogo";
 import { RiArrowDownSLine } from "react-icons/ri";
 import { FiLogOut } from "react-icons/fi";
 
-const StudentNavBar = ({ toggle, firstName }) => {
+const StudentNavBar = ({ toggle, firstName, profileStyle }) => {
   const [scrollNav, setScrollNav] = useState(false);
 
   const changNav = () => {
     if (window.scrollY >= 80) {
-      setScrollNav(true);
+      setScrollNav(true); 
     } else {
       setScrollNav(false);
     }
   };
 
-  //geting this last so its already set before getting it 
+  //geting this last so its already set before getting it
   // setTimeout(() => {
   //   setFirstName(sessionStorage.getItem("firstName"));
   // }, 0)
@@ -45,7 +45,7 @@ const StudentNavBar = ({ toggle, firstName }) => {
   return (
     <>
       <IconContext.Provider value={{ color: "#fff" }}>
-        <Nav scrollNav={scrollNav}>
+        <Nav scrollNav={scrollNav} style={profileStyle}>
           <NavbarContainer>
             <NavLogo to="/student/home" onClick={toggleHome}>
               <img src={logoImage} />
@@ -61,7 +61,7 @@ const StudentNavBar = ({ toggle, firstName }) => {
                   duration={500}
                   spy={true}
                   exact="true"
-                  offset={-80} 
+                  offset={-80}
                 >
                   Time-table
                 </NavLinksTimeTable>
@@ -113,7 +113,7 @@ const StudentNavBar = ({ toggle, firstName }) => {
                 Log out
                 <FiLogOut style={{ marginLeft: "5px" }} />
               </NavBtnLink>
-              <NavBtn title="profile">
+              <NavBtn title="profile" to={"/student/profile"}>
                 <ProfileLogo
                   Text={firstName ? firstName.slice(0, 1) : ""}
                   Name={firstName ? firstName.slice(0, 7) + "..." : ""}
@@ -238,9 +238,10 @@ const NavBtnContainer = styled.div`
   }
 `;
 
-const NavBtn = styled.nav`
+const NavBtn = styled(LinkR)`
   display: flex;
   align-items: center;
+  text-decoration: none;
   //justify-content: center;
 
   @media screen and (max-width: 768px) {

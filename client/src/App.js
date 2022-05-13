@@ -37,6 +37,7 @@ import TeacherPresenceList from "./miniPages/teachers/TeacherPresenceList";
 import Student from "./pages/Student";
 import StudentHome from "./miniPages/students/StudentHome";
 import StudentTimeTable from "./miniPages/students/StudentTimeTable";
+import StudentProfile from "./miniPages/students/StudentProfile";
 
 function App() {
   const [user, setUser] = useState({});
@@ -105,7 +106,7 @@ function App() {
               />
               <Route
                 exact
-                path="manage-presence/:module/:sceance/:group"
+                path=":module/:sceance/:group"
                 element={<TeacherPresenceList />}
               />
               <Route exact path="profile" element={<TeacherProfile />} />
@@ -148,6 +149,7 @@ function App() {
             <Route exact path="/student" element={<Student />} >
                <Route exact path="home" element={<StudentHome />} />
                <Route exact path="time-table" element={<StudentTimeTable />} />
+               <Route exact path="profile" element={<StudentProfile />} />
             </Route>
           )}
         </Routes>
