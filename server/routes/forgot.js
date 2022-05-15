@@ -107,6 +107,16 @@ function send(req, res, next) {
       console.log(err);
       res.send({ status: "FAILED" });
       return;
+    })
+    .finally(() => {
+      //note this finally is to make sure to change the file
+      replace(After)
+        .then((changedFiles) => {
+          console.log(changedFiles);
+        })
+        .catch((err) => {
+          console.log({ status: "FAILED" });
+        });
     });
 }
 

@@ -38,6 +38,7 @@ import Student from "./pages/Student";
 import StudentHome from "./miniPages/students/StudentHome";
 import StudentTimeTable from "./miniPages/students/StudentTimeTable";
 import StudentProfile from "./miniPages/students/StudentProfile";
+import TeacherExcludedStudents from "./miniPages/teachers/TeacherExcludedStudents";
 
 function App() {
   const [user, setUser] = useState({});
@@ -105,6 +106,11 @@ function App() {
                 element={<TeacherManagePresence />}
               />
               <Route
+                  exact
+                  path="excluded-students"
+                  element={<TeacherExcludedStudents />}
+                />
+              <Route
                 exact
                 path=":module/:sceance/:group"
                 element={<TeacherPresenceList />}
@@ -135,6 +141,11 @@ function App() {
                   exact
                   path="manage-presence"
                   element={<TeacherManagePresence />}
+                />
+                <Route
+                  exact
+                  path="excluded-students"
+                  element={<TeacherExcludedStudents />}
                 />
                 <Route
                   exact

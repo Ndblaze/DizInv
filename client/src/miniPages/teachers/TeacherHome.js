@@ -50,7 +50,7 @@ const listCard = [
     icon: <HiMinusCircle />,
     discription:
       "View and manage the list of excluded students by clicking on the continue button.",
-    path: "/schedules",
+    path: "/teacher/excluded-students",
     boxShadow: {
       boxShadow: "0 1px 1px #FFCADC, 0 2px 4px #FFCADC",
     },
