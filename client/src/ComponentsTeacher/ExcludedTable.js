@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import axios from "axios";
+//import axios from "axios";
 
 import { CgClose } from "react-icons/cg";
 import { BsCheck2All } from "react-icons/bs";
 import { BiChevronDown } from "react-icons/bi";
 
 const ExcludedTable = ({ listExcluded }) => {
+  const [showDetail, setShowDetail] = useState(false);
+  const [displayIndex, setDisplayIndex] = useState();
+
   return (
     <Wrapper>
       <Content>
@@ -23,32 +26,65 @@ const ExcludedTable = ({ listExcluded }) => {
           {listExcluded.length > 0 ? (
             <TableBody>
               {listExcluded.map((item, index) => (
-                <TrBody key={index}>
-                  <NumberIDBody>{index}</NumberIDBody>
-                  <NameBody>{item.name}</NameBody>
-                  <GroupBody>{item.group}</GroupBody>
-                  <ActionBody>
-                    {!item.excluded ? (
-                      <IconContainer
-                        // onClick={() => registerPresence(item)}
-                        style={{ color: "#ff4a4a", backgroundColor: "#ffe7e7" }}
-                      >
-                        <CgClose />
-                      </IconContainer>
-                    ) : (
-                      <IconContainer
-                        // onClick={() => registerPresence(item)}
-                        style={{ color: "#00cf00", backgroundColor: "#e2ffe2" }}
-                      >
-                        <BsCheck2All />
-                      </IconContainer>
-                    )}
-                  </ActionBody>
-                  <DetaileBody>
-                    {" "}
-                    <BiChevronDown />{" "}
-                  </DetaileBody>
-                </TrBody>
+                <>
+                  <TrBody key={index} id={`${index}`}>
+                    <NumberIDBody>{index}</NumberIDBody>
+                    <NameBody>{item.firstName} {item.lastName}</NameBody>
+                    <GroupBody>{item.group}</GroupBody>
+                    <ActionBody>
+                      {!item.excluded ? (
+                        <IconContainer
+                          // onClick={() => registerPresence(item)}
+                          style={{
+                            color: "#ff4a4a",
+                            backgroundColor: "#ffe7e7",
+                          }}
+                        >
+                          <CgClose />
+                        </IconContainer>
+                      ) : (
+                        <IconContainer
+                          // onClick={() => registerPresence(item)}
+                          style={{
+                            color: "#00cf00",
+                            backgroundColor: "#e2ffe2",
+                          }}
+                        >
+                          <BsCheck2All />
+                        </IconContainer>
+                      )}
+                    </ActionBody>
+                    <DetaileBody>
+                      <ArrowDown
+                        style={{ color: displayIndex === index && "#d493ff" }}
+                        onClick={() => {
+                          setShowDetail(!showDetail);
+                          setDisplayIndex(index);
+                        }}
+                      />
+                    </DetaileBody>
+                  </TrBody>
+                  <MoreDetailes
+                    style={{
+                      padding: showDetail ? "8px 10px 15px 15px" : "0",
+                      maxHeight: showDetail ? "30pc" : "0",
+                      overflow: showDetail ? "visible" : "hidden",
+                      display: displayIndex === index ? "flex" : "none",
+                    }}
+                  >
+                    <div>
+                      <MoreDetailesHeader>Detailes: </MoreDetailesHeader>
+                      <MoreDetailesDiscription>
+                        This student missed class on :
+                        {item.dateMissed.map((date) => (
+                          <span>
+                            {""} {date} {" ,"}
+                          </span>
+                        ))}
+                      </MoreDetailesDiscription>
+                    </div>
+                  </MoreDetailes>
+                </>
               ))}
             </TableBody>
           ) : (
@@ -202,6 +238,11 @@ const DetaileBody = styled.td`
   font-size: 25px;
   padding: 3px;
   text-align: left;
+
+  & > a {
+    text-decoration: none;
+    color: #777b86;
+  }
 `;
 
 const IconContainer = styled.div`
@@ -213,4 +254,41 @@ const IconContainer = styled.div`
   width: 70px;
   height: 30px;
   font-size: 20px;
+`;
+
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>...
+
+const MoreDetailes = styled.div`
+  background-color: #f6e8ff;
+  position: relative;
+  transition: 650ms;
+
+  &::before {
+    content: "";
+    position: absolute;
+    width: 5px;
+    border-radius: 5px;
+    height: 80%;
+    background-color: #d493ff;
+    top: 50%;
+    left: 5;
+    transform: translateY(-50%);
+  }
+
+  & > div {
+    color: #777b86;
+    margin-left: 12px;
+  }
+`;
+
+const ArrowDown = styled(BiChevronDown)``;
+
+const MoreDetailesHeader = styled.h2`
+  font-style: italic;
+  font-size: 14px;
+  color: #ff6868;
+`;
+const MoreDetailesDiscription = styled.h2`
+  font-style: italic;
+  font-size: 12px;
 `;

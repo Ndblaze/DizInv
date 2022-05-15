@@ -1,30 +1,36 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import axios from "axios";
+//import axios from "axios";
 import ListExcludedNav from "./ListExcludedNav";
 import ExcludedTable from "./ExcludedTable";
 
 const ExcludedListTeacher = () => {
-  const [query, setQuery] = useState();
+  const [query, setQuery] = useState("");
 
   const [allList, setAllList] = useState([]);
   const [filtered, setFiltered] = useState([]);
 
   const list = [
     {
-      name: "Ndubuisi James Eze",
+      firstName: "Ndubuisi",
+      lastName: "James Eze",
       group: "G1",
       excluded: true,
+      dateMissed: ["11/04/2022", "17/11/20202", "11/08/2022"],
     },
     {
-      name: "Slimane Ibrahim",
+      firstName: "Slimane",
+      lastName: "Ibrahim",
       group: "G3",
       excluded: true,
+      dateMissed: ["12/04/2022", "15/11/20202", "21/08/2022"],
     },
     {
-      name: "Malak Meina ",
+      firstName: "Malak",
+      lastName: "Meina ",
       group: "G2",
       excluded: false,
+      dateMissed: ["01/04/2022", "02/11/20202", "23/08/2022"],
     },
   ];
 
@@ -32,6 +38,20 @@ const ExcludedListTeacher = () => {
     setAllList(list);
     setFiltered(list);
   }, []);
+
+  useEffect(() => {
+    if (query !== "") {
+      const newData = allList.filter((item) => {
+        return (
+          item.firstName.toUpperCase().includes(query.toUpperCase()) ||
+          item.lastName.toUpperCase().includes(query.toUpperCase())
+        );
+      });
+      setFiltered(newData);
+    }else{
+      setFiltered(allList);
+    }
+  }, [query, allList]);
 
   return (
     <Wrapper>
