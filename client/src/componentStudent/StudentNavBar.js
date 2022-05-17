@@ -7,7 +7,6 @@ import { Link as LinkR } from "react-router-dom";
 import { Link as LinkS } from "react-scroll";
 import logoImage from "../asserts/images/logo.png";
 import ProfileLogo from "../components/ProfileLogo";
-import { RiArrowDownSLine } from "react-icons/ri";
 import { FiLogOut } from "react-icons/fi";
 
 const StudentNavBar = ({ toggle, firstName, profileStyle }) => {
@@ -119,7 +118,6 @@ const StudentNavBar = ({ toggle, firstName, profileStyle }) => {
                   Name={firstName ? firstName.slice(0, 7) + "..." : ""}
                   style={{ color: "#fff" }}
                 />
-                <RiArrowDownSLine style={{ marginLeft: "5px" }} />
               </NavBtn>
             </NavBtnContainer>
           </NavbarContainer>

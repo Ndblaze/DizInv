@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import logo from "../asserts/images/logoNav.png";
 import MenuLinkIcon from "../components/MenuLinkIcon";
+import ChelfMenu from "../componentsChelf/ChelfMenu";
 
 //icons and images
 import { BiUser } from "react-icons/bi";
-import { HiOutlineLogout, HiHome } from "react-icons/hi";
-import ChelfMenu from "../componentsChelf/ChelfMenu";
+import { HiOutlineLogout, HiHome, HiMinusCircle } from "react-icons/hi";
+import { MdLibraryAddCheck } from "react-icons/md";
 
 const TeacherMenu = () => {
   const [active, setActive] = useState("");
@@ -46,6 +47,24 @@ const TeacherMenu = () => {
             }}
           />
           <MenuLinkIcon
+            Name="Manage presence"
+            path="/teacher/manage-presence"
+            Icon={MdLibraryAddCheck}
+            Active={active === "manage presence" ? true : false}
+            onClick={() => {
+              changeActiveIcon("manage presence");
+            }}
+          />
+          <MenuLinkIcon
+            Name="Excluded students"
+            path="/teacher/excluded-students"
+            Icon={HiMinusCircle}
+            Active={active === "excluded students" ? true : false}
+            onClick={() => {
+              changeActiveIcon("excluded students");
+            }}
+          />
+          {/* <MenuLinkIcon
             Name="Profile"
             path="/teacher/profile"
             Icon={BiUser}
@@ -53,7 +72,7 @@ const TeacherMenu = () => {
             onClick={() => {
               changeActiveIcon("Profile");
             }}
-          />
+          /> */}
           <LogoutDivider />
           <MenuLinkIcon
             Name="Logout"

@@ -45,7 +45,7 @@ const AdminNav = () => {
       <Content>
         <Logo src={logo} alt="logo" />
         <Menu>
-          <MenuLinkIcon
+          <MenuLinkIcon 
             Name="Dashboard"
             path="/admin/dashboard"
             Icon={BiBarChartAlt}
@@ -54,7 +54,7 @@ const AdminNav = () => {
               changeActiveIcon("dashboard");
             }}
           />
-          <MenuLinkIcon
+          {/* <MenuLinkIcon
             Name="Profile"
             path="/admin/profile"
             Icon={BiUser}
@@ -62,7 +62,7 @@ const AdminNav = () => {
             onClick={() => {
               changeActiveIcon("Profile");
             }}
-          />
+          /> */}
           <MenuLinkIcon
             Name="Teacher"
             path="/admin/teacher"
@@ -192,6 +192,7 @@ const Header = styled.h1`
   font-weight: bold;
   color: #777b86;
   margin-bottom: 2px;
+  margin-top: 10px;
 `;
 const Divider = styled.div`
   width: 100%;

@@ -1,11 +1,13 @@
 import React from "react";
 import styled from "styled-components";
+import { RiArrowDownSLine } from "react-icons/ri";
 
 const ProfileLogo = ({ Text, Name, style }) => {
   return (
     <Wrapper>
       <Logo>{Text}</Logo>
       <User style={style && style}>{Name}</User>
+      <RiArrowDownSLine style={{ marginLeft: "5px", color: "#777B86" }} />
     </Wrapper>
   );
 };
@@ -16,10 +18,15 @@ const Wrapper = styled.div`
      display: flex;
      justify-content: space-between;
      align-items: center;
-     //width: 85px;
-     margin-left: 30px;
+     padding: 5px;
+     margin-left: 30px;  
      cursor: pointer;
-     //border:1px solid red ;
+     border:1px solid transparent ;
+
+     &:hover{
+      border:1px solid #fff ;
+      border-radius: 5px;
+     }
 `
 
 const Logo = styled.div`

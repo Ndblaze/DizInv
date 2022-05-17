@@ -91,7 +91,7 @@ const TeacherHome = () => {
         }
         if (res.data.status === "FAILED") {
         }
-      })
+      })  
       .catch((err) => {
         console.log(err);
       });

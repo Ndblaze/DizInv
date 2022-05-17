@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Search from "../../components/Search";
+import { Link } from "react-router-dom";
 
 //react icons
 import { MdNotificationsActive } from "react-icons/md";
@@ -10,19 +11,19 @@ const Nav = () => {
   const [query, setQuery] = useState("");
 
   //console.log(query);
-  
+
   return (
     <Wrapper>
       <Content>
         <SearchContainer>
-          <Search 
+          <Search
             onChange={(e) => {
               setQuery(e.target.value);
             }}
           />
         </SearchContainer>
         <Notification />
-        <Profile>
+        <Profile to={"/admin/profile"}>
           <ProfileLogo Text="B" Name="Blaze" />
         </Profile>
       </Content>
@@ -58,4 +59,6 @@ const Notification = styled(MdNotificationsActive)`
   margin-left: 50px;
 `;
 
-const Profile = styled.div``;
+const Profile = styled(Link)`
+  text-decoration: none;
+`;

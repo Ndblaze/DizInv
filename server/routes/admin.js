@@ -155,22 +155,22 @@ router.post("/add-new-student", (req, res) => {
     numbers: false,
     symbols: false,
   });
-  const ins = generator.generate({
-    length: 10,
-    lowercase: false,
-    uppercase: true,
-    numbers: true,
-    symbols: false,
-  });
+  // const ins = generator.generate({
+  //   length: 10,
+  //   lowercase: false,
+  //   uppercase: true,
+  //   numbers: true,
+  //   symbols: false,
+  // });
 
   let addStudentUserSQL = `INSERT INTO dizinv.user 
                       (id_user, firstName, lastName, email, address, city, password, phone, type) 
-                      VALUES ('${ins}', '${firstName}', '${lastName}', '${email}', '${address}', 
+                      VALUES ('${inscription}', '${firstName}', '${lastName}', '${email}', '${address}', 
                       '${city}', '${password}', '${phone}', 'student');`;
 
   let addStudentTableSQL = `INSERT INTO dizinv.students 
                           (inscription, department, level, student_group, section_speciality) 
-                          VALUES ('${ins}', '${department}', '${level}', '${group}', '${section_speciality}');
+                          VALUES ('${inscription}', '${department}', '${level}', '${group}', '${section_speciality}');
   `;
 
   if (values) {
