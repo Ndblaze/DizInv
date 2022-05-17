@@ -120,7 +120,7 @@ const StudentListingSpeciality = () => {
     }
     if (group !== "Group") {
       newData = newData.filter((item) => {
-        return item.group === group;
+        return item.student_group === group;
       });
     }
     setFiltered(newData);

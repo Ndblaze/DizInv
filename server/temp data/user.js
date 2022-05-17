@@ -1,14 +1,14 @@
 const users = [
   {
     email: "ndubuisieze60@gmail.com",
-    password: "Blaze3000",
+    password: "Blaze3000", 
     type: "admin",
   },
   {
     email: "malak.menia@univ-constantine2.dz",
     password: "Malak3000",
     type: "admin",
-  },
+  }, 
   {
     email: "slimane.moussaoubrahim@univ-constantine2.dz",
     password: "Slimane3000",

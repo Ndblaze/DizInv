@@ -82,7 +82,7 @@ const GeneralProfile = ({ user, profileType, firstLetter, style }) => {
                       <Data>Speciality/Group:</Data>
                     )}
                     <Value>
-                      {user.section_speciality} / {user.group}
+                      {user.section_speciality} / {user.student_group}
                     </Value>{" "}
                   </DataContainer>
                 </AcademicDetail>

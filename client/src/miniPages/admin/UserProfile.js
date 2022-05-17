@@ -37,15 +37,17 @@ const UserProfile = () => {
         `http://localhost:5000/api/admin/user-profile/${params.handler}/${params.id}`
       )
       .then((res) => {
-        if (res.data.length > 0) {
-          // console.log(res.data[0]);
-          setUser(res.data[0]);
-          setFirstLetter(res.data[0].firstName.slice(0, 1).toUpperCase());
+        if (res.data.status === "SUCCESS") {
+           console.log(res.data.result[0]);
+          setUser(res.data.result[0]);
+          setFirstLetter(
+            res.data.result[0].firstName.slice(0, 1).toUpperCase()
+          );
         }
-        if (res.data[0].hasOwnProperty("inscription")) {
+        if (res.data.result[0].type === "student") {
           setProfileType("student");
         }
-        if (res.data[0].hasOwnProperty("status")) {
+        if (res.data.result[0].type === "teacher") {
           setProfileType("teacher");
         }
         setLoading(false);

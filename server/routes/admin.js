@@ -7,47 +7,53 @@ let { modules } = require("../temp data/modules");
 
 const router = express.Router();
 
+//database connection
+const db = require("../ConnectDB");
+
+//password generator
+const generator = require("generate-password");
+
 router.get("/dashboard", (req, res) => {
   res.send(users);
 });
 
+//getting a list of students
 router.get("/students/:id", (req, res) => {
-  const parameter = req.params.id;
+  let parameter = req.params.id;
 
   if (parameter === "licence1") {
-    res.status(200).send(
-      students.filter((item) => {
-        return item.level === "Licence 1";
-      })
-    );
+    parameter = "Licence 1";
+  } else if (parameter === "licence2") {
+    parameter = "Licence 2";
+  } else if (parameter === "licence3") {
+    parameter = "Licence 3";
+  } else if (parameter === "master1") {
+    parameter = "Master 1";
+  } else if (parameter === "master2") {
+    parameter = "Master 2";
+  } else {
   }
-  if (parameter === "licence2") {
-    res.status(200).send(
-      students.filter((item) => {
-        return item.level === "Licence 2";
-      })
-    );
-  }
-  if (parameter === "licence3") {
-    res.status(200).send(
-      students.filter((item) => {
-        return item.level === "Licence 3";
-      })
-    );
-  }
-  if (parameter === "master1") {
-    res.status(200).send(
-      students.filter((item) => {
-        return item.level === "Master 1";
-      })
-    );
-  }
-  if (parameter === "master2") {
-    res.status(200).send(
-      students.filter((item) => {
-        return item.level === "Master 2";
-      })
-    );
+
+  let getUserSQL = ` SELECT * FROM dizinv.user, dizinv.students 
+                    where user.id_user = students.inscription
+                    and level = '${parameter}' ;`;
+
+  if (parameter) {
+    db.query(getUserSQL, (err, result) => {
+      if (err) {
+        res.send({ status: "FAILED" });
+        return;
+      }
+      if (result) {
+        let response = result.map((data) => {
+          return { ...data, password: "****" };
+        });
+        res.status(200).send({ status: "SUCCESS", result: response });
+      }
+    });
+  } else {
+    res.send({ status: "FAILED" });
+    return;
   }
 });
 
@@ -56,12 +62,24 @@ router.get("/user-profile/:handler/:id", (req, res) => {
   const { handler, id } = req.params;
   // console.log(handler, id);
 
+  let userStudentSQL = ` SELECT * FROM dizinv.user, dizinv.students
+                  where user.id_user = students.inscription
+                  and inscription = '${id}'
+                  ;`;
+
   if (handler === "student") {
-    res.status(200).send(
-      students.filter((item) => {
-        return item.inscription === id;
-      })
-    );
+    db.query(userStudentSQL, (err, result) => {
+      if (err) {
+        res.send({ status: "FAILED" });
+        return;
+      }
+      if (result) {
+        let response = result.map((data) => {
+          return { ...data, password: "****" };
+        });
+        res.status(200).send({ status: "SUCCESS", result: response });
+      }
+    });
   }
   if (handler === "teacher") {
     res.status(200).send(
@@ -122,21 +140,70 @@ router.delete("/delete/:handler/:id", (req, res) => {
   }
 });
 
+//rout to add a new student
 router.post("/add-new-student", (req, res) => {
   const { values } = req.body;
-  //  console.log(values);
+  // console.log(values);
+
+  const { firstName, lastName, email, phone, address, city } = values;
+  const { level, inscription, section_speciality, department, group } = values;
+
+  const password = generator.generate({
+    length: 10,
+    lowercase: true,
+    uppercase: false,
+    numbers: false,
+    symbols: false,
+  });
+  const ins = generator.generate({
+    length: 10,
+    lowercase: false,
+    uppercase: true,
+    numbers: true,
+    symbols: false,
+  });
+
+  let addStudentUserSQL = `INSERT INTO dizinv.user 
+                      (id_user, firstName, lastName, email, address, city, password, phone, type) 
+                      VALUES ('${ins}', '${firstName}', '${lastName}', '${email}', '${address}', 
+                      '${city}', '${password}', '${phone}', 'student');`;
+
+  let addStudentTableSQL = `INSERT INTO dizinv.students 
+                          (inscription, department, level, student_group, section_speciality) 
+                          VALUES ('${ins}', '${department}', '${level}', '${group}', '${section_speciality}');
+  `;
+
   if (values) {
-    students.push(values);
-    res.status(200).send({ status: "SUCCESS" });
+    db.query(addStudentUserSQL, (err, result) => {
+      if (err) {
+        res.send({ status: "FAILED" });
+        return;
+      }
+      if (result) {
+        db.query(addStudentTableSQL, (err, result) => {
+          if (err) {
+            res.send({
+              status: "FAILED",
+              message: "could not add to student table",
+            });
+            return;
+          }
+          if (result) {
+            res.status(200).send({ status: "SUCCESS" });
+            return;
+          }
+        });
+      }
+    });
+  } else {
+    //if it reacheses here
+    res.send({ status: "FAILED" });
     return;
   }
-
-  res.send({ status: "FAILED" });
-  return;
 });
 
 router.get("/schedule/:level", (req, res) => {
-  const { level } = req.params
+  const { level } = req.params;
   if (level === "Licence 1") {
     res.send(schedule.licence1);
   }

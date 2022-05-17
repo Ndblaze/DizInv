@@ -20,7 +20,6 @@ const AddNewFormStudentSection = ({
   update,
   addedSuccecfully,
 }) => {
-
   //geting the value of the url parameter
   const { id } = useParams();
 
@@ -33,13 +32,6 @@ const AddNewFormStudentSection = ({
       .min(3, "field must be more than 3 characters")
       .required("field is required"),
     email: Yup.string().email("enter correct email").required("email required"),
-    password: Yup.string()
-      .min(6, "password must be at least 6 characters")
-      .required("field is required")
-      .matches(
-        /^(?=.*[a-zA-Z])/,
-        "must contain one Uppercase, One Lowwecase, one Number and special character."
-      ),
     phone: Yup.string("numbers only")
       .required("field is required")
       .min(10, "must be 10 numbers")
@@ -68,7 +60,6 @@ const AddNewFormStudentSection = ({
     phone: "",
     address: "",
     city: "",
-    password: "",
     level: "",
     inscription: "",
     section_speciality: "",
@@ -106,7 +97,7 @@ const AddNewFormStudentSection = ({
       </Hero>
       <Content>
         <Formik
-          initialValues={initialValues} 
+          initialValues={initialValues}
           validationSchema={validation}
           onSubmit={(values) => addNewUser(values)}
         >
@@ -152,14 +143,17 @@ const AddNewFormStudentSection = ({
                 </Shared>
                 <Shared>
                   <InputShared>
-                    <Label>password *</Label>
-                    <TextField type="password" name="password" />
-                  </InputShared>
-                  <InputShared>
                     <Label>Department *</Label>
                     <TextFieldOptions
                       options={formField[id].departmentOptions}
                       name="department"
+                    />
+                  </InputShared>
+                  <InputShared>
+                    <Label>Level *</Label>
+                    <TextFieldOptions
+                      options={formField[id].levelOption}
+                      name="level"
                     />
                   </InputShared>
                 </Shared>
@@ -170,27 +164,20 @@ const AddNewFormStudentSection = ({
                   </Input>
                 </NonShared>
                 <Shared>
-                  <InputShared3>
-                    <Label>Level *</Label>
-                    <TextFieldOptions
-                      options={formField[id].levelOption}
-                      name="level"
-                    />
-                  </InputShared3>
-                  <InputShared3>
+                  <InputShared>
                     <Label>Section / Speciality *</Label>
                     <TextFieldOptions
                       options={formField[id].section_specialityOption}
                       name="section_speciality"
                     />
-                  </InputShared3>
-                  <InputShared3>
+                  </InputShared>
+                  <InputShared>
                     <Label>Group *</Label>
                     <TextFieldOptionsGroup
                       formikSection={formik.values.section_speciality}
                       name="group"
                     />
-                  </InputShared3>
+                  </InputShared>
                 </Shared>
                 <ButtonContainer>
                   <Save type="submit">Add</Save>
@@ -310,21 +297,21 @@ const InputShared = styled.div`
   }
 `;
 
-const InputShared3 = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 32%;
+// const InputShared3 = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   width: 32%;
 
-  & > input {
-    width: 96%;
-    border-radius: 3px;
-    padding-left: 10px;
-    outline: none;
-    height: 30px;
-    border: 1px solid #adb1c0;
-    font-size: 14px;
-  }
-`;
+//   & > input {
+//     width: 96%;
+//     border-radius: 3px;
+//     padding-left: 10px;
+//     outline: none;
+//     height: 30px;
+//     border: 1px solid #adb1c0;
+//     font-size: 14px;
+//   }
+// `;
 
 const Label = styled.span`
   color: #777b86;

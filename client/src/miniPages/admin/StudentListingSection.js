@@ -73,9 +73,13 @@ const StudentListingSection = () => {
     await axios
       .get(`http://localhost:5000/api/admin/students/${params.id}`)
       .then((res) => {
-        if (res.data.length > 0) {
-          setAllList(res.data);
-          setFiltered(res.data);
+        // console.log(res.data)
+        if (res.data.status === "SUCCESS") {
+          setAllList(res.data.result);
+          setFiltered(res.data.result);
+        }
+        if (res.data.status === "FAILED") {
+          console.log(res.data.message);
         }
       })
       .catch((err) => {
@@ -101,7 +105,7 @@ const StudentListingSection = () => {
     }
     if (group !== "Group") {
       newData = newData.filter((item) => {
-        return item.group === group;
+        return item.student_group === group;
       });
     }
     setFiltered(newData);
@@ -120,11 +124,11 @@ const StudentListingSection = () => {
           Icon={IconChange}
           onClick={() => setModalIsOpen(true)}
         />
-        <List>  
+        <List>
           <ListNav
             Students
             level="section"
-            section={section} 
+            section={section}
             setSection={setSection}
             setGroup={setGroup}
             group={group}
@@ -137,7 +141,7 @@ const StudentListingSection = () => {
             data={filtered}
             DeleteUser={DeleteUser}
             updateUI={getStudents}
-          /> 
+          />
         </List>
         <NewUserModal
           isOpen={modalIsOpen}
