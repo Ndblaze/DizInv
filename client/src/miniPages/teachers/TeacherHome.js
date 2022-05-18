@@ -86,7 +86,7 @@ const TeacherHome = () => {
           sessionStorage.setItem("module", module);
           sessionStorage.setItem("status", status);
           sessionStorage.setItem("groups", groups);
-          sessionStorage.setItem("level", level);
+          sessionStorage.setItem("level", level); 
           sessionStorage.setItem("sceance", sceance);
         }
         if (res.data.status === "FAILED") {

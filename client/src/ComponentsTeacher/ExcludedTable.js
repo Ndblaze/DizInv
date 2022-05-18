@@ -29,8 +29,10 @@ const ExcludedTable = ({ listExcluded }) => {
                 <>
                   <TrBody key={index} id={`${index}`}>
                     <NumberIDBody>{index}</NumberIDBody>
-                    <NameBody>{item.firstName} {item.lastName}</NameBody>
-                    <GroupBody>{item.group}</GroupBody>
+                    <NameBody>
+                      {item.firstName} {item.lastName}
+                    </NameBody>
+                    <GroupBody>{item.student_group}</GroupBody>
                     <ActionBody>
                       {!item.excluded ? (
                         <IconContainer
@@ -73,14 +75,21 @@ const ExcludedTable = ({ listExcluded }) => {
                     }}
                   >
                     <div>
-                      <MoreDetailesHeader>Detailes: </MoreDetailesHeader>
+                      <MoreDetailesHeader>
+                        Detailes:-{" "}
+                        <span>
+                          complete assesment of both TP and TD absence{" "}
+                        </span>{" "}
+                      </MoreDetailesHeader>
                       <MoreDetailesDiscription>
-                        This student missed class on :
-                        {item.dateMissed.map((date) => (
+                        Sessions Missed (TD, TP) :-
+                        {item.dates.split(",").map((date) => (
                           <span>
                             {""} {date} {" ,"}
                           </span>
                         ))}
+                        <br />
+                        module :- {item.moduleName}
                       </MoreDetailesDiscription>
                     </div>
                   </MoreDetailes>
@@ -285,10 +294,20 @@ const ArrowDown = styled(BiChevronDown)``;
 
 const MoreDetailesHeader = styled.h2`
   font-style: italic;
+  margin-bottom: 8px;
   font-size: 14px;
   color: #ff6868;
+
+  & > span {
+    font-size: 12px;
+    color: #777b86;
+  }
 `;
 const MoreDetailesDiscription = styled.h2`
   font-style: italic;
   font-size: 12px;
+
+  & > span {
+    color: #ff6868;
+  }
 `;

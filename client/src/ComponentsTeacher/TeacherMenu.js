@@ -55,7 +55,7 @@ const TeacherMenu = () => {
               changeActiveIcon("manage presence");
             }}
           />
-          <MenuLinkIcon
+          <MenuLinkIcon 
             Name="Excluded students"
             path="/teacher/excluded-students"
             Icon={HiMinusCircle}
@@ -74,7 +74,7 @@ const TeacherMenu = () => {
             }}
           /> */}
           <LogoutDivider />
-          <MenuLinkIcon
+          <MenuLinkIcon  
             Name="Logout"
             path="/login"
             Icon={HiOutlineLogout}

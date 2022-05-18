@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import axios from "axios";
+//import axios from "axios";
 import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import ExcludedListTeacher from "../../ComponentsTeacher/ExcludedListTeacher";
@@ -22,7 +22,7 @@ const TeacherExcludedStudents = () => {
     </Wrapper>
   );
 };
-
+  
 export default TeacherExcludedStudents;
 
 const Wrapper = styled.div`

@@ -254,4 +254,43 @@ router.get("/delete-session/:id", (req, res) => {
   });
 });
 
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// working on the list of excluded students here
+
+router.get("/excluded-students/:module/:group", (req, res) => {
+  const { module, group } = req.params;
+  //console.log(module, group);
+
+  //converting the groups into an array
+  const queryGroups = group.split(",");
+  //console.log(queryGroups);
+
+  let excludedSQL = `select student_group, moduleName, inscription_no, department, level, group_concat(date) dates, firstName, lastName 
+                     from dizinv.sessions, dizinv.absence, dizinv.user
+                     where sessions.id_session = absence.id_session
+                     And user.id_user = absence.inscription_no
+                     and sessions.moduleName = '${module}'
+                     and sessions.student_group in ('${queryGroups[0]}', '${queryGroups[1]}', '${queryGroups[2]}', '${queryGroups[3]}')
+                     group by inscription_no 
+                     having count(*) >= 3 `;
+
+  db.query(excludedSQL, (err, result) => {
+    if (err) {
+      res.send({ status: "FAILED", message: err.sqlMessage });
+    }
+    if (result) {
+      const results = result.map((data) => {
+       // console.log(data);
+         return { ...data};
+      });
+     // console.log(results);
+      res.send({ status: "SUCCESS", results: results });
+      return;
+    } else {
+      res.send({ status: "SUCCESS", results: result });
+      return;
+    }
+  });
+});
+
 module.exports = router;

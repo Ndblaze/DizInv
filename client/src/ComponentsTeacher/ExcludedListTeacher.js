@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-//import axios from "axios";
+import axios from "axios";
 import ListExcludedNav from "./ListExcludedNav";
 import ExcludedTable from "./ExcludedTable";
 
@@ -10,34 +10,33 @@ const ExcludedListTeacher = () => {
   const [allList, setAllList] = useState([]);
   const [filtered, setFiltered] = useState([]);
 
-  const list = [
-    {
-      firstName: "Ndubuisi",
-      lastName: "James Eze",
-      group: "G1",
-      excluded: true,
-      dateMissed: ["11/04/2022", "17/11/20202", "11/08/2022"],
-    },
-    {
-      firstName: "Slimane",
-      lastName: "Ibrahim",
-      group: "G3",
-      excluded: true,
-      dateMissed: ["12/04/2022", "15/11/20202", "21/08/2022"],
-    },
-    {
-      firstName: "Malak",
-      lastName: "Meina ",
-      group: "G2",
-      excluded: false,
-      dateMissed: ["01/04/2022", "02/11/20202", "23/08/2022"],
-    },
-  ];
-
   useEffect(() => {
-    setAllList(list);
-    setFiltered(list);
+    getExcludedStudents();
   }, []);
+
+  //get all date listing
+  const getExcludedStudents = async () => {
+    await axios
+      .get(
+        `http://localhost:5000/api/managePresence/excluded-students/${sessionStorage.getItem(
+          "module"
+        )}/${sessionStorage.getItem("groups")}`
+      )
+      .then((res) => {
+       // console.log(res.data.results)
+        if (res.data.status === "SUCCESS") {
+          setAllList(res.data.results);
+          setFiltered(res.data.results);
+        }
+        if (res.data.status === "FAILED") {
+          //this error message should be prompted to show in the toast
+          console.log(res.data.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   useEffect(() => {
     if (query !== "") {
@@ -48,7 +47,7 @@ const ExcludedListTeacher = () => {
         );
       });
       setFiltered(newData);
-    }else{
+    } else {
       setFiltered(allList);
     }
   }, [query, allList]);

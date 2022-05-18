@@ -12,9 +12,15 @@ const ChelfDashBoard = () => {
       )
       .then((res) => {
         if (res.data.status === "SUCCESS") {
-          let { department } = res.data.data;
-          const data = JSON.stringify(res.data.data);
-          sessionStorage.setItem("userData", data);
+          let { department, module, status, groups, level, sceance } =
+            res.data.data;
+
+          sessionStorage.setItem("department", department);
+          sessionStorage.setItem("module", module);
+          sessionStorage.setItem("status", status);
+          sessionStorage.setItem("groups", groups);
+          sessionStorage.setItem("level", level); 
+          sessionStorage.setItem("sceance", sceance);
           sessionStorage.setItem("department", department);
         }
         if (res.data.status === "FAILED") {
