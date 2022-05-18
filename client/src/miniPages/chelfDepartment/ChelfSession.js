@@ -19,14 +19,14 @@ const successMessage = (message) => {
   toast.success(message, {
     style: {
       background: "#25ab42",
-      color: "#fff",
+      color: "#fff", 
     },
   });
 };
 
 const ChelfSession = () => {
   //chelf department information
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData] = useState();
 
   const [viewSchedule, setViewSchedule] = useState("Licence 1");
 
@@ -34,12 +34,12 @@ const ChelfSession = () => {
   const [scheduleData, setScheduleData] = useState({});
 
   useEffect(() => {
-    setUserData(JSON.parse(sessionStorage.getItem("userData")));
+    setUserData(sessionStorage.getItem("department"));
     getSchedulesFromDB();
   }, [viewSchedule]);
-
+ 
   const getSchedulesFromDB = async () => {
-    await axios
+    await axios 
       .get(`http://localhost:5000/api/admin/schedule/${viewSchedule}`)
       .then((res) => {
         setScheduleData(res.data);
@@ -84,7 +84,7 @@ const ChelfSession = () => {
               value={viewSchedule}
               onChange={(e) => setViewSchedule(e.target.value)}
             >
-              {userData.department === "MI" ? (
+              {userData === "MI" ? (
                 <>
                   <option value={"Licence 1"}>Licence 1</option>
                   <option value={"Licence 2"}>Licence 2</option>

@@ -265,20 +265,21 @@ router.get("/excluded-students/:module/:group", (req, res) => {
   const queryGroups = group.split(",");
   //console.log(queryGroups);
 
-  let excludedSQL = `select student_group, moduleName, inscription_no, department, level, group_concat(date) dates, firstName, lastName 
+  let excludedSQL = `select student_group, moduleName, inscription_no, id_user, department, group_concat( concat_ws(' / ', sceance, date) separator ' , ') dates, level, firstName, lastName 
                      from dizinv.sessions, dizinv.absence, dizinv.user
                      where sessions.id_session = absence.id_session
                      And user.id_user = absence.inscription_no
                      and sessions.moduleName = '${module}'
                      and sessions.student_group in ('${queryGroups[0]}', '${queryGroups[1]}', '${queryGroups[2]}', '${queryGroups[3]}')
-                     group by inscription_no 
-                     having count(*) >= 3 `;
+                     And absence.isJustified IS NULL OR absence.isJustified = ''
+                     group by inscription_no
+                     having count(*) >= 3 ;`
 
   db.query(excludedSQL, (err, result) => {
     if (err) {
       res.send({ status: "FAILED", message: err.sqlMessage });
     }
-    if (result) {
+    if (result) { 
       const results = result.map((data) => {
        // console.log(data);
          return { ...data};

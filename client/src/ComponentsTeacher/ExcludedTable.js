@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 //import axios from "axios";
+import randomcolor from "randomcolor";
 
-import { CgClose } from "react-icons/cg";
 import { BsCheck2All } from "react-icons/bs";
 import { BiChevronDown } from "react-icons/bi";
 
@@ -34,27 +34,15 @@ const ExcludedTable = ({ listExcluded }) => {
                     </NameBody>
                     <GroupBody>{item.student_group}</GroupBody>
                     <ActionBody>
-                      {!item.excluded ? (
-                        <IconContainer
-                          // onClick={() => registerPresence(item)}
-                          style={{
-                            color: "#ff4a4a",
-                            backgroundColor: "#ffe7e7",
-                          }}
-                        >
-                          <CgClose />
-                        </IconContainer>
-                      ) : (
-                        <IconContainer
-                          // onClick={() => registerPresence(item)}
-                          style={{
-                            color: "#00cf00",
-                            backgroundColor: "#e2ffe2",
-                          }}
-                        >
-                          <BsCheck2All />
-                        </IconContainer>
-                      )}
+                      <IconContainer
+                        // onClick={() => registerPresence(item)}
+                        style={{
+                          color: "#00cf00",
+                          backgroundColor: "#e2ffe2",
+                        }}
+                      >
+                        <BsCheck2All />
+                      </IconContainer>
                     </ActionBody>
                     <DetaileBody>
                       <ArrowDown
@@ -83,9 +71,17 @@ const ExcludedTable = ({ listExcluded }) => {
                       </MoreDetailesHeader>
                       <MoreDetailesDiscription>
                         Sessions Missed (TD, TP) :-
-                        {item.dates.split(",").map((date) => (
-                          <span>
-                            {""} {date} {" ,"}
+                        {item.dates.split(",").map((date, index) => (
+                          <span
+                            style={{
+                              color: randomcolor({
+                                luminosity: "dark",
+                              }),
+                            }}
+                          >
+                            {" "}
+                            {`(${index + 1})`}
+                            {date} {" , "}{" "}
                           </span>
                         ))}
                         <br />
@@ -259,7 +255,7 @@ const IconContainer = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 5px;
-  cursor: pointer;
+  //cursor: pointer;
   width: 70px;
   height: 30px;
   font-size: 20px;
