@@ -2,6 +2,8 @@ const express = require("express");
 
 const router = express.Router();
 
+let { modules } = require("../temp data/modules");
+
 //database connection
 const db = require("../ConnectDB");
 
@@ -257,6 +259,7 @@ router.get("/delete-session/:id", (req, res) => {
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // working on the list of excluded students here
 
+//finding excluded student for the teacher of a module
 router.get("/excluded-students/:module/:group", (req, res) => {
   const { module, group } = req.params;
   //console.log(module, group);
@@ -273,18 +276,18 @@ router.get("/excluded-students/:module/:group", (req, res) => {
                      and sessions.student_group in ('${queryGroups[0]}', '${queryGroups[1]}', '${queryGroups[2]}', '${queryGroups[3]}')
                      And absence.isJustified IS NULL OR absence.isJustified = ''
                      group by inscription_no
-                     having count(*) >= 3 ;`
+                     having count(*) >= 3 ;`;
 
   db.query(excludedSQL, (err, result) => {
     if (err) {
       res.send({ status: "FAILED", message: err.sqlMessage });
     }
-    if (result) { 
+    if (result) {
       const results = result.map((data) => {
-       // console.log(data);
-         return { ...data};
+        // console.log(data);
+        return { ...data };
       });
-     // console.log(results);
+      // console.log(results);
       res.send({ status: "SUCCESS", results: results });
       return;
     } else {
@@ -292,6 +295,60 @@ router.get("/excluded-students/:module/:group", (req, res) => {
       return;
     }
   });
+});
+
+//finding excluded student for the chelf department
+router.get("/chelf-excluded/:module", (req, res) => {
+  const { module } = req.params; 
+  console.log(module);
+
+  let excludedSQL = `select student_group, moduleName, inscription_no, id_user, department, group_concat( concat_ws(' / ', sceance, date) separator ' , ') dates, level, firstName, lastName 
+                     from dizinv.sessions, dizinv.absence, dizinv.user
+                     where sessions.id_session = absence.id_session
+                     And user.id_user = absence.inscription_no
+                     and sessions.moduleName = '${module}'
+                     And absence.isJustified IS NULL OR absence.isJustified = ''
+                     group by inscription_no
+                     having count(*) >= 3 ;`;
+
+  db.query(excludedSQL, (err, result) => {
+    if (err) {
+      res.send({ status: "FAILED", message: err.sqlMessage });
+    }
+    if (result) {
+      const results = result.map((data) => {
+         //console.log(data);
+        return { ...data };
+      });
+      // console.log(results);
+      res.send({ status: "SUCCESS", results: results });
+      return;
+    } else {
+      res.send({ status: "SUCCESS", results: result });
+      return;
+    }
+  });
+});
+
+//get the list of module of a particular department
+router.get("/modules/:department", (req, res) => {
+  const { department } = req.params;
+
+  //console.log(department);
+
+  //filter the modules of MI department
+  const allDeptModule = modules.filter((module) => {
+    if (module.department === department) {
+      return module;
+    }
+  });
+
+  //set the data we want in this format
+  const result = allDeptModule.map((module) => {
+    return { value: module.name, label: module.name };
+  });
+  //console.log(result);
+  res.send({ status: "SUCCESS", results: result });
 });
 
 module.exports = router;

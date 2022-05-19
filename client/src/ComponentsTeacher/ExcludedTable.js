@@ -73,6 +73,7 @@ const ExcludedTable = ({ listExcluded }) => {
                         Sessions Missed (TD, TP) :-
                         {item.dates.split(",").map((date, index) => (
                           <span
+                            key={index}
                             style={{
                               color: randomcolor({
                                 luminosity: "dark",

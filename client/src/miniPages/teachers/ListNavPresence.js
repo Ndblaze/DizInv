@@ -116,7 +116,6 @@ const ListNavPresence = ({
   };
 
   const setNewDate = (date) => {
-    //setCurrentDate(date);
     setDateQuery(date.value);
   };
   console.log(currentDate);

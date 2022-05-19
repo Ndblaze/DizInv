@@ -9,7 +9,14 @@ const modules = [
     {
       id: 'c4jguii4',
       code: "SI",
-      name: "System Information",
+      name: "Networks Communucation",
+      department: "MI",
+      level: 'Licence 2'
+    },
+    {
+      id: 'nbuehvke',
+      code: "SI",
+      name: "System Machine",
       department: "MI",
       level: 'Licence 2'
     },

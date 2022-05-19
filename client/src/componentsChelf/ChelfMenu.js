@@ -5,6 +5,7 @@ import MenuLinkIcon from "../components/MenuLinkIcon";
 import { BiBarChartAlt } from "react-icons/bi";
 import { GiSandsOfTime } from "react-icons/gi";
 import { FcInspection } from "react-icons/fc";
+import { HiMinusCircle } from "react-icons/hi";
 
 const ChelfMenu = ({ active, changeActiveIcon }) => {
   return (
@@ -27,6 +28,15 @@ const ChelfMenu = ({ active, changeActiveIcon }) => {
         Active={active === "sessions" ? true : false}
         onClick={() => {
           changeActiveIcon("sessions");
+        }}
+      />
+      <MenuLinkIcon
+        Name="Excluded students"
+        path="/teacher/chelf/excluded-students"
+        Icon={HiMinusCircle}
+        Active={active === "excluded chelf students" ? true : false}
+        onClick={() => {
+          changeActiveIcon("excluded chelf students");
         }}
       />
       <MenuLinkIcon

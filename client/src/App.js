@@ -39,6 +39,7 @@ import StudentHome from "./miniPages/students/StudentHome";
 import StudentTimeTable from "./miniPages/students/StudentTimeTable";
 import StudentProfile from "./miniPages/students/StudentProfile";
 import TeacherExcludedStudents from "./miniPages/teachers/TeacherExcludedStudents";
+import ChelfExcluded from "./miniPages/chelfDepartment/ChelfExcluded";
 
 function App() {
   const [user, setUser] = useState({});
@@ -124,6 +125,7 @@ function App() {
               <Route exact path="chelf" element={<ChelfDepartment />}>
                 <Route exact path="dashboard" element={<ChelfDashBoard />} />
                 <Route exact path="sessions" element={<ChelfSession />} />
+                <Route exact path="excluded-students" element={<ChelfExcluded />} />
                 <Route
                   exact
                   path="justification"
