@@ -21,7 +21,7 @@ const users = [
   },
   {
     email: "zakarah.lakar@univ-constantine2.dz",
-    password: "Lakar3000",
+    password: "lakar@500",
     type: "teacher",
   },
   {

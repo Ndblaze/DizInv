@@ -24,29 +24,31 @@ const Login = () => {
     try {
       const res = await axios.post("http://localhost:5000/login", {
         email,
-        password,
+        password, 
       });
-      //console.log(res);
-      if (res.data.success) {
-        sessionStorage.setItem("email", res.data.email);
-        sessionStorage.setItem("type", res.data.type);
-        sessionStorage.setItem("success", res.data.success);
-
-        //try to put a more stable navigation
-        if (res.data.type === "admin") {
+      console.log(res);
+      if (res.data.status === "SUCCESS") {
+        const { email, type, firstName, id_user } = res.data.result[0];
+        sessionStorage.setItem("email", email);
+        sessionStorage.setItem("type", type);
+        sessionStorage.setItem("firstName", firstName);
+        sessionStorage.setItem("id_user", id_user);
+ 
+        //try to put a more stable navigation 
+        if (type === "admin") { 
           window.location.href = "http://localhost:3000/admin/dashboard";
-        } else if (res.data.type === "teacher") {
+        } else if (type === "teacher") {
           window.location.href = "http://localhost:3000/teacher/home";
-        } else if (res.data.type === "ChelfDepartment") {
+        } else if (type === "ChelfDepartment") {
           window.location.href =
             "http://localhost:3000/teacher/chelf/dashboard";
-        } else if (res.data.type === "student") {
+        } else if (type === "student") {
           window.location.href = "http://localhost:3000/student/home";
         } else {
           console.log(res);
         }
       }
-      if (!res.data.success) {
+      if (res.data.status === "FAILED") {
         errorMessage(res.data.message);
       }
     } catch (error) {

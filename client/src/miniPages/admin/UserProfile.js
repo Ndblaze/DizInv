@@ -62,7 +62,7 @@ const UserProfile = () => {
     <Wrapper>
       <Content>
         {loading && (
-          <HashLoader
+          <HashLoader 
             color={"#C278F8"}
             css={override}
             loading={loading}
@@ -86,6 +86,7 @@ const UserProfile = () => {
           user={user}
           firstLetter={firstLetter}
           profileType={profileType}
+          getStudents={getStudents} 
         />
       </Content>
     </Wrapper>

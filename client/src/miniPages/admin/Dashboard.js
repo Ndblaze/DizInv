@@ -6,7 +6,7 @@ import GeneralStatistics from "../../components/GeneralStatistics";
 import { BiBarChartAlt } from "react-icons/bi";
 
 //charts
-import PieChart from "../../components/PieChart";
+import PieChart from "../../components/PieChart";  
 import BarChart from "../../components/BarChart";
 import LineChart from "../../components/LineChart";
 

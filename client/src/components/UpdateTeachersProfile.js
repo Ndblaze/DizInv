@@ -1,26 +1,40 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import image from "../asserts/images/addForm.svg";
 import { Formik, Form } from "formik";
-import * as Yup from "yup";
 import TextField from "./TextField";
 import TextFieldOptions from "./TextFieldOptions";
-import { MdOutlineClose } from "react-icons/md";
-
-import { v4 as uuidv4 } from "uuid";
+import TextFieldOptionsGroup from "./TextFieldOptionsGroup";
+import * as Yup from "yup";
 import Select from "react-select";
 
-const AddNewFormTeacher = ({
-  setModalIsOpen,
-  addedFailed,
-  update,
-  addedSuccecfully,
-}) => {
+const UpdateTeachersProfile = ({ user, profileType, edit }) => {
   const [teacherGroups, setTeacherGroups] = useState([]);
   const [teacherModule, setTeacherModule] = useState();
   const [teacherSceanceType, setTeacherSceanceType] = useState([]);
   const [moduleListOptions, setModuleListOptions] = useState([]);
+
+  const customStyles = {
+    menuList: () => ({
+      height: 10,
+    }),
+    menu: (provided, state) => ({
+      ...provided,
+      height: "170px",
+      overflowY: "scroll",
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      fontSize: "13px",
+    }),
+  };
+
+  const SceanceStyles = {
+    option: (provided, state) => ({
+      ...provided,
+      fontSize: "10px",
+    }),
+  };
 
   //validation
   const validation = Yup.object({
@@ -46,46 +60,6 @@ const AddNewFormTeacher = ({
     level: Yup.string().required("this field is required"),
   });
 
-  //data from the add new modal
-  const initialValues = {
-    id: uuidv4(),
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    address: "",
-    city: "",
-    password: uuidv4(),
-    department: "",
-    module: "",
-    status: "",
-    groups: [],
-    level: "",
-    sceance: [],
-  };
-
-  const customStyles = {
-    menuList: () => ({
-      height: 10,
-    }),
-    menu: (provided, state) => ({
-      ...provided,
-      height: "170px",
-      overflowY: "scroll",
-    }),
-    option: (provided, state) => ({
-      ...provided,
-      fontSize: "13px",
-    }),
-  };
-
-  const SceanceStyles = {
-    option: (provided, state) => ({
-      ...provided,
-      fontSize: "10px",
-    }),
-  };
-
   const getModuleOptions = async () => {
     await axios
       .get(`http://localhost:5000/api/admin/modules/teacher-form-option`)
@@ -98,39 +72,6 @@ const AddNewFormTeacher = ({
       .catch((err) => {
         console.log(err.message);
       });
-  };
-
-  const AddTeacher = async (value) => {
-    const data = {
-      ...value,
-      groups: teacherGroups.map((e) => e.value),
-      sceance: teacherSceanceType.map((e) => e.value),
-      module: teacherModule,
-    };
-
-    await axios
-      .post("http://localhost:5000/api/admin/add-new-teacher", {
-        data,
-      })
-      .then((res) => {
-        if (res.data.status === "SUCCESS") {
-          // succes toast down to the main component
-          setModalIsOpen(false);
-          addedSuccecfully("Teacher was succefully added");
-          update();
-        }
-        if (res.data.status === "FAILED") {
-          setModalIsOpen(false);
-          addedFailed("Something went wrong, try again");
-        }
-      })
-      .catch((err) => {
-        setModalIsOpen(false);
-        console.log(err);
-        addedFailed("Something went wrong, try again");
-      });
-
-    console.log(data);
   };
 
   const groupOptions = [
@@ -202,30 +143,23 @@ const AddNewFormTeacher = ({
 
   return (
     <Wrapper>
-      <Hero>
-        <Img src={image} alt="add form image" />
-      </Hero>
-      <Content>
+      <Content style={{ opacity: edit && 0.3, pointerEvents: edit && "none" }}>
         <Formik
-          initialValues={initialValues}
+          enableReinitialize
+          initialValues={user}
           validationSchema={validation}
-          onSubmit={(values) => AddTeacher(values)}
+          onSubmit={(values) => console.log(values)}
         >
           {(formik) => (
             <div>
-              <Header>
-                Teacher Form
-                <CloseIcon onClick={setModalIsOpen} />
-              </Header>
-              <Form style={{ width: "95%" }}>
-                {console.log({ formik })}
+              <Form style={{ width: "100%" }}>
                 <Shared>
                   <InputShared>
-                    <Label>First name *</Label>
+                    <Label>first name</Label>
                     <TextField type="text" name="firstName" />
                   </InputShared>
                   <InputShared>
-                    <Label>Last name *</Label>
+                    <Label>Last name</Label>
                     <TextField type="text" name="lastName" />
                   </InputShared>
                 </Shared>
@@ -357,24 +291,25 @@ const AddNewFormTeacher = ({
   );
 };
 
-export default AddNewFormTeacher;
+export default UpdateTeachersProfile;
 
 const Wrapper = styled.div`
-  height: 100%;
+  width: 600px;
+  height: fit-content;
   background-color: #ffffff;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  //box-shadow: 0 4px 7px rgba(0, 0, 0, 0.05), 0 10px 10px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 4px 7px rgba(0, 0, 0, 0.05), 0 10px 10px rgba(0, 0, 0, 0.22);
+  border-radius: 20px;
 `;
 
 const Content = styled.div`
-  width: 60%;
+  padding: 20px 30px;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+
   & > div {
-    width: 95%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -382,64 +317,31 @@ const Content = styled.div`
   }
 `;
 
-const Hero = styled.div`
-  width: 40%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: #bb60fd;
-`;
-
-const Img = styled.img`
-  width: 150px;
-`;
-
-const Header = styled.div`
-  font-size: 22px;
-  font-weight: 700;
-  color: #c278f8;
-  border-bottom: 1px solid #f1f3f7;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-`;
-
-const CloseIcon = styled(MdOutlineClose)`
-  color: #0a0b0d;
-  font-weight: 700;
-  font-size: 25px;
-  margin-right: 10px;
-`;
-
 const Shared = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 95%;
+  width: 91%;
   margin-bottom: 10px;
 `;
 const NonShared = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 95%;
+  width: 90%;
   margin-bottom: 10px;
 `;
 
 const Input = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 97%;
 
   & > input {
     width: 100%;
-    border-radius: 3px;
+    border-radius: 10px;
     height: 30px;
-    padding-left: 5px;
+    padding-left: 10px;
     outline: none;
     font-size: 14px;
     border: 1px solid #adb1c0;
@@ -452,24 +354,8 @@ const InputShared = styled.div`
   width: 45%;
 
   & > input {
-    width: 100%;
-    border-radius: 3px;
-    padding-left: 5px;
-    outline: none;
-    height: 30px;
-    border: 1px solid #adb1c0;
-    font-size: 14px;
-  }
-`;
-
-const InputShared3 = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 32%;
-
-  & > input {
-    width: 96%;
-    border-radius: 3px;
+    width: 93%;
+    border-radius: 10px;
     padding-left: 10px;
     outline: none;
     height: 30px;
@@ -482,15 +368,15 @@ const Label = styled.span`
   color: #777b86;
   margin-left: 3px;
   margin-bottom: 3px;
-  font-size: 14px;
-  opacity: 0.7;
+  font-size: 12px;
+  opacity: 0.5;
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
   align-items: center;
   margin-top: 20px;
-  height: 50px;
+  height: 40px;
   width: 100%;
   border-top: 1px solid #f1f3f7;
 `;

@@ -101,7 +101,7 @@ const CreateNewSession = ({
 
   useEffect(() => {
     if (QRsrc === undefined) {
-      setLoading(true);
+      setLoading(true); 
     } else {
       setLoading(false);
     }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Search from "../../components/Search";
 import { Link } from "react-router-dom";
@@ -9,8 +9,13 @@ import ProfileLogo from "../../components/ProfileLogo";
 
 const Nav = () => {
   const [query, setQuery] = useState("");
+  const [firstName, setFirstName] = useState("");
 
   //console.log(query);
+
+  useEffect(() => {
+    setFirstName(sessionStorage.getItem("firstName"));
+  }, []);
 
   return (
     <Wrapper>
@@ -24,7 +29,10 @@ const Nav = () => {
         </SearchContainer>
         <Notification />
         <Profile to={"/admin/profile"}>
-          <ProfileLogo Text="B" Name="Blaze" />
+          <ProfileLogo
+            Text={firstName ? firstName.slice(0, 1) : ""}
+            Name={firstName ? firstName.slice(0, 7) + "..." : ""}
+          />
         </Profile>
       </Content>
     </Wrapper>

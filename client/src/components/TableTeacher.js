@@ -8,6 +8,7 @@ import View_Delete from "./View_Delete";
 import { TiUserDelete } from "react-icons/ti";
 
 const TableTeacher = ({ data, DeleteUser, updateUI }) => {
+  console.log(data)
   const [modalIsOpen, setModalIsOpen] = useState(false);
   //item to delete
   const [newDelete, setNewDelete] = useState();
@@ -76,7 +77,7 @@ const TableTeacher = ({ data, DeleteUser, updateUI }) => {
               <View>View</View>
               <Delete>Delete</Delete>
             </TrHead>
-          </TableHeader>
+          </TableHeader>  
           <TableBody>
             {data.map((item) => (
               <TrBody key={item.id}>

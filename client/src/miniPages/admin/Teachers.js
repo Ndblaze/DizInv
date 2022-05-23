@@ -56,15 +56,18 @@ const Teachers = () => {
     await axios
       .get(`http://localhost:5000/api/admin/get-teachers`)
       .then((res) => {
-        console.log(res.data);
-        if (res.data.length > 0) {
-          setAllList(res.data);
-          setFiltered(res.data);
+        //console.log(res.data);
+        if (res.data.status === 'SUCCESS') {
+          setAllList(res.data.result);
+          setFiltered(res.data.result);
+        }
+        if (res.data.status === 'FAILED') {
+          addedFailed(res.data.message)
         }
       })
       .catch((err) => {
         console.log(err.message);
-      });
+      }); 
   };
 
   useEffect(() => {

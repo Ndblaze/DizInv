@@ -17,9 +17,11 @@ router.get("/dashboard", (req, res) => {
   res.send(users);
 });
 
-//getting a list of students
-router.get("/students/:id", (req, res) => {
-  let parameter = req.params.id;
+//getting a list of students by there levels (DB)
+router.get("/students/:level", (req, res) => {
+  let parameter = req.params.level;
+
+  //console.log(parameter)
 
   if (parameter === "licence1") {
     parameter = "Licence 1";
@@ -36,7 +38,7 @@ router.get("/students/:id", (req, res) => {
 
   let getUserSQL = ` SELECT * FROM dizinv.user, dizinv.students 
                     where user.id_user = students.inscription
-                    and level = '${parameter}' ;`;
+                    and students.level = '${parameter}' ;`;
 
   if (parameter) {
     db.query(getUserSQL, (err, result) => {
@@ -57,7 +59,84 @@ router.get("/students/:id", (req, res) => {
   }
 });
 
-//getting user profile
+//geting the admin profile (DB)
+router.get("/profile/:email", (req, res) => {
+  const { email } = req.params;
+  // console.log(email);
+
+  let adminProfileSQL = ` SELECT * 
+                        FROM dizinv.user, dizinv.admin
+                        where email = 'admin@gmail.com'`;
+
+  if (email) {
+    db.query(adminProfileSQL, (err, result) => {
+      if (err) {
+        res.send({
+          status: "FAILED",
+          message: "something went wrong, Try again !!",
+        });
+        return;
+      }
+      if (result) {
+        // console.log({ ...result[0], password: "****" })
+        res.send({
+          status: "SUCCESS",
+          result: { ...result[0], password: "*********" },
+        });
+        return;
+      }
+    });
+  } else {
+    res.send({
+      status: "FAILED",
+      message: "something went wrong, Try again !!",
+    });
+    return;
+  }
+});
+
+//updating Admin profile (DB)
+router.post("/update-profile", (req, res) => {
+  const { values, id } = req.body;
+  const { firstName, lastName, email, address, city, phone } = values;
+  //   console.log(id, values);
+
+  let adminProfileSQL = `UPDATE dizinv.user 
+                        SET firstName = '${firstName}', lastName = '${lastName}', email = '${email}', 
+                        address = '${address}', city = '${city}',
+                        phone = '${phone}'
+                        WHERE (user.id_user = '${id}');`;
+
+  if (values) {
+    db.query(adminProfileSQL, (err, result) => {
+      if (err) {
+        console.log("kkkk");
+        res.send({
+          status: "FAILED",
+          message: "something went wrong, Try again !!",
+        });
+        console.log({
+          message: err.message,
+        });
+        return;
+      }
+      if (result) {
+        res.send({
+          status: "SUCCESS",
+        });
+        return;
+      }
+    });
+  } else {
+    res.send({
+      status: "FAILED",
+      message: "something went wrong, Try again !!",
+    });
+    return;
+  }
+});
+
+//getting user profile with theere id both teacher and students (DB)
 router.get("/user-profile/:handler/:id", (req, res) => {
   const { handler, id } = req.params;
   // console.log(handler, id);
@@ -65,6 +144,11 @@ router.get("/user-profile/:handler/:id", (req, res) => {
   let userStudentSQL = ` SELECT * FROM dizinv.user, dizinv.students
                   where user.id_user = students.inscription
                   and inscription = '${id}'
+                  ;`;
+
+  let userTeacherSQL = ` SELECT * FROM dizinv.user, dizinv.teacher
+                        where user.id_user = teacher.id_user
+                        and teacher.id_user = '${id}'
                   ;`;
 
   if (handler === "student") {
@@ -82,65 +166,149 @@ router.get("/user-profile/:handler/:id", (req, res) => {
     });
   }
   if (handler === "teacher") {
-    res.status(200).send(
-      teacher.filter((item) => {
-        return item.id === id;
-      })
-    );
+    db.query(userTeacherSQL, (err, result) => {
+      if (err) {
+        res.send({ status: "FAILED" });
+        return;
+      }
+      if (result) {
+        let response = result.map((data) => {
+          const obj = {
+            ...data,
+            password: "********",
+            id: data.id_user,
+            groups: JSON.parse(data.groups),
+            sceance: JSON.parse(data.sceance),
+          };
+          // console.log(obj);
+          return obj;
+        });
+        res.status(200).send({ status: "SUCCESS", result: response });
+      }
+    });
   }
 });
 
-// router.delete("/delete/teacher/:id", (req, res) => {
-//   const parameter = req.params.id;
-//   console.log(parameter);
-// })
+//updating Student profile by admin (DB)
+router.post("/update-profile/student", (req, res) => {
+  const { values, id } = req.body;
+  const { firstName, lastName, email, address, city, phone } = values;
+  // console.log(id, values);
 
+  let adminProfileSQL = `UPDATE dizinv.user 
+                        SET firstName = '${firstName}', lastName = '${lastName}', email = '${email}', 
+                        address = '${address}', city = '${city}',
+                        phone = '${phone}'
+                        WHERE (user.id_user = '${id}');`;
+
+  if (values) {
+    db.query(adminProfileSQL, (err, result) => {
+      if (err) {
+        console.log("kkkk");
+        res.send({
+          status: "FAILED",
+          message: "something went wrong, Try again !!",
+        });
+        // console.log({
+        //   message: err.message,
+        // });
+        return;
+      }
+      if (result) {
+        res.send({
+          status: "SUCCESS",
+        });
+        return;
+      }
+    });
+  } else {
+    res.send({
+      status: "FAILED",
+      message: "something went wrong, Try again !!",
+    });
+    return;
+  }
+});
+
+//deleting a user both teacher and students (DB)
 router.delete("/delete/:handler/:id", (req, res) => {
   const { handler, id } = req.params;
   console.log(handler, id);
 
-  //delet student
+  //delete students fromt he students table
+  let deleteStudentSQL1 = `DELETE FROM dizinv.students WHERE (students.inscription = '${id}');`;
+  //delete teacher from the tecaheers table
+  let deleteTeacherSQL1 = `DELETE FROM dizinv.teacher WHERE (teacher.id_user = '${id}');`;
+  // deletes both teacher and student in the user table
+  let deleteUserSQL = `DELETE FROM dizinv.user WHERE (user.id_user = '${id}');`;
+
+  // deleting students
   if (handler === "student") {
-    const student = students.filter((item) => {
-      if (item.inscription === id) {
-        return item;
+    //deleting from student table first before the user table because the id is a foregine key to the user table
+    db.query(deleteStudentSQL1, (err, result) => { 
+      if (err) {
+        res.send({
+          status: "FAILED",
+          message: "something went wrong, Try again!!",
+        });
+        return;
+      }
+      if (result) {
+        //now deleting from the user table after succefully deleting from student table
+        db.query(deleteUserSQL, (err, result) => {
+          if (err) {
+            res.send({
+              status: "FAILED",
+              message: "something went wrong, Try again!!",
+            });
+            return;
+          }
+          if (result) {
+            res.send({
+              status: "SUCCESS",
+              message: "User deleted succefully",
+            });
+            return;
+          }
+        });
       }
     });
-
-    //check student if exists
-    if (student.length <= 0) {
-      res.send({ status: "NON" });
-      return;
-    }
-
-    //yes there exists then we delete it here
-    students = students.filter((item) => item.inscription !== id);
-    res.status(200).send({ status: "SUCCESS" });
-    return;
   }
 
-  //delet teacher
+  //deleting teacher
   if (handler === "teacher") {
-    const Teachers = teacher.filter((item) => {
-      if (item.id === id) {
-        return item;
+    //deleting from teacher table first before the user table because the id is a foregine key to the user table
+    db.query(deleteTeacherSQL1, (err, result) => {
+      if (err) {
+        res.send({
+          status: "FAILED",
+          message: "something went wrong, Try again!!",
+        });
+        return;
+      }
+      if (result) {
+        //now deleting from the user table after succefully deleting from student table
+        db.query(deleteUserSQL, (err, result) => {
+          if (err) {
+            res.send({
+              status: "FAILED",
+              message: "something went wrong, Try again!!",
+            });
+            return;
+          }
+          if (result) {
+            res.send({
+              status: "SUCCESS",
+              message: "User deleted succefully",
+            });
+          }
+        });
       }
     });
-
-    //check student if exists
-    if (Teachers.length <= 0) {
-      res.send({ status: "NON" });
-      return;
-    }
-
-    //yes there exists then we delete it here
-    teacher = teacher.filter((item) => item.id !== id);
-    res.status(200).send({ status: "SUCCESS" });
-    return;
-  }
+  } 
 });
 
-//rout to add a new student
+//route to add a new student (DB)
 router.post("/add-new-student", (req, res) => {
   const { values } = req.body;
   // console.log(values);
@@ -190,6 +358,59 @@ router.post("/add-new-student", (req, res) => {
           }
           if (result) {
             res.status(200).send({ status: "SUCCESS" });
+            return;
+          }
+        });
+      }
+    });
+  } else {
+    //if it reacheses here
+    res.send({ status: "FAILED" });
+    return;
+  }
+});
+
+//route to add a new teacher (DB)
+router.post("/add-new-teacher", (req, res) => {
+  const { data } = req.body;
+  console.log(data);
+
+  const { id, firstName, lastName, email, phone } = data;
+  const { address, city, password } = data;
+  const { level, status, module, department, groups, sceance } = data;
+
+  let groupString = JSON.stringify(groups);
+  let sceanceString = JSON.stringify(sceance);
+
+  //console.log(groupString, sceanceString, department);
+
+  let addTeacherUserSQL = `INSERT INTO dizinv.user 
+                          (user.id_user, user.firstName, user.lastName, user.email, user.address, user.city, user.password, user.phone, user.type) 
+                          VALUES ('${id}', '${firstName}', '${lastName}', '${email}', '${address}', 
+                          '${city}', '${password}', '${phone}', '${status}');`;
+
+  let addTeacherTableSQL = `INSERT INTO dizinv.teacher
+                           (teacher.id_user, teacher.department, teacher.groups, teacher.module, teacher.level, teacher.sceance, teacher.status) 
+                           VALUES ('${id}', '${department}', '${groupString}' , '${module}', '${level}', '${sceanceString}', '${status}');`;
+
+  if (data) {
+    db.query(addTeacherUserSQL, (err, result) => {
+      if (err) {
+        console.log(err.message);
+        res.send({ status: "FAILED" });
+        return;
+      }
+      if (result) {
+        db.query(addTeacherTableSQL, (err, result) => {
+          if (err) {
+            console.log(err);
+            res.send({
+              status: "FAILED",
+            });
+            return;
+          }
+          if (result) {
+            res.send({ status: "SUCCESS" });
             return;
           }
         });
@@ -266,8 +487,35 @@ router.post("/schedule", (req, res) => {
     to an object with JSON.parse() method and send to the front end.
 */
 
+//getting all the teachers by the admin
 router.get("/get-teachers", (req, res) => {
-  res.status(200).send(teacher);
+  let getTeacherSQL = `SELECT * FROM dizinv.user, dizinv.teacher
+                       where user.id_user = teacher.id_user`;
+
+  db.query(getTeacherSQL, (err, result) => {
+    if (err) {
+      res.send({
+        status: "FAILED",
+        message: "something went wrong fetching data, Try again!!",
+      });
+      return;
+    }
+    if (result) {
+      let response = result.map((data) => {
+        const obj = {
+          ...data,
+          password: "********",
+          id: data.id_user,
+          groups: JSON.parse(data.groups),
+          sceance: JSON.parse(data.sceance),
+        };
+        // Sconsole.log(obj);
+        return obj;
+      });
+      //console.log(response)
+      res.send({ status: "SUCCESS", result: response });
+    }
+  });
 });
 
 //get list of modules for adding teachers options

@@ -1,34 +1,51 @@
 const express = require("express");
 
-let { users } = require("../temp data/user");
-
 const router = express.Router();
 
-router.post("/login", (req, res) => {
+//database connection
+const db = require("../ConnectDB");
+
+router.post("/login", (req, res) => { 
   const { email, password } = req.body;
-  //  console.log(email, password);
+  console.log(email, password);
+
+  let authSQL = `SELECT email, password, type, id_user, firstName
+                   FROM dizinv.user
+                   where user.email = '${email}'
+                   And user.password = '${password}'`;
+
   if (email && password) {
-    const user = users.filter((user) => {
-      if (user.email === email && user.password === password) {
-        return user;
+    db.query(authSQL, (err, result) => {
+      if (err) {
+        res.send({
+          status: "FAILED",
+          message: "no user with this email and password",
+        });
+        return;
+      }
+
+      if (result.length > 0) {
+       // console.log(result);
+        res.send({
+          status: "SUCCESS",
+          result: { ...result, password: "****" },
+        });
+        return;
+      } else {
+        res.send({
+          status: "FAILED",
+          message: "no user with this email and password",
+        });
+        return;
       }
     });
-
-    if (user.length > 0) {
-      res.status(200).send({
-        email: user[0].email,
-        type: user[0].type,
-        success: true,
-      });
-      return;
-    }
+  } else {
+    res.send({
+      message: "enter email and password",
+      status: "FAILED",
+    });
+    return;
   }
-
-  res.status(200).send({
-    message: "no user with this email and password",
-    success: false,
-  });
-  return;
 });
 
 module.exports = router;

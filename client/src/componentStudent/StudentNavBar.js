@@ -110,7 +110,7 @@ const StudentNavBar = ({ toggle, firstName, profileStyle }) => {
                 }}
               >
                 Log out
-                <FiLogOut style={{ marginLeft: "5px" }} />
+                <FiLogOut style={{ marginLeft: "5px" }} /> 
               </NavBtnLink>
               <NavBtn title="profile" to={"/student/profile"}>
                 <ProfileLogo

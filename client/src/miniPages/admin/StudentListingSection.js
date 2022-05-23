@@ -63,7 +63,7 @@ const StudentListingSection = () => {
     }
     if (params.id === "licence2") {
       setGetStudentParameter("Licence 2");
-      setIconChange(<HiAcademicCap />);
+      setIconChange(<HiAcademicCap />); 
     }
     getStudents();
   }, [params]);

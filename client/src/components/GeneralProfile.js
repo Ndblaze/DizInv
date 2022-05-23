@@ -1,22 +1,97 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-
+import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 import { MdOutlineEditNote } from "react-icons/md";
 
 //for admin use
-import Form from "./Form";
+import UpdateAdminProfile from "./UpdateAdminProfile";
+import UpdateStudentProfile from "./UpdateStudentProfile";
+import UpdateTeachersProfile from "./UpdateTeachersProfile";
 
-const GeneralProfile = ({ user, profileType, firstLetter, style }) => {
+const GeneralProfile = ({
+  user,
+  profileType,
+  style,
+  getProfileAdmin,
+  getStudents,
+}) => {
   const [edit, setEdit] = useState(true);
+
+  //toast messages success
+  const successMessage = (message) => {
+    toast.success(message, {
+      style: {
+        background: "#25ab42",
+        color: "#fff",
+      },
+    });
+  };
+
+  //toast messages error
+  const errorMessage = (message) => {
+    toast.error(message, {
+      style: {
+        background: "rgba(255,51,51, 0.7)",
+        color: "#fff",
+      },
+    });
+  };
+
+  const UpdateAdminProfileToDB = async (values, id) => {
+    //console.log(values, id)
+    await axios
+      .post(`http://localhost:5000/api/admin/update-profile`, {
+        values,
+        id,
+      })
+      .then((res) => {
+        // console.log(res.data);
+        if (res.data.status === "SUCCESS") {
+          getProfileAdmin();
+          successMessage("Profile updated succefully");
+        }
+        if (res.data.status === "FAILED") {
+          //console.log(res.data.message);
+          errorMessage(res.data.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
+  const UpdateStudentByAdmin = async (values, id) => {
+    //console.log(values, id)
+    await axios
+      .post(`http://localhost:5000/api/admin/update-profile/student`, {
+        values,
+        id,
+      })
+      .then((res) => {
+        // console.log(res.data);
+        if (res.data.status === "SUCCESS") {
+          getStudents();
+          successMessage("Profile updated succefully");
+        }
+        if (res.data.status === "FAILED") {
+          //console.log(res.data.message);
+          errorMessage(res.data.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
 
   return (
     <Wrapper style={style}>
+      <Toaster />
       <Content>
         <Info>
           <Personal>
             <Edit onClick={() => setEdit(!edit)} />
             <Header>
-              <Photo>{firstLetter}</Photo>
+              <Photo>{user.firstName ? user.firstName.slice(0, 1) : ""}</Photo>
               <Name>
                 {user.firstName} {user.lastName}
               </Name>
@@ -105,14 +180,38 @@ const GeneralProfile = ({ user, profileType, firstLetter, style }) => {
                   </DataContainer>
                   <DataContainer>
                     <Data>Group(s):</Data>
-                    <Value>{user.groups}</Value>
+                    <Value>
+                      {user.groups.map((g) => (
+                        <span>{`${g}/ `}</span>
+                      ))}
+                    </Value>
                   </DataContainer>
                 </AcademicDetail>
               </>
             )}
           </Academic>
         </Info>
-        <Form user={user} profileType={profileType} edit={edit} />
+        {profileType === "admin" && (
+          <UpdateAdminProfile
+            user={user}
+            edit={edit}
+            UpdateAdminProfileToDB={UpdateAdminProfileToDB}
+          />
+        )}
+        {profileType === "student" && (
+          <UpdateStudentProfile
+            user={user}
+            edit={edit}
+            UpdateStudentByAdmin={UpdateStudentByAdmin}
+          />
+        )}
+        {profileType === "teacher" && (
+          <UpdateTeachersProfile
+            user={user}
+            edit={edit}
+            UpdateStudentByAdmin={UpdateStudentByAdmin}
+          />
+        )}
       </Content>
     </Wrapper>
   );

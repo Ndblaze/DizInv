@@ -10,7 +10,7 @@ const teacher = [
     password: "lakar@500",
     department: "MI",
     module: "System Machine",
-    status: "teacher",
+    status: "teacher", 
     groups: ["G1", "G2", "G3"],
     level: "Licence 1",
     sceance: ["TD"],

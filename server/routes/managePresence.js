@@ -201,8 +201,8 @@ router.post("/create-session", (req, res) => {
         res.send({
           status: "SUCCESS",
           message: {
+            SessionID, 
             date,
-            SessionID,
             group,
             sceance,
             level,

@@ -1,36 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import axios from "axios";
 
 import { BiUser } from "react-icons/bi";
 import GeneralProfile from "../../components/GeneralProfile";
 
-const user = {
-  firstName: "Blaze",
-  lastName: "Eze",
-  email: "ndubuisieze60@gmail.com",
-  phone: "+213 798 76 1871",
-  address: "UV18 batiment oscar",
-  city: "Constantine, nouvelle",
-  password: "Blaze@500",
-  position: "Administrator",
-  faculty: "NTIC",
-};
-
 const Profile = () => {
   //data from the add new userEditProfile
-  const [newValues, setNewValues] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    address: "",
-    city: "",
-    password: "",
-  });
+  const [user, setUser] = useState({});
 
-  const UpdateValues = (e) => {
-    e.preventDefault();
-    console.log(newValues);
+  useEffect(() => {
+    getProfileAdmin();
+  }, []);
+
+  const getProfileAdmin = async () => {
+    await axios
+      .get(
+        `http://localhost:5000/api/admin/profile/${sessionStorage.getItem(
+          "email"
+        )}`
+      )
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.status === "SUCCESS") {
+          setUser(res.data.result);
+        }
+        if (res.data.status === "FAILED") {
+          console.log(res.data.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
   };
 
   return (
@@ -42,11 +43,8 @@ const Profile = () => {
         </HeaderContainer>
         <GeneralProfile
           user={user}
-          setNewValues={setNewValues}
-          newValues={newValues}
-          UpdateValues={UpdateValues}
+          getProfileAdmin={getProfileAdmin}
           profileType="admin"
-          firstLetter={user.firstName.slice(0, 1).toUpperCase()}
         />
       </Content>
     </Wrapper>
