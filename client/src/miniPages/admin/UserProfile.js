@@ -38,7 +38,7 @@ const UserProfile = () => {
       )
       .then((res) => {
         if (res.data.status === "SUCCESS") {
-           console.log(res.data.result[0]);
+          console.log(res.data.result[0]);
           setUser(res.data.result[0]);
           setFirstLetter(
             res.data.result[0].firstName.slice(0, 1).toUpperCase()
@@ -47,7 +47,10 @@ const UserProfile = () => {
         if (res.data.result[0].type === "student") {
           setProfileType("student");
         }
-        if (res.data.result[0].type === "teacher") {
+        if (
+          res.data.result[0].type === "teacher" ||
+          res.data.result[0].type === "ChelfDepartment"
+        ) {
           setProfileType("teacher");
         }
         setLoading(false);
@@ -62,7 +65,7 @@ const UserProfile = () => {
     <Wrapper>
       <Content>
         {loading && (
-          <HashLoader 
+          <HashLoader
             color={"#C278F8"}
             css={override}
             loading={loading}
@@ -86,7 +89,7 @@ const UserProfile = () => {
           user={user}
           firstLetter={firstLetter}
           profileType={profileType}
-          getStudents={getStudents} 
+          getStudents={getStudents}
         />
       </Content>
     </Wrapper>

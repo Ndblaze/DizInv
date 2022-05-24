@@ -90,9 +90,9 @@ const AddNewFormTeacher = ({
     await axios
       .get(`http://localhost:5000/api/admin/modules/teacher-form-option`)
       .then((res) => {
-        console.log(res.data);
-        if (res.data.length > 0) {
-          setModuleListOptions(res.data);
+       // console.log(res.data);
+        if (res.data.status === "SUCCESS") {
+          setModuleListOptions(res.data.result);
         }
       })
       .catch((err) => {
@@ -338,7 +338,7 @@ const AddNewFormTeacher = ({
                       options={[
                         { key: "choose status", value: "" },
                         { key: "teacher", value: "teacher" },
-                        { key: "Chelf Department", value: "Chelf Department" },
+                        { key: "Chelf Department", value: "ChelfDepartment" },
                       ]}
                       name="status"
                     />

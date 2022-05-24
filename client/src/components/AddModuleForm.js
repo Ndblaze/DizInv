@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled from "styled-components"; 
 import axios from "axios";
 import image from "../asserts/images/addForm.svg";
 import { Formik, Form } from "formik";
@@ -33,9 +33,9 @@ const AddModuleForm = ({
   });
 
   const initialValues = {
-    id: moduleFormValues.id || uuidv4(),
-    code: moduleFormValues.code || "",
-    name: moduleFormValues.name || "",
+    id: moduleFormValues.id_modules || uuidv4(),
+    code: moduleFormValues.module_code || "",
+    name: moduleFormValues.module_name || "",
     department: moduleFormValues.department || "",
     level: moduleFormValues.level || "",
   };
@@ -55,11 +55,8 @@ const AddModuleForm = ({
           // after delet call back the get request to get back up to date data
           update();
         }
-        if (res.data.status === "WARN") {
-          setModalIsOpen(false);
-          addedFailed(res.data.message);
-        }
-        if (res.data.status === "NON") {
+        
+        if (res.data.status === "FAILED") {
           setModalIsOpen(false);
           addedFailed(res.data.message);
         }
@@ -140,7 +137,7 @@ const AddModuleForm = ({
                 </NonShared>
                 <ButtonContainer>
                   <Save type="submit">
-                    {moduleFormValues.hasOwnProperty("code") ? "Edit" : "Add"}
+                    {moduleFormValues.hasOwnProperty("module_code") ? "Edit" : "Add"}
                   </Save>
                   <Cancel type="reset" value="Reset" />
                 </ButtonContainer>

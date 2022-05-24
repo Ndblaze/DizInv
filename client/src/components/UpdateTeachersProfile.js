@@ -272,7 +272,7 @@ const UpdateTeachersProfile = ({ user, profileType, edit }) => {
                       options={[
                         { key: "choose status", value: "" },
                         { key: "teacher", value: "teacher" },
-                        { key: "Chelf Department", value: "Chelf Department" },
+                        { key: "Chelf Department", value: "ChelfDepartment" },
                       ]}
                       name="status"
                     />

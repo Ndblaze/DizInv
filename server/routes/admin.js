@@ -139,7 +139,7 @@ router.post("/update-profile", (req, res) => {
 //getting user profile with theere id both teacher and students (DB)
 router.get("/user-profile/:handler/:id", (req, res) => {
   const { handler, id } = req.params;
-  // console.log(handler, id);
+  console.log(handler, id);
 
   let userStudentSQL = ` SELECT * FROM dizinv.user, dizinv.students
                   where user.id_user = students.inscription
@@ -192,7 +192,10 @@ router.get("/user-profile/:handler/:id", (req, res) => {
 //updating Student profile by admin (DB)
 router.post("/update-profile/student", (req, res) => {
   const { values, id } = req.body;
-  const { firstName, lastName, email, address, city, phone } = values;
+
+  const { firstName, lastName, email, phone, address, city } = values;
+  const { inscription, section_speciality, group } = values;
+
   // console.log(id, values);
 
   let adminProfileSQL = `UPDATE dizinv.user 
@@ -245,7 +248,7 @@ router.delete("/delete/:handler/:id", (req, res) => {
   // deleting students
   if (handler === "student") {
     //deleting from student table first before the user table because the id is a foregine key to the user table
-    db.query(deleteStudentSQL1, (err, result) => { 
+    db.query(deleteStudentSQL1, (err, result) => {
       if (err) {
         res.send({
           status: "FAILED",
@@ -305,7 +308,7 @@ router.delete("/delete/:handler/:id", (req, res) => {
         });
       }
     });
-  } 
+  }
 });
 
 //route to add a new student (DB)
@@ -487,7 +490,7 @@ router.post("/schedule", (req, res) => {
     to an object with JSON.parse() method and send to the front end.
 */
 
-//getting all the teachers by the admin
+//getting all the teachers by the admin (DB)
 router.get("/get-teachers", (req, res) => {
   let getTeacherSQL = `SELECT * FROM dizinv.user, dizinv.teacher
                        where user.id_user = teacher.id_user`;
@@ -520,98 +523,121 @@ router.get("/get-teachers", (req, res) => {
 
 //get list of modules for adding teachers options
 router.get("/modules/teacher-form-option", (req, res) => {
-  const moduleList = modules.map((module) => ({
-    value: `${module.name}`,
-    label: `${module.code} - ${module.name} (${module.department})`,
-  }));
-  res.status(200).send(moduleList);
+  let getModuleSQL = `SELECT * FROM dizinv.modules;`;
+
+  db.query(getModuleSQL, (err, result) => {
+    if (err) {
+      res.send({
+        status: "FAILED",
+        message: "Something went wrong fetching Modules",
+      });
+      return;
+    }
+    if (result) {
+      // console.log(result);
+      const moduleList = result.map((module) => ({
+        value: `${module.module_name}`,
+        label: `${module.module_code} - ${module.module_name} (${module.department})`,
+      }));
+      res.send({ status: "SUCCESS", result: moduleList });
+      return;
+    }
+  });
 });
 
 //api for modules>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+//getting all modules (DB)
 router.get("/modules", (req, res) => {
-  //console.log(modules)
-  res.status(200).send(modules);
-});
+  let getModuleSQL = `SELECT * FROM dizinv.modules;`;
 
-router.delete("/delete/module/:department/:code", (req, res) => {
-  const { department, code } = req.params;
-  console.log(department, code);
-
-  // delete module
-  const Module = modules.filter((item) => {
-    if (item.department === department && item.code === code) {
-      return item;
+  db.query(getModuleSQL, (err, result) => {
+    if (err) {
+      res.send({
+        status: "FAILED",
+        message: "Something went wrong fetching Modules",
+      });
+      return;
+    }
+    if (result) {
+      // console.log(result);
+      res.send({ status: "SUCCESS", result: result });
+      return;
     }
   });
+});
 
-  //check student if exists
-  if (Module.length <= 0) {
-    res.send({ status: "NON" });
-    return;
+//deleting modules (DB)
+router.delete("/delete-module/:id", (req, res) => {
+  const { id } = req.params;
+  // console.log(id);
+
+  let deletModuleSQL = `DELETE FROM dizinv.modules WHERE (id_modules = '${id}');`;
+
+  if (id) {
+    db.query(deletModuleSQL, (err, result) => {
+      if (err) {
+        res.send({
+          status: "FAILED",
+          message: "Something went wrong, Try again",
+        });
+        return;
+      }
+      if (result) {
+        res.send({ status: "SUCCESS", message: "Module Deleted succefully!!" });
+        return;
+      }
+    });
   }
-
-  //yes there exists then we delete it here
-  modules = modules.filter((item) => {
-    //remember to use the code and the department to delete items from the database
-    if (item.code !== code) {
-      return item;
-    }
-  });
-
-  res.status(200).send({ status: "SUCCESS" });
-  return;
 });
 
+//adding and edithing  modules  (DB)
 router.post("/add-module", (req, res) => {
   const { module, mood } = req.body;
-  // console.log(module);
+  //console.log(module, mood);
 
-  // check if module exist
-  const Module = modules.filter((item) => {
-    if (item.id === module.id) {
-      return item;
-    }
-  });
+  const { id, code, name, department, level } = module;
 
-  // No it does not exists and u are adding
-  if (Module.length <= 0 && mood === "add") {
-    modules.push(module);
-    res.send({ status: "SUCCESS", message: "Module Added succefully!!" });
-    return;
-  }
+  let addModuleSQL = `INSERT INTO dizinv.modules 
+                      (id_modules, module_code, module_name, department, level) 
+                      VALUES ('${id}', '${code}', '${name}', '${department}', '${level}');`;
 
-  // No it does not exists and u want to edit
-  if (Module.length <= 0 && mood === "edit") {
-    res.send({
-      status: "WARN",
-      message: "Module-Code doesen't exist, can't edit !!",
+  let UpdateModuleSQL = `UPDATE dizinv.modules
+                         SET module_code = '${code}', module_name = '${name}',
+                         department = '${department}', level = '${level}' 
+                         WHERE (id_modules = '${id}');`;
+
+  if (module && mood === "add") {
+    db.query(addModuleSQL, (err, result) => {
+      if (err) {
+        res.send({
+          status: "FAILED",
+          message: "Something went wrong, Try again",
+        });
+        return;
+      }
+      if (result) {
+        res.send({ status: "SUCCESS", message: "Module Added succefully!!" });
+        return;
+      }
     });
-    return;
   }
 
-  // Module already exits
-  if (Module.length > 0 && mood === "add") {
-    res.send({
-      status: "WARN",
-      message: "Module or Module-code already exits, can't add !!",
+  if (module && mood === "edit") {
+    db.query(UpdateModuleSQL, (err, result) => {
+      if (err) {
+        res.send({
+          status: "FAILED",
+          message: "Something went wrong, Try again",
+        });
+        return;
+      }
+      if (result) {
+        res.send({ status: "SUCCESS", message: "Module Edited succefully!!" });
+        return;
+      }
     });
-    return;
   }
-
-  //yes module exits
-  if (Module.length > 0 && mood === "edit") {
-    Module[0].code = module.code;
-    Module[0].name = module.name;
-    Module[0].department = module.department;
-    Module[0].level = module.level;
-    res.send({ status: "SUCCESS", message: "Module Edited succefully!!" });
-    return;
-  }
-
-  //failed
-  res.send({ status: "NON", message: " Operation failed, try again!!" });
-  return;
 });
 
 module.exports = router;

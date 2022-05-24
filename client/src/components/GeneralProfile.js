@@ -206,7 +206,7 @@ const GeneralProfile = ({
           />
         )}
         {profileType === "teacher" && (
-          <UpdateTeachersProfile
+          <UpdateTeachersProfile 
             user={user}
             edit={edit}
             UpdateStudentByAdmin={UpdateStudentByAdmin}

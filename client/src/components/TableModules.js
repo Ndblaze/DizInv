@@ -14,18 +14,18 @@ const TableModules = ({
 }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   //item to delete
-  const [newDelete, setNewDelete] = useState({});
+  const [newDelete, setNewDelete] = useState('');
   //console.log(newDelete);
 
-  const onDelete = (department, code) => {
+  const onDelete = (id_modules) => {
     setModalIsOpen(true);
-    setNewDelete({ department: department, code: code });
+    setNewDelete(id_modules);
   };
 
   const onSubmitDelete = async () => {
     await axios
       .delete(
-        `http://localhost:5000/api/admin/delete/module/${newDelete.department}/${newDelete.code}`
+        `http://localhost:5000/api/admin/delete-module/${newDelete}`
       )
       .then((res) => {
         if (res.data.status === "SUCCESS") {
@@ -82,9 +82,9 @@ const TableModules = ({
           </TableHeader>
           <TableBody>
             {data.map((item) => (
-              <TrBody key={item.id}>
-                <CodeBody>{item.code}</CodeBody>
-                <NameBody>{item.name}</NameBody>
+              <TrBody key={item.id_module}>
+                <CodeBody>{item.module_code}</CodeBody>
+                <NameBody>{item.module_name}</NameBody>
                 <DepartmentBody>{item.department}</DepartmentBody>
                 <LevelBody>{item.level}</LevelBody>
                 <Tbody2>
@@ -98,7 +98,7 @@ const TableModules = ({
                 <Tbody2>
                   <DeleteButton
                     text="Delete"
-                    onClick={() => onDelete(item.department, item.code)}
+                    onClick={() => onDelete(item.id_modules)}
                   >
                     Delete
                   </DeleteButton>

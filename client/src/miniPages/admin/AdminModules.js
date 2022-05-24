@@ -71,10 +71,13 @@ const AdminModules = () => {
     await axios
       .get(`http://localhost:5000/api/admin/modules`)
       .then((res) => {
-        console.log(res.data);
-        if (res.data.length > 0) {
-          setAllList(res.data);
-          setFiltered(res.data);
+        // console.log(res.data);
+        if (res.data.status === "SUCCESS") {
+          setAllList(res.data.result);
+          setFiltered(res.data.result);
+        }
+        if (res.data.status === "FAILED") {
+          console.log(res.data.message);
         }
       })
       .catch((err) => {

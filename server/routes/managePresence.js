@@ -2,8 +2,6 @@ const express = require("express");
 
 const router = express.Router();
 
-let { modules } = require("../temp data/modules");
-
 //database connection
 const db = require("../ConnectDB");
 
@@ -201,7 +199,7 @@ router.post("/create-session", (req, res) => {
         res.send({
           status: "SUCCESS",
           message: {
-            SessionID, 
+            SessionID,
             date,
             group,
             sceance,
@@ -259,7 +257,7 @@ router.get("/delete-session/:id", (req, res) => {
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // working on the list of excluded students here
 
-//finding excluded student for the teacher of a module
+//finding excluded student for the teacher of a module (DB)
 router.get("/excluded-students/:module/:group", (req, res) => {
   const { module, group } = req.params;
   //console.log(module, group);
@@ -297,9 +295,9 @@ router.get("/excluded-students/:module/:group", (req, res) => {
   });
 });
 
-//finding excluded student for the chelf department
+//finding excluded student for the chelf department (DB)
 router.get("/chelf-excluded/:module", (req, res) => {
-  const { module } = req.params; 
+  const { module } = req.params;
   console.log(module);
 
   let excludedSQL = `select student_group, moduleName, inscription_no, id_user, department, group_concat( concat_ws(' / ', sceance, date) separator ' , ') dates, level, firstName, lastName 
@@ -317,7 +315,7 @@ router.get("/chelf-excluded/:module", (req, res) => {
     }
     if (result) {
       const results = result.map((data) => {
-         //console.log(data);
+        //console.log(data);
         return { ...data };
       });
       // console.log(results);
@@ -330,25 +328,31 @@ router.get("/chelf-excluded/:module", (req, res) => {
   });
 });
 
-//get the list of module of a particular department
+//get the list of module of a particular department (DB)
 router.get("/modules/:department", (req, res) => {
   const { department } = req.params;
+  console.log(department);
 
-  //console.log(department);
+  let getModuleSQL = `SELECT * FROM dizinv.modules where department = '${department}';`;
 
-  //filter the modules of MI department
-  const allDeptModule = modules.filter((module) => {
-    if (module.department === department) {
-      return module;
+  db.query(getModuleSQL, (err, result) => {
+    if (err) {
+      res.send({
+        status: "FAILED",
+        message: "Something went wrong fetching Modules",
+      });
+      return;
+    }
+    if (result) {
+      // console.log(result);
+      const response = result.map((module) => ({
+        value: module.module_name,
+        label: module.module_name,
+      }));
+      res.send({ status: "SUCCESS", results: response });
+      return;
     }
   });
-
-  //set the data we want in this format
-  const result = allDeptModule.map((module) => {
-    return { value: module.name, label: module.name };
-  });
-  //console.log(result);
-  res.send({ status: "SUCCESS", results: result });
 });
 
 module.exports = router;
