@@ -13,7 +13,7 @@ const SessionChelf = ({ scheduleData, setScheduleData }) => {
     module: "",
     teacher: { name: "", email: "" },
     room: "",
-  });
+  });   
 
   //open and close the add teacher modal
   const [addTeacher, setAddTeacher] = useState(false);

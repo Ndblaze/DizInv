@@ -20,7 +20,7 @@ const errorMessage = (message) => {
 const successMessage = (message) => {
   toast.success(message, {
     style: {
-      background: "#25ab42",   
+      background: "#25ab42",
       color: "#fff",
     },
   });
@@ -65,7 +65,12 @@ const AdminSchedules = () => {
     await axios
       .get(`http://localhost:5000/api/admin/schedule/${viewSchedule}`)
       .then((res) => {
-        setScheduleData(res.data);
+        if (res.data.status === "SUCCESS") {
+          setScheduleData(res.data.result);
+        }
+        if (res.data.status === "FAILEd") {
+          console.log(res.data.message);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -107,9 +112,13 @@ const AdminSchedules = () => {
   };
 
   const createNewSchedule = async () => {
+    let newSchema = schema();
     setModalIsOpen(false);
     await axios
-      .post(`http://localhost:5000/api/admin/schedule`, { schema: schema() })
+      .post(`http://localhost:5000/api/admin/schedule`, {
+        schema: newSchema,
+        level: newSchema.level,
+      })
       .then((res) => {
         if (res.data.status === "SUCCESS") {
           getSchedulesFromDB();
@@ -127,9 +136,11 @@ const AdminSchedules = () => {
 
   const SaveChanges = async () => {
     //console.log(scheduleData)
+    let newSchema = scheduleData;
     await axios
       .post(`http://localhost:5000/api/admin/schedule`, {
-        schema: scheduleData,
+        schema: newSchema,
+        level: newSchema.level,
       })
       .then((res) => {
         //toast message that it has saved succefully

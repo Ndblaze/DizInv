@@ -13,7 +13,6 @@ const StudentTimeTable = () => {
     getSchedulesFromDB();
   }, []);
 
-
   //uses the admin schedule api to get all the schedules
   const getSchedulesFromDB = async () => {
     await axios
@@ -23,8 +22,12 @@ const StudentTimeTable = () => {
         )}`
       )
       .then((res) => {
-        setScheduleData(res.data);
-        //console.log(res.data)
+        if (res.data.status === "SUCCESS") {
+          setScheduleData(res.data.result);
+        }
+        if (res.data.status === "FAILEd") {
+          console.log(res.data.message);
+        }
       })
       .catch((err) => {
         console.log(err);

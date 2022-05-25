@@ -170,7 +170,7 @@ const CreateSchedules = ({ scheduleData, setScheduleData }) => {
                     {th.value}
                   </TimeValues>
                 ))}
-              </Tr>
+              </Tr> 
             </Thead>
             <Tbody>
               <Tr>

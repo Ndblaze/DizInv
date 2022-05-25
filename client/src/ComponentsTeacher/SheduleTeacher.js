@@ -1,10 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
 const SheduleTeacher = ({ scheduleData, email }) => {
-  //   useEffect(() => {
-  //     setEmail(sessionStorage.getItem("email"));
-  //   }, [email]);
 
   return (
     <Wrapper>
@@ -15,7 +12,7 @@ const SheduleTeacher = ({ scheduleData, email }) => {
             <Thead>
               <Tr>
                 <Time>Time</Time>
-                {scheduleData.header.map((th) => (
+                {scheduleData.header.map((th) => ( 
                   <TimeValues key={th.index}>{th.value}</TimeValues>
                 ))}
               </Tr>

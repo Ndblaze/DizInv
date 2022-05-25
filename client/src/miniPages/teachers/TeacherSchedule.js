@@ -12,7 +12,7 @@ const TeacherSchedule = () => {
 
   useEffect(() => {
     getSchedulesFromDB();
-    setEmail(sessionStorage.getItem("email"));
+    setEmail(sessionStorage.getItem("email"));  
   }, []);
 
   const getSchedulesFromDB = async () => {
@@ -23,8 +23,12 @@ const TeacherSchedule = () => {
         )}`
       )
       .then((res) => {
-        setScheduleData(res.data);
-        //console.log(res.data)
+        if (res.data.status === "SUCCESS") {
+          setScheduleData(res.data.result);
+        }
+        if (res.data.status === "FAILEd") {
+          console.log(res.data.message);
+        }
       })
       .catch((err) => {
         console.log(err);

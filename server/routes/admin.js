@@ -1,10 +1,5 @@
 const express = require("express");
 
-let { students } = require("../temp data/students");
-let { schedule } = require("../temp data/schedules");
-let { teacher } = require("../temp data/teachers");
-let { modules } = require("../temp data/modules");
-
 const router = express.Router();
 
 //database connection
@@ -428,67 +423,63 @@ router.post("/add-new-teacher", (req, res) => {
 
 router.get("/schedule/:level", (req, res) => {
   const { level } = req.params;
-  if (level === "Licence 1") {
-    res.send(schedule.licence1);
-  }
-  if (level === "Licence 2") {
-    res.send(schedule.licence2);
-  }
-  if (level === "Licence 3") {
-    res.send(schedule.licence3);
-  }
-  if (level === "Master 1") {
-    res.send(schedule.master1);
-  }
-  if (level === "Master 2") {
-    res.send(schedule.master2);
+
+  // console.log(level);
+
+  let getSCheduleSQL = `SELECT schedules.schema
+                       FROM dizinv.schedules 
+                       where schedules.schedule_level = '${level}' ;`;
+
+  if (level) {
+    db.query(getSCheduleSQL, (err, result) => {
+      if (err) {
+        console.log(err);
+        res.send({
+          status: "FAILD",
+          message: "something went wrong while geting the schedule",
+        });
+        return;
+      }
+      if (result) {
+        let schema_obj = JSON.parse(result[0].schema);
+        // console.log(schema_obj)
+        //check if there is a schedule or not
+        if (schema_obj) {
+          res.send({ status: "SUCCESS", result: schema_obj });
+        } else {
+          res.send({ status: "SUCCESS", result: {} });
+        }
+        return;
+      }
+    });
   }
 });
 
 router.post("/schedule", (req, res) => {
-  const { schema } = req.body;
+  const { schema, level } = req.body;
 
-  if (schema.hasOwnProperty("level") === false) {
-    res.send({ status: "FAILD" });
-    return;
-  }
+  let schema_json = JSON.stringify(schema);
+  // console.log(schema_json, level);
 
-  if (schema.level === "Licence 1") {
-    schedule.licence1 = schema;
-    res.send({ status: "SUCCESS" });
-    return;
+  let scheduleSQL = `UPDATE dizinv.schedules 
+                     SET schedules.schema = '${schema_json}' 
+                     WHERE (schedules.schedule_level = '${level}');`;
+
+  if (schema_json) {
+    db.query(scheduleSQL, (err, result) => {
+      if (err) {
+        console.log(err);
+        res.send({ status: "FAILD" });
+        return;
+      }
+      if (result) {
+        res.send({ status: "SUCCESS" });
+        return;
+      }
+    });
   }
-  if (schema.level === "Licence 2") {
-    schedule.licence2 = schema;
-    res.send({ status: "SUCCESS" });
-    return;
-  }
-  if (schema.level === "Licence 3") {
-    schedule.licence3 = schema;
-    res.send({ status: "SUCCESS" });
-    return;
-  }
-  if (schema.level === "Master 1") {
-    schedule.master1 = schema;
-    res.send({ status: "SUCCESS" });
-    return;
-  }
-  if (schema.level === "Master 2") {
-    schedule.master2 = schema;
-    res.send({ status: "SUCCESS" });
-    return;
-  }
-  res.send({ status: "FAILD" });
-  return;
 });
 
-/* 
-    when sendomg the schedule to the datebase we send it as a string by converting it with
-    JSON.stringify() method and send to the database 
-
-    when getting back the schedule from the database we get the string that we have stored and change it 
-    to an object with JSON.parse() method and send to the front end.
-*/
 
 //getting all the teachers by the admin (DB)
 router.get("/get-teachers", (req, res) => {

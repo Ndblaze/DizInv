@@ -19,7 +19,7 @@ const successMessage = (message) => {
   toast.success(message, {
     style: {
       background: "#25ab42",
-      color: "#fff", 
+      color: "#fff",
     },
   });
 };
@@ -37,22 +37,30 @@ const ChelfSession = () => {
     setUserData(sessionStorage.getItem("department"));
     getSchedulesFromDB();
   }, [viewSchedule]);
- 
+
   const getSchedulesFromDB = async () => {
-    await axios 
+    await axios
       .get(`http://localhost:5000/api/admin/schedule/${viewSchedule}`)
       .then((res) => {
-        setScheduleData(res.data);
-      })
+        if (res.data.status === "SUCCESS") {
+          setScheduleData(res.data.result);
+        }
+        if (res.data.status === "FAILEd") {
+          console.log(res.data.message);
+        }
+      }) 
       .catch((err) => {
-        console.log(err);
+        console.log(err); 
       });
   };
 
   const SaveChanges = async () => {
+   // console.log(scheduleData);
+    let updatedSchema = scheduleData;
     await axios
       .post(`http://localhost:5000/api/admin/schedule`, {
-        schema: scheduleData,
+        schema: updatedSchema,
+        level: updatedSchema.level,
       })
       .then((res) => {
         //toast message that it has saved succefully
@@ -101,7 +109,7 @@ const ChelfSession = () => {
             <Button>Edit Current Schedule</Button>
           </TableButtons>
         </HeaderContainer>
-        
+
         <SessionChelf
           scheduleData={scheduleData}
           setScheduleData={setScheduleData}
