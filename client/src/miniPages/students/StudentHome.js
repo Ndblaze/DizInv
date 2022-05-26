@@ -40,7 +40,7 @@ const StudentHome = () => {
           sessionStorage.setItem("student_group", student_group);
           sessionStorage.setItem("level", level);
           sessionStorage.setItem("section_speciality", section_speciality);
-
+ 
           setFirstName(firstName);
         }
         if (res.data.status === "FAILED") {

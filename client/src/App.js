@@ -40,6 +40,7 @@ import StudentTimeTable from "./miniPages/students/StudentTimeTable";
 import StudentProfile from "./miniPages/students/StudentProfile";
 import TeacherExcludedStudents from "./miniPages/teachers/TeacherExcludedStudents";
 import ChelfExcluded from "./miniPages/chelfDepartment/ChelfExcluded";
+import StudentAbsenceJustification from "./miniPages/students/StudentAbsenceJustification";
 
 function App() {
   const [user, setUser] = useState({});
@@ -163,6 +164,7 @@ function App() {
                <Route exact path="home" element={<StudentHome />} />
                <Route exact path="time-table" element={<StudentTimeTable />} />
                <Route exact path="profile" element={<StudentProfile />} />
+               <Route exact path="absence-justification" element={<StudentAbsenceJustification />} />
             </Route>
           )}
         </Routes>

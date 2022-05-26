@@ -14,7 +14,7 @@ const StudentNavBar = ({ toggle, firstName, profileStyle }) => {
 
   const changNav = () => {
     if (window.scrollY >= 80) {
-      setScrollNav(true); 
+      setScrollNav(true);
     } else {
       setScrollNav(false);
     }
@@ -54,7 +54,7 @@ const StudentNavBar = ({ toggle, firstName, profileStyle }) => {
             </MobileIcon>
             <NavMenu>
               <NavItem>
-                <NavLinksTimeTable
+                <NavLinksNonScroll
                   to="/student/time-table"
                   smooth={true}
                   duration={500}
@@ -63,11 +63,11 @@ const StudentNavBar = ({ toggle, firstName, profileStyle }) => {
                   offset={-80}
                 >
                   Time-table
-                </NavLinksTimeTable>
+                </NavLinksNonScroll>
               </NavItem>
               <NavItem>
-                <NavLinks
-                  to="absence"
+                <NavLinksNonScroll
+                  to="/student/absence-justification"
                   smooth={true}
                   duration={500}
                   spy={true}
@@ -75,7 +75,7 @@ const StudentNavBar = ({ toggle, firstName, profileStyle }) => {
                   offset={-80}
                 >
                   Absence/Justification
-                </NavLinks>
+                </NavLinksNonScroll>
               </NavItem>
               <NavItem>
                 <NavLinks
@@ -110,7 +110,7 @@ const StudentNavBar = ({ toggle, firstName, profileStyle }) => {
                 }}
               >
                 Log out
-                <FiLogOut style={{ marginLeft: "5px" }} /> 
+                <FiLogOut style={{ marginLeft: "5px" }} />
               </NavBtnLink>
               <NavBtn title="profile" to={"/student/profile"}>
                 <ProfileLogo
@@ -218,7 +218,7 @@ const NavLinks = styled(LinkS)`
   } */
 `;
 
-const NavLinksTimeTable = styled(LinkR)`
+const NavLinksNonScroll = styled(LinkR)`
   color: #fff;
   display: flex;
   align-items: center;
@@ -227,6 +227,7 @@ const NavLinksTimeTable = styled(LinkR)`
   height: 100%;
   cursor: pointer;
 `;
+
 const NavBtnContainer = styled.div`
   display: flex;
   align-items: center;
