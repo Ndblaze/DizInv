@@ -82,13 +82,25 @@ const ListNavPresence = ({
 
   const deleteSession = async () => {
     let id = "";
-    dateList.map((date) => {
-      if (date.value === currentDate.value) {
-        id = date.id_session;
-        return;
-      }
-    });
+
+    let today = new Date().toLocaleDateString();
+
+    //check if thesession is today or not
+    if (currentDate.value === today) {
+      dateList.map((date) => {
+        if (date.value === currentDate.value) {
+          id = date.id_session;
+          return;
+        }
+      });
+    } else {
+      deletUnsuccessfull("You can only delete sessions of Today!!");
+      setModalIsOpen(false);
+      return;
+    }
+
     //  console.log("id");
+    // deleting the session if it was todays session
     if (id) {
       await axios
         .get(`http://localhost:5000/api/managePresence/delete-session/${id}`)
