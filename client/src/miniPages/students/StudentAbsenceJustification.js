@@ -1,10 +1,35 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Link as LinkR } from "react-router-dom";
+import Modal from "react-modal";
 import logoImage from "../../asserts/images/logoNav.png";
+import MakeJustification from "../../componentStudent/MakeJustification";
+
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    transform: "translate(-50%, -50%)",
+    backgroundColor: "#fff",
+    padding: 0,
+    border: "none",
+    borderRadius: "20px",
+    overflow: "hidden",
+    width: "500px",
+    height: "600px",
+  },
+  overlay: {
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+  },
+};
 
 const StudentAbsenceJustification = () => {
   const [listOption, setListOption] = useState("Absence");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [itemToJustify, setItemToJustify] = useState({});
+  // console.log(itemToJustify)
 
   const List = [
     {
@@ -91,12 +116,27 @@ const StudentAbsenceJustification = () => {
                     )}
                   </Discription>
                 </Detailes>
-                <JustifyBtn>Justify Now</JustifyBtn>
+                <JustifyBtn
+                  onClick={() => {
+                    setModalOpen(true);
+                    setItemToJustify(absence);
+                  }}
+                >
+                  Justify Now
+                </JustifyBtn>
               </CardContent>
             </Card>
           ))}
         </AbsenceJustification>
       </Content>
+      <Modal
+        isOpen={modalOpen}
+        style={customStyles}
+        onRequestClose={() => setModalOpen(false)}
+        ariaHideApp={false}
+      >
+        <MakeJustification itemToJustify={itemToJustify} />
+      </Modal>
     </Wrapper>
   );
 };
