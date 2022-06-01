@@ -1,31 +1,79 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import toast, { Toaster } from "react-hot-toast";
 
 const MakeJustification = ({ itemToJustify }) => {
   const [studentComment, setStudentComment] = useState("");
+  const [filePDF, setFilePDF] = useState(null);
+ // console.log(filePDF);
 
+  const errorMessage = (message) => {
+    toast.error(message, {
+      style: {
+        background: "rgba(255,51,51, 0.7)",
+        color: "#fff",
+      },
+    });
+  };
+
+  const successMessage = (message) => {
+    toast.success(message, {
+      style: {
+        background: "#25ab42",
+        color: "#fff",
+      },
+    });
+  };
+
+
+  //checking the lenght of words for the student comments
   const checkLength = (word) => {
     if (word.trim().length <= 200) {
       setStudentComment(word);
     }
   };
 
+  //chech if a file is PDF or not
+  const checkPDF = (file) => {
+    if (file[0].type === "application/pdf") {
+      const [f] = file;
+      setFilePDF(f);
+      // console.log(f);
+    } else {
+      errorMessage("You must choose a PDF file ONLY");
+    }
+  };
+
+
+  //submiting my justification
+  const submitJustification = () => {
+    let data = { ...itemToJustify, student_comment: studentComment };
+
+    if (filePDF === null) {
+      errorMessage("You must choose a PDF file ONLY");
+      return;
+    }
+
+    console.log(data);
+  };
+
   return (
     <Wrapper>
+      <Toaster position="top-center" reverseOrder={false} />
       <Content>
         <Header> New Justification</Header>
         <form>
           <div>
             <Label>Module</Label>
-            <InputNotShared defaultValue={"Module"} readOnly />
+            <InputNotShared defaultValue={itemToJustify.module} readOnly />
           </div>
           <div>
             <Label>Sceance</Label>
-            <InputNotShared defaultValue={"Sceance"} readOnly />
+            <InputNotShared defaultValue={itemToJustify.sceance} readOnly />
           </div>
           <div>
             <Label>Level</Label>
-            <InputNotShared defaultValue={"Level"} readOnly />
+            <InputNotShared defaultValue={itemToJustify.level} readOnly />
           </div>
           <div>
             <Label>Drop a comment ({200 - studentComment.trim().length})</Label>
@@ -38,9 +86,15 @@ const MakeJustification = ({ itemToJustify }) => {
           </div>
           <div>
             <Label>Attachment (recomended)</Label>
-            <InputNotShared style={{ border: "none" }} type={"file"} />
+            <InputNotShared
+              style={{ border: "none" }}
+              type={"file"}
+              onClick={() => setFilePDF(null)}
+              onChange={(e) => checkPDF(e.target.files)}
+              multiple={false}
+            />
           </div>
-          <AddSceance>Submit</AddSceance>
+          <AddSceance onClick={() => submitJustification()}>Submit</AddSceance>
         </form>
       </Content>
     </Wrapper>

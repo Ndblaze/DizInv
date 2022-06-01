@@ -26,7 +26,6 @@ const customStyles = {
 };
 
 const StudentAbsenceJustification = () => {
-  const [listOption, setListOption] = useState("Absence");
   const [modalOpen, setModalOpen] = useState(false);
   const [itemToJustify, setItemToJustify] = useState({});
   // console.log(itemToJustify)
@@ -59,6 +58,15 @@ const StudentAbsenceJustification = () => {
       isJustified: "Accepted",
       inscriotion_no: "james eze",
     },
+    {
+      id_absence: "wwxfwfwfwww",
+      sceance: "TP",
+      module: "Development Application Concurrent",
+      date: "21/87/2022",
+      time: "15:30:20",
+      isJustified: "Rejected",
+      inscriotion_no: "james eze",
+    },
   ];
 
   return (
@@ -69,11 +77,8 @@ const StudentAbsenceJustification = () => {
 
       <Content>
         <HeaderContainer>
-          <Header>My list of {listOption}</Header>
-          <Select onChange={(e) => setListOption(e.target.value)}>
-            <option>Absence</option>
-            <option>Justification</option>
-          </Select>
+          <Header>My list of Absence and Justification </Header>
+         
         </HeaderContainer>
         <AbsenceJustification>
           {List.map((absence) => (
@@ -101,6 +106,12 @@ const StudentAbsenceJustification = () => {
                     Justification Status: {""}
                     {absence.isJustified === null && (
                       <span style={{ color: "red" }}> None</span>
+                    )}
+                    {absence.isJustified === "Rejected" && (
+                      <span style={{ color: "red" }}>
+                        {" "}
+                        {absence.isJustified}{" "}
+                      </span>
                     )}
                     {absence.isJustified === "Pending" && (
                       <span style={{ color: "#ffbf00" }}>
@@ -178,15 +189,6 @@ const Header = styled.h1`
   text-decoration: underline;
 `;
 
-const Select = styled.select`
-  height: 30px;
-  width: 110px;
-  padding: 0 5px;
-  outline: none;
-  border: 1px solid #c278f8;
-  border-radius: 5px;
-  margin-left: 100px;
-`;
 
 const AbsenceJustification = styled.div`
   width: 70%;
@@ -224,6 +226,8 @@ const Card = styled.div`
     margin-left: 8px;
     height: 95%;
     background-color: ${({ isJustified }) => isJustified === null && "#ff6262"};
+    background-color: ${({ isJustified }) =>
+      isJustified === "Rejected" && "#ff6262"};
     background-color: ${({ isJustified }) =>
       isJustified === "Accepted" && "#00cf00"};
     background-color: ${({ isJustified }) =>

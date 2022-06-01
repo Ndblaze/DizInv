@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 //import axios from "axios";
-import { FaArrowLeft } from "react-icons/fa";
 import DepartmentExcludedList from "../../componentsChelf/DepartmentExcludedList";
 
 const ChelfExcluded = () => {
@@ -11,7 +10,7 @@ const ChelfExcluded = () => {
       <Content>
         <HeaderContainer>
           <Title>
-            <Hearder>Excluded Students (Department) </Hearder>
+            <Hearder> Excluded Students (Department) </Hearder>
           </Title>
         </HeaderContainer>
         <DepartmentExcludedList />
