@@ -21,7 +21,6 @@ const ChelfDashBoard = () => {
           sessionStorage.setItem("groups", JSON.parse(groups));
           sessionStorage.setItem("level", level);
           sessionStorage.setItem("sceance", JSON.parse(sceance));
-          sessionStorage.setItem("department", department);
         }
         if (res.data.status === "FAILED") {
         }

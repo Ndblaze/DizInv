@@ -82,12 +82,12 @@ const TeacherHome = () => {
           let { department, module, status, groups, level, sceance } =
             res.data.data;
 
-          sessionStorage.setItem("department", department);
+          sessionStorage.setItem("department", department); 
           sessionStorage.setItem("module", module);
           sessionStorage.setItem("status", status);
-          sessionStorage.setItem("groups", groups);
+          sessionStorage.setItem("groups", JSON.parse(groups));
           sessionStorage.setItem("level", level); 
-          sessionStorage.setItem("sceance", sceance);
+          sessionStorage.setItem("sceance", JSON.parse(sceance));
         }
         if (res.data.status === "FAILED") {
         }

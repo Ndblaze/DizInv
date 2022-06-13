@@ -46,6 +46,7 @@ const PresenceListTeacher = ({
         sceance: sceance,
         module: module,
         level: sessionStorage.getItem("level"),
+        department: sessionStorage.getItem("department"),
       })
       .then((res) => {
         //console.log(res);

@@ -39,7 +39,7 @@ const customStylesSelect = {
   }),
   menu: (provided, state) => ({
     ...provided,
-    height: "100px",
+    height: "60px",
     overflowY: "scroll",
   }),
   option: (provided, state) => ({
@@ -70,23 +70,60 @@ const CreateNewSession = ({
   const section_specialityOptions = () => {
     const level = sessionStorage.getItem("level");
     if (level === "Licence 1" || level === "Licence 2") {
-      let arr = [
-        { value: "Section 1", label: "Section 1" },
-        { value: "Section 2", label: "Section 2" },
-        { value: "Section 3", label: "Section 3" },
-        { value: "Section 4", label: "Section 4" },
-      ];
-      setSectionSpecialityOptions(arr);
+      if (
+        group === "G1" ||
+        group === "G2" ||
+        group === "G3" ||
+        group === "G4"
+      ) {
+        setSectionSpecialityOptions([
+          { value: "Section 1", label: "Section 1" },
+        ]);
+      } else if (
+        group === "G5" ||
+        group === "G6" ||
+        group === "G7" ||
+        group === "G8"
+      ) {
+        setSectionSpecialityOptions([
+          { value: "Section 2", label: "Section 2" },
+        ]);
+      } else if (
+        group === "G9" ||
+        group === "G10" ||
+        group === "G11" ||
+        group === "G12"
+      ) {
+        setSectionSpecialityOptions([
+          { value: "Section 3", label: "Section 3" },
+        ]);
+      } else if (
+        group === "G13" ||
+        group === "G14" ||
+        group === "G15" ||
+        group === "G16"
+      ) {
+        setSectionSpecialityOptions([
+          { value: "Section 4", label: "Section 4" },
+        ]);
+      } else {
+      }
     }
 
     if (level === "Licence 3" || level === "Master 1" || level === "Master 2") {
-      let arr = [
-        { value: "GL", label: "GL" },
-        { value: "TI", label: "TI" },
-        { value: "SCI", label: "SCI" },
-        { value: "SI", label: "SI" },
-      ];
-      setSectionSpecialityOptions(arr);
+      let department = sessionStorage.getItem("department");
+      if (department === "TLSI") {
+        setSectionSpecialityOptions([
+          { value: "GL", label: "GL" },
+          { value: "SI", label: "SI" },
+        ]);
+      } else if (department === "IFA") {
+        setSectionSpecialityOptions([
+          { value: "TI", label: "TI" },
+          { value: "SCI", label: "SCI" },
+        ]);
+      } else {
+      }
     }
   };
 

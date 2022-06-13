@@ -37,8 +37,8 @@ router.get("/get-dates/:module/:sceance/:group", (req, res) => {
 
 //get the list of presence with the chosen date  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 router.post("/get-list-presence", (req, res) => {
-  const { date, group, module, sceance, level } = req.body;
-  // console.log(date, group, module, sceance);
+  const { date, group, module, sceance, level, department } = req.body;
+  console.log(date, group, module, sceance, department);
 
   if (date) {
     const dateSplit = date.split("/");
@@ -50,14 +50,16 @@ router.post("/get-list-presence", (req, res) => {
     where user.id_user = students.inscription
     And sessions.date = '${converted}'
     AND sessions.student_group = '${group}'
-    AND sessions.sceance = '${sceance}'
+    AND sessions.sceance = '${sceance}' 
     And sessions.level = '${level}'
     And sessions.moduleName = '${module}'
-    And students.student_group = '${group}'
+    And students.department = '${department}'
+    And students.student_group = '${group}' 
     And students.level = '${level}'
     And students.inscription NOT IN (select inscription_no from dizinv.absence, dizinv.sessions 
                                       where sessions.id_session = absence.id_session 
                                       And sessions.date = '${converted}'
+                                      And sessions.department ='${department}'
                                       AND sessions.student_group = '${group}'
                                       AND sessions.sceance = '${sceance}'
                                       And sessions.level = '${level}'
@@ -69,6 +71,7 @@ router.post("/get-list-presence", (req, res) => {
     And user.id_user = absence.inscription_no  
     And sessions.date = '${converted}'
     AND sessions.student_group = '${group}'
+    And sessions.department ='${department}'
     AND sessions.sceance = '${sceance}'
     And sessions.moduleName = '${module}'
     ;  `;
