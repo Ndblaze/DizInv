@@ -27,7 +27,7 @@ const Nav = () => {
             }}
           />
         </SearchContainer>
-        <Notification />
+        <Notification /> 
         <Profile to={"/admin/profile"}>
           <ProfileLogo
             Text={firstName ? firstName.slice(0, 1) : ""}

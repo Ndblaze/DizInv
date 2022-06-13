@@ -1,7 +1,7 @@
 const express = require("express");
 
 const router = express.Router();
-
+ 
 //database connection
 const db = require("../ConnectDB");
 
@@ -186,7 +186,7 @@ router.get("/user-profile/:handler/:id", (req, res) => {
 
 //updating Student profile by admin (DB)
 router.post("/update-profile/student", (req, res) => {
-  const { values, id } = req.body;
+  const { values, id } = req.body; 
 
   const { firstName, lastName, email, phone, address, city } = values;
   const { inscription, section_speciality, group } = values;

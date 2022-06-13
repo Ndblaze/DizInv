@@ -1,12 +1,30 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-
+import toast, { Toaster } from "react-hot-toast";
 import { MdOutlineEditNote } from "react-icons/md";
 import UpdateProfileForm from "./UpdateProfileForm";
 import axios from "axios";
 
 const ProfileTeacher = ({ user, firstLetter, getProfile }) => {
   const [edit, setEdit] = useState(true);
+
+  const errorMessage = (message) => {
+    toast.error(message, {
+      style: {
+        background: "rgba(255,51,51, 0.7)",
+        color: "#fff",
+      },
+    });
+  };
+
+  const successMessage = (message) => {
+    toast.success(message, {
+      style: {
+        background: "#25ab42",
+        color: "#fff",
+      },
+    });
+  };
 
   //founction to call an Api for the profile update
   const UpdateTeacher = async (newValues) => {
@@ -15,8 +33,14 @@ const ProfileTeacher = ({ user, firstLetter, getProfile }) => {
         newValues,
       })
       .then((res) => {
-        console.log(res);
-         getProfile();
+        //console.log(res);
+        if (res.data.status === "SUCCESS") {
+          getProfile();
+          successMessage("Profile Updated Succefully");
+        }
+        if (res.data.status === "FAILED") {
+          errorMessage("Something went wrong, Try again !!");
+        }
       })
       .catch((err) => {
         console.log(err.message);
@@ -25,6 +49,7 @@ const ProfileTeacher = ({ user, firstLetter, getProfile }) => {
 
   return (
     <Wrapper>
+      <Toaster position="top-center" reverseOrder={false} />
       <Content>
         <Info>
           <Personal>

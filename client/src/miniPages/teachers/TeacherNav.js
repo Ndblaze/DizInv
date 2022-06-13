@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Search from "../../components/Search";
 import { Link } from "react-router-dom";
@@ -8,29 +8,39 @@ import { MdNotificationsActive } from "react-icons/md";
 import ProfileLogo from "../../components/ProfileLogo";
 
 const TeacherNav = () => {
-    const [query, setQuery] = useState("");
+  const [query, setQuery] = useState("");
+
+  const [firstName, setFirstName] = useState("");
+
+  //console.log(query);
+
+  useEffect(() => {
+    setFirstName(sessionStorage.getItem("firstName"));
+  }, []);
+
   return (
     <Wrapper>
       <Content>
         <SearchContainer>
-          <Search 
-            onChange={(e) => { 
+          <Search
+            onChange={(e) => {
               setQuery(e.target.value);
             }}
           />
         </SearchContainer>
         <Notification />
         <Profile to={"/teacher/profile"}>
-          <ProfileLogo Text="B" Name="Blaze" />
+          <ProfileLogo
+            Text={firstName ? firstName.slice(0, 1) : ""}
+            Name={firstName ? firstName.slice(0, 7) + "..." : ""}
+          />
         </Profile>
       </Content>
     </Wrapper>
-  )
-}
+  );
+};
 
-export default TeacherNav
-
-
+export default TeacherNav;
 
 const Wrapper = styled.div`
   padding: 20px 40px 0 0px;

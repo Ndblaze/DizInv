@@ -15,13 +15,6 @@ const UpdateProfileForm = ({ user, edit, UpdateTeacher }) => {
       .min(3, "field must be more than 3 characters")
       .required("field is required"),
     email: Yup.string().email("enter correct email").required("email required"),
-    password: Yup.string()
-      .min(8, "password must be at least 8 characters")
-      .required("field is required")
-      .matches(
-        /^(?=.*[a-zA-Z])/,
-        "must contain one Uppercase, One Lowwecase, one Number and special character."
-      ),
     phone: Yup.string("numbers only")
       .required("field is required")
       .min(10, "must be 10 numbers")
@@ -35,14 +28,16 @@ const UpdateProfileForm = ({ user, edit, UpdateTeacher }) => {
   });
 
   //destructuring the values that i need
-  const { firstName, lastName, email, password, phone, address, city } = user;
+  const { firstName, lastName, email, password, phone, address, city, id_user } = user;
+ // console.log(user)
 
   return (
-    <Wrapper>
+    <Wrapper> 
       <Content style={{ opacity: edit && 0.3, pointerEvents: edit && "none" }}>
         <Formik
           enableReinitialize
           initialValues={{
+            id_user, 
             firstName,
             lastName,
             email,
@@ -90,12 +85,7 @@ const UpdateProfileForm = ({ user, edit, UpdateTeacher }) => {
                     <TextField type="text" name="phone" />
                   </InputShared>
                 </Shared>
-                <Shared>
-                  <InputShared>
-                    <Label>password *</Label>
-                    <TextField type="password" name="password" />
-                  </InputShared>
-                </Shared>
+                
                 <ButtonContainer>
                   <Save type="submit">Add</Save>
                   <Cancel type="reset" value="Reset" />

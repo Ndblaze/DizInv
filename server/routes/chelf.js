@@ -1,57 +1,73 @@
 const express = require("express");
 
-let { teacher } = require("../temp data/teachers");
-
 const router = express.Router();
+
+//database connection
+const db = require("../ConnectDB");
 
 router.get("/data/:email", (req, res) => {
   const { email } = req.params;
   //console.log(email);
 
-  //find the persons data from the database
-  const person = teacher.filter((person) => {
-    if (person.email === email) {
-      return person;
-    }
-  });
+  let getDataSQL = ` SELECT *  FROM dizinv.user, dizinv.teacher 
+                     where user.id_user = teacher.id_user 
+                     And email = '${email}' ;`;
 
-  if (person.length > 0) {
-    const { department, module, status, groups, level, sceance } = person[0];
-    res.send({
-      status: "SUCCESS",
-      data: { department, module, status, groups, level, sceance },
+  if (email) {
+    db.query(getDataSQL, (err, result) => {
+      if (err) {
+        res.send({
+          status: "FAILED",
+        });
+        return;
+      }
+
+      if (result) {
+        //  console.log(result);
+        const { department, module, status, groups, level, sceance } =
+          result[0];
+
+        res.send({
+          status: "SUCCESS",
+          data: { department, module, status, groups, level, sceance },
+        });
+
+        return;
+      }
     });
-
-    return;
   }
-
-  res.send({
-    status: "FAILED",
-  });
 });
 
 //use the department name to get the list of all teacger in that department
 router.get("/emails/:department", (req, res) => {
   const { department } = req.params;
 
-  //find the teachers emails in a certain department from the database
-  const teachers = teacher.filter((teacher) => {
-    if (teacher.department === department) {
-      return teacher;
-    }
-  }); 
+  let getTeacherSQL = ` SELECT email  FROM dizinv.user, dizinv.teacher 
+                        where user.id_user = teacher.id_user 
+                        And teacher.department = '${department}' ;`;
 
-  if (teachers.length > 0) {
-    const emails = teachers.map((email) => ({
-      value: email.email,
-      label: email.email,
-    }));
-    res.send({ status: "SUCCESS", emails: emails });
-    return;
+  if (department) {
+    db.query(getTeacherSQL, (err, result) => {
+      if (err) {
+        res.send({
+          status: "FAILED",
+        });
+        return;
+      }
+
+      if (result) {
+        console.log(result);
+        const emails = result.map((email) => ({
+          value: email.email,
+          label: email.email,
+        }));
+
+        res.send({ status: "SUCCESS", emails: emails });
+
+        return;
+      }
+    });
   }
-
-  res.send({ status: "FAILED" });
-  return;
 });
 
 module.exports = router;

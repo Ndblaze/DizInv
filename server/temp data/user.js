@@ -5,11 +5,6 @@ const users = [
     type: "admin",
   },
   {
-    email: "ndubuisi.eze@univ-constantine2.dz",
-    password: "Ndubuisi3000",
-    type: "admin",
-  },
-  {
     email: "zakarah.lakar@univ-constantine2.dz",
     password: "lakar@500",
     type: "teacher",

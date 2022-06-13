@@ -68,6 +68,7 @@ const TeacherPresenceList = () => {
 
   // craete new session request
   const createNewSession = async (sessionDetails, type) => {
+    console.log(sessionDetails)
     await axios
       .post(`http://localhost:5000/api/managePresence/create-session`, {
         values: { ...sessionDetails, type: type },

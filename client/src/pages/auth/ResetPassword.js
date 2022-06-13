@@ -90,6 +90,10 @@ const ResetPassword = () => {
           errorMessage("Credentials invalid, Try agian or start again");
           setLoading(false);
         }
+        if (res.data.status === "PASS") {
+          errorMessage("Password do not match!!");
+          setLoading(false);
+        }
       })
       .catch((err) => {
         setLoading(false);

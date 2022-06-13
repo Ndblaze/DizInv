@@ -17,7 +17,7 @@ const TeacherProfile = () => {
     await axios
       .get(
         `http://localhost:5000/api/teacher/profile/${sessionStorage.getItem(
-          "email"
+          "id_user"
         )}`
       )
       .then((res) => {

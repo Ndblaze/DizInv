@@ -20,7 +20,7 @@ const TeacherManagePresence = () => {
   // console.log(manageGroup);
   // console.log(currentSceance);
 
-  useEffect(() => {
+  useEffect(() => {  
     const group = sessionStorage.getItem("groups");
     if (group.includes(",")) {
       setManageGroup(group.split(","));

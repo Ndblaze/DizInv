@@ -1,6 +1,5 @@
 const express = require("express");
 
-let { students } = require("../temp data/students");
 
 const router = express.Router();
 

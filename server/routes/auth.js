@@ -2,8 +2,8 @@ const express = require("express");
 
 const router = express.Router();
 
-//database connection
-const db = require("../ConnectDB");
+//database connection 
+const db = require("../ConnectDB"); 
 
 router.post("/login", (req, res) => { 
   const { email, password } = req.body;
